@@ -5,15 +5,23 @@
         <hr>
 
         <label for="name"><b>Name</b></label>
+        <label style="color: red;">
+            <?php echo $err['name']??"";?></label>
         <input type="text" placeholder="Enter Name" name="name" id="name" required>
 
         <label for="email"><b>Email</b></label>
+        <label style="color: red;">
+            <?php echo $err['email']??"";?></label>
         <input type="text" placeholder="Enter Email" name="email" id="email" required>
 
         <label for="psw"><b>Password</b></label>
+        <label style="color: red;">
+            <?php echo $err['password']??"";?></label>
         <input type="password" placeholder="Enter Password" name="psw" id="psw" required>
 
         <label for="psw-repeat"><b>Repeat Password</b></label>
+        <label style="color: red;">
+            <?php echo $err['password-repeat']??"";?></label>
         <input type="password" placeholder="Repeat Password" name="psw-repeat" id="psw-repeat" required>
         <hr>
 
@@ -29,6 +37,11 @@
 
 <style>
     * {box-sizing: border-box}
+
+    /* Bordered form */
+    form {
+        border: 3px solid #f1f1f1;
+    }
 
     /* Add padding to containers */
     .container {
