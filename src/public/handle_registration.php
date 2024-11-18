@@ -44,6 +44,17 @@ function validateRegistrationForm(array $methodPost): array
         $errors['email'] = "Email указан неверно";
     }
 
+    if (empty($errors['email'])) {
+        $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+        $stmt->execute(['email' => $email]);
+        $userData = $stmt->fetch();
+
+        if ($userData['email'] === $email) {
+            $errors['email'] = "Email уже зарегистрирован";
+        }
+    }
+
     if (empty($password)) {
         $errors['password'] = "Пароль не должен быть пустым";
     } elseif (strlen($password) < 4) {
@@ -68,9 +79,9 @@ function validateRegistrationForm(array $methodPost): array
 //    echo $error['password'] = "Пароли не совпадают";
 //}
 
-$err = validateRegistrationForm($_POST);
+$errors = validateRegistrationForm($_POST);
 
-if(empty($err)) {
+if(empty($errors)) {
     $name = $_POST['name'];
     $email = $_POST["email"];
     $password = $_POST['psw'];

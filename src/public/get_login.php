@@ -7,12 +7,12 @@
 
         <label for="email"><b>Email</b></label>
         <label style="color: red;">
-            <?php echo $err['email']??"";?></label>
+            <?php echo $errors['email']??"";?></label>
         <input type="text" placeholder="Enter Email" name="email" required>
 
         <label for="psw"><b>Password</b></label>
         <label style="color: red;">
-            <?php echo $err['password']??"";?></label>
+            <?php echo $errors['password']??"";?></label>
         <input type="password" placeholder="Enter Password" name="psw" required>
 
         <button type="submit">Login</button>

@@ -1,20 +1,16 @@
 <?php
-
-$email = $_POST["email"];
-$password = $_POST['psw'];
-
-function validateLoginForm(array $methodPost): array
+function validateLoginForm(array $arrPost): array
 {
     $errors = [];
 
-    if(isset($methodPost['email'])){
-        $email = $methodPost['email'];
+    if(isset($arrPost['email'])){
+        $email = $arrPost['email'];
     } else {
         $errors['email'] = "Требуется установить Email";
     }
 
-    if(isset($methodPost['psw'])){
-        $password = $methodPost['psw'];
+    if(isset($arrPost['psw'])){
+        $password = $arrPost['psw'];
     } else {
         $errors['password'] = "Требуется установить Пароль";
     }
@@ -34,28 +30,31 @@ function validateLoginForm(array $methodPost): array
     } elseif (is_numeric($password)) {
         $errors['password'] = "Пароль не должен содержать только цифры";
     } elseif ($password === strtolower($password) || $password === strtoupper($password)) {
-        $errors['password'] = "Пароль должен содержать латинские, заглавные и строчные буквы";
+        $errors['password'] = "Пароль должен содержать заглавные и строчные буквы";
     }
 
     return $errors;
 }
 
 
-$err = validateLoginForm($_POST);
+$errors = validateLoginForm($_POST);
 
-if(empty($err)) {
+if(empty($errors)) {
+    $email = $_POST["email"];
+    $password = $_POST["psw"];
+
     $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
     $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
     $stmt->execute(['email' => $email]);
 
-    $hash = $stmt->fetch();
+    $userData = $stmt->fetch();
 
-    if($hash === false) {
-        $err['email'] = "Данный пользователь не зарегистрирован на сайте";
-    } elseif (password_verify($password, $hash['password'])) {
+    if($userData === false) {
+        $errors['email'] = "Данный пользователь не зарегистрирован на сайте";
+    } elseif (password_verify($password, $userData['password'])) {
         echo "Добро пожаловать на сайт!";
     } else {
-        $err['password'] = "Имя пользователя или пароль указаны неверно";
+        $errors['password'] = "Имя пользователя или пароль указаны неверно";
     }
 }
 
