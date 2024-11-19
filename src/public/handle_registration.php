@@ -1,29 +1,29 @@
 <?php
 
-function validateRegistrationForm(array $methodPost): array
+function validateRegistrationForm(array $arrPost): array
 {
     $errors = [];
 
-    if(isset($methodPost['name'])){
-        $name = $methodPost['name'];
+    if(isset($arrPost['name'])){
+        $name = $arrPost['name'];
     } else {
         $errors['name'] = "Требуется установить Имя";
     }
 
-    if(isset($methodPost['email'])){
-        $email = $methodPost['email'];
+    if(isset($arrPost['email'])){
+        $email = $arrPost['email'];
     } else {
         $errors['email'] = "Требуется установить Email";
     }
 
-    if(isset($methodPost['psw'])){
-        $password = $methodPost['psw'];
+    if(isset($arrPost['psw'])){
+        $password = $arrPost['psw'];
     } else {
         $errors['password'] = "Требуется установить Пароль";
     }
 
-    if(isset($methodPost['psw-repeat'])){
-        $passwordRepeat = $methodPost['psw-repeat'];
+    if(isset($arrPost['psw-repeat'])){
+        $passwordRepeat = $arrPost['psw-repeat'];
     } else {
         $errors['password-repeat'] = "Требуется установить повтор Пароля";
     }
@@ -42,15 +42,13 @@ function validateRegistrationForm(array $methodPost): array
         $errors['email'] = "Email должен содержать не менее 6 символов";
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors['email'] = "Email указан неверно";
-    }
-
-    if (empty($errors['email'])) {
+    } else {
         $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
         $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
         $stmt->execute(['email' => $email]);
         $userData = $stmt->fetch();
 
-        if ($userData['email'] === $email) {
+        if ($userData['email'] !== false) {
             $errors['email'] = "Email уже зарегистрирован";
         }
     }
@@ -73,11 +71,6 @@ function validateRegistrationForm(array $methodPost): array
 
     return $errors;
 }
-//if(!preg_match("^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$^", $password)) {
-//    echo $error['password'] = "Пароль должен содержать заглавные, строчные буквы, цифры и спецсимволы: @$!%*#?&";
-//} elseif ($password !== $passwordRepeat) {
-//    echo $error['password'] = "Пароли не совпадают";
-//}
 
 $errors = validateRegistrationForm($_POST);
 

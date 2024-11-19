@@ -5,37 +5,24 @@ function validateLoginForm(array $arrPost): array
 
     if(isset($arrPost['email'])){
         $email = $arrPost['email'];
+        if (empty($email)) {
+            $errors['email'] = "Email не должен быть пустым";
+        }
     } else {
         $errors['email'] = "Требуется установить Email";
     }
 
     if(isset($arrPost['psw'])){
         $password = $arrPost['psw'];
+        if (empty($password)) {
+            $errors['password'] = "Пароль не должен быть пустым";
+        }
     } else {
         $errors['password'] = "Требуется установить Пароль";
     }
 
-    if (empty($email)) {
-        $errors['email'] = "Email не должен быть пустым";
-    } elseif (strlen($email) < 6) {
-        $errors['email'] = "Email должен содержать не менее 6 символов";
-    } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors['email'] = "Email указан неверно";
-    }
-
-    if (empty($password)) {
-        $errors['password'] = "Пароль не должен быть пустым";
-    } elseif (strlen($password) < 4) {
-        $errors['password'] = "Пароль должен содержать не менее 4 символов";
-    } elseif (is_numeric($password)) {
-        $errors['password'] = "Пароль не должен содержать только цифры";
-    } elseif ($password === strtolower($password) || $password === strtoupper($password)) {
-        $errors['password'] = "Пароль должен содержать заглавные и строчные буквы";
-    }
-
     return $errors;
 }
-
 
 $errors = validateLoginForm($_POST);
 
@@ -50,11 +37,14 @@ if(empty($errors)) {
     $userData = $stmt->fetch();
 
     if($userData === false) {
-        $errors['email'] = "Данный пользователь не зарегистрирован на сайте";
+        $errors['email'] = "Имя пользователя или пароль указаны неверно";
     } elseif (password_verify($password, $userData['password'])) {
-        echo "Добро пожаловать на сайт!";
+        //setcookie('user_id', $userData['id']);
+        session_start();
+        $_SESSION['user_id'] = $userData['id'];
+        header('Location: /catalog.php');
     } else {
-        $errors['password'] = "Имя пользователя или пароль указаны неверно";
+        $errors['email'] = "Имя пользователя или пароль указаны неверно";
     }
 }
 
