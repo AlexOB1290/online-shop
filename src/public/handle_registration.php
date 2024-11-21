@@ -1,5 +1,4 @@
 <?php
-
 function validateRegistrationForm(array $arrPost): array
 {
     $errors = [];
@@ -48,7 +47,7 @@ function validateRegistrationForm(array $arrPost): array
         $stmt->execute(['email' => $email]);
         $userData = $stmt->fetch();
 
-        if ($userData['email'] !== false) {
+        if ($userData !== false) {
             $errors['email'] = "Email уже зарегистрирован";
         }
     }
@@ -88,10 +87,10 @@ if(empty($errors)) {
 
     $stmt->execute(['name' => $name, 'email' => $email, 'password' => $hash]);
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
-    $stmt->execute(['email' => $email]);
-
-    print_r($stmt->fetch());
+//    $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
+//    $stmt->execute(['email' => $email]);
+//
+//    print_r($stmt->fetch());
 }
 
 require_once ('./get_registration.php');

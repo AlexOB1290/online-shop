@@ -42,7 +42,7 @@ if(empty($errors)) {
         //setcookie('user_id', $userData['id']);
         session_start();
         $_SESSION['user_id'] = $userData['id'];
-        header('Location: /catalog.php');
+        header('Location: /catalog');
     } else {
         $errors['email'] = "Имя пользователя или пароль указаны неверно";
     }

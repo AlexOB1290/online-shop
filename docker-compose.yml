@@ -21,3 +21,5 @@ services:
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     ports:
       - 54321:5432
+    volumes:
+      - ./docker/postgres/data:/var/lib/postgresql/data
