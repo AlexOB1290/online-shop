@@ -91,6 +91,6 @@ if(empty($errors)) {
 //    $stmt->execute(['email' => $email]);
 //
 //    print_r($stmt->fetch());
-}
 
+}
 require_once ('./get_registration.php');

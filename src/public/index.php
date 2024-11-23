@@ -35,6 +35,18 @@
         } else {
             echo "$method не поддерживается адресом $uri";
         }
+    } elseif ($uri === '/cart') {
+        if ($method === 'GET') {
+            require_once './cart.php';
+        } else {
+            echo "$method не поддерживается адресом $uri";
+        }
+    } elseif ($uri === '/logout') {
+        if ($method === 'GET') {
+            require_once './logout.php';
+        } else {
+            echo "$method не поддерживается адресом $uri";
+        }
     } else {
         require_once './404.html';
     }

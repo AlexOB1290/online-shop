@@ -1,11 +1,11 @@
 <?php
+
 session_start();
 if (!isset($_SESSION['user_id'])) {
     header('Location: /login');
 }
 
-print_r($_POST);
-print_r($_SESSION['user_id']);
+
 function validateAddProductForm(array $arrPost): array
 {
     $errors = [];
@@ -28,6 +28,17 @@ function validateAddProductForm(array $arrPost): array
         $errors['amount'] = "Product-id должно быть положительным числом";
     } elseif (!is_numeric($productId)) {
         $errors['product-id'] = "Product-id должно быть числом";
+    } elseif (str_contains($productId, ".")) {
+        $errors['product-id'] = "Product-id должно быть натуральным числом";
+    } else {
+        $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
+        $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :id");
+        $stmt->execute(['id' => $productId]);
+        $productData = $stmt->fetch();
+
+        if ($productData === false) {
+            $errors['product-id'] = "Данный товар отсутствует в магазине";
+        }
     }
 
     if (empty($amount)) {
@@ -36,12 +47,14 @@ function validateAddProductForm(array $arrPost): array
         $errors['amount'] = "Количество продуктов должно быть положительным";
     } elseif (!is_numeric($amount)) {
         $errors['amount'] = "Количество продуктов должно быть числом";
+    } elseif (str_contains($amount, ".")) {
+        $errors['amount'] = "Количество должно быть натуральным числом";
     }
 
     return $errors;
 }
 
-print_r($errors = validateAddProductForm($_POST));
+$errors = validateAddProductForm($_POST);
 
 if (empty($errors)) {
     $userId = $_SESSION['user_id'];
@@ -50,8 +63,19 @@ if (empty($errors)) {
 
     $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
 
-    $stmt = $pdo->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
-    $stmt->execute(['user_id' => $userId, 'product_id' => $productId, 'amount' => $amount]);
+    $stmt = $pdo->prepare("SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :product_id");
+    $stmt->execute(['user_id' => $userId, 'product_id' => $productId]);
+    $userProductsData = $stmt->fetch();
+
+    if ($userProductsData === false) {
+        $stmt = $pdo->prepare("INSERT INTO user_products (user_id, product_id, amount) VALUES (:user_id, :product_id, :amount)");
+        $stmt->execute(['user_id' => $userId, 'product_id' => $productId, 'amount' => $amount]);
+    } else {
+        $stmt = $pdo->prepare("UPDATE user_products SET amount =amount + :amount WHERE user_id = :user_id AND product_id = :product_id");
+        $stmt->execute(['amount' => $amount, 'user_id' => $userId, 'product_id' => $productId]);
+    }
+
+
 }
 
 require_once './get_add_product.php';

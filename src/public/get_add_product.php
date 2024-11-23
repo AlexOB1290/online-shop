@@ -1,8 +1,12 @@
 <?php
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header('Location: /login');
+if (session_status() == PHP_SESSION_ACTIVE) {
+    if (!isset($_SESSION['user_id'])) {
+        header('Location: /login');
+    }
+} else {
+    session_start();
 }
+
 ?>
 
 
@@ -27,9 +31,11 @@ if (!isset($_SESSION['user_id'])) {
         <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
         <button type="submit" class="registerbtn">Add to cart</button>
     </div>
-
-    <div class="container signin">
-        <p>Already have an account? <a href="#">Sign in</a>.</p>
+    <div class="container cart">
+        <p>Do you want to <a href="/cart">Cart</a>?</p>
+    </div>
+    <div class="container logout">
+        <p>Do you want to log out of your account? <a href="/logout">Exit</a>.</p>
     </div>
 </form>
 
@@ -90,8 +96,14 @@ if (!isset($_SESSION['user_id'])) {
     }
 
     /* Set a grey background color and center the text of the "sign in" section */
-    .signin {
+    .cart {
         background-color: #f1f1f1;
         text-align: center;
     }
+
+    .logout {
+        background-color: #f1f1f1;
+        text-align: center;
+    }
+
 </style>

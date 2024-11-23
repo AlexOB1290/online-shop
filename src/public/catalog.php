@@ -1,7 +1,4 @@
 <?php
-//if (!isset($_COOKIE['user_id'])) {
-//    header('Location: /get_login.php');
-//}
 
 session_start();
 if (!isset($_SESSION['user_id'])) {
@@ -29,6 +26,12 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </div>
     <?php endforeach; ?>
+</div>
+<div class="container add">
+    <p> Do you want to <a href="/add-product"> Add product</a>?</p>
+</div>
+<div class="container logout">
+    <p>Do you want to log out of your account? <a href="/logout">Exit</a>.</p>
 </div>
 
 
@@ -86,5 +89,16 @@ if (!isset($_SESSION['user_id'])) {
 
     .card button:hover {
         opacity: 0.7;
+    }
+
+    /* Set a grey background color and center the text of the "sign in" section */
+    .logout {
+        background-color: #f1f1f1;
+        text-align: center;
+    }
+
+    .add {
+        background-color: #04AA6D;
+        text-align: center;
     }
 </style>

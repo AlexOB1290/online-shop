@@ -39,7 +39,6 @@ if(empty($errors)) {
     if($userData === false) {
         $errors['email'] = "Имя пользователя или пароль указаны неверно";
     } elseif (password_verify($password, $userData['password'])) {
-        //setcookie('user_id', $userData['id']);
         session_start();
         $_SESSION['user_id'] = $userData['id'];
         header('Location: /catalog');
