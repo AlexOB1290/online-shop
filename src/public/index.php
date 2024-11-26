@@ -1,9 +1,7 @@
 <?php
 
-//print_r($_SERVER);
-
-    $uri = $_SERVER['REQUEST_URI'];
-    $method = $_SERVER['REQUEST_METHOD'];
+$uri = $_SERVER['REQUEST_URI'];
+$method = $_SERVER['REQUEST_METHOD'];
 
     if ($uri === '/registrate') {
         if ($method === 'GET') {

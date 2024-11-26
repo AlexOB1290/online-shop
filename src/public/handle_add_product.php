@@ -32,7 +32,7 @@ function validateAddProductForm(array $arrPost): array
         $errors['product-id'] = "Product-id должно быть натуральным числом";
     } else {
         $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
-        $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :id");
+        $stmt = $pdo->prepare("SELECT id FROM products WHERE id = :id");
         $stmt->execute(['id' => $productId]);
         $productData = $stmt->fetch();
 
@@ -74,8 +74,6 @@ if (empty($errors)) {
         $stmt = $pdo->prepare("UPDATE user_products SET amount =amount + :amount WHERE user_id = :user_id AND product_id = :product_id");
         $stmt->execute(['amount' => $amount, 'user_id' => $userId, 'product_id' => $productId]);
     }
-
-
 }
 
 require_once './get_add_product.php';

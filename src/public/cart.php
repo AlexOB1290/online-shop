@@ -11,7 +11,18 @@ if (!isset($_SESSION['user_id'])) {
     $stmt->execute(['user_id' => $userId]);
     $userProductsData = $stmt->fetchAll();
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE id = :id");
+//    $stmt = $pdo->prepare("SELECT product_id, amount FROM user_products WHERE user_id = :user_id");
+//    $stmt->execute(['user_id' => $userId]);
+//    print_r($userProductsData = $stmt->fetchAll());
+//
+//    foreach ($userProductsData as $userProduct) {
+//        $productId = $userProduct['product_id'];
+//        $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :id");
+//        $stmt->execute(['id' => $productId]);
+//        print_r($userProductsData[] = $stmt->fetch());
+//    }
+
+    $stmt = $pdo->prepare("SELECT name FROM users WHERE id = :id");
     $stmt->execute(['id' => $userId]);
     $userData = $stmt->fetch();
 
