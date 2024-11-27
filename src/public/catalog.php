@@ -1,17 +1,3 @@
-<?php
-
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header('Location: /login');
-} else {
-    $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
-    $stmt = $pdo->query("SELECT * FROM products ORDER BY id");
-
-    $productsData = $stmt->fetchAll();
-}
-?>
-
-
 <div id="main" class="main">
     <?php foreach ($productsData as $product) : ?>
     <div class="main_item">

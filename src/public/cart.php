@@ -1,42 +1,6 @@
-<?php
-
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header('Location: /login');
-} else {
-    $userId = $_SESSION['user_id'];
-
-    $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
-    $stmt = $pdo->prepare("SELECT amount, name, price, description, image FROM products JOIN user_products ON user_products.product_id = products.id WHERE user_id = :user_id");
-    $stmt->execute(['user_id' => $userId]);
-    $userProductsData = $stmt->fetchAll();
-
-//    $stmt = $pdo->prepare("SELECT product_id, amount FROM user_products WHERE user_id = :user_id");
-//    $stmt->execute(['user_id' => $userId]);
-//    print_r($userProductsData = $stmt->fetchAll());
-//
-//    foreach ($userProductsData as $userProduct) {
-//        $productId = $userProduct['product_id'];
-//        $stmt = $pdo->prepare("SELECT * FROM products WHERE id = :id");
-//        $stmt->execute(['id' => $productId]);
-//        print_r($userProductsData[] = $stmt->fetch());
-//    }
-
-    $stmt = $pdo->prepare("SELECT name FROM users WHERE id = :id");
-    $stmt->execute(['id' => $userId]);
-    $userData = $stmt->fetch();
-
-    if ($userProductsData === false) {
-        $error = "Ошибка при выдаче данных товаров корзины";
-    } elseif ($userData === false) {
-        $error = "Ошибка при выдаче имени пользователя";
-    }
-}
-?>
-
-<h1>Корзина товаров пользователя <?php echo $userData['name'] ?? $error?></h1>
+<h1>Корзина товаров пользователя <?php echo $userData['name'] ?? $errors?></h1>
 <div id="main" class="main">
-    <?php foreach ($userProductsData as $product) : ?>
+    <?php foreach ($userProducts as $product) : ?>
         <div class="main_item">
             <div class="card" >
                 <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
