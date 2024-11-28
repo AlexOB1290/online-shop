@@ -1,11 +1,11 @@
 <?php
-require_once './UserProduct.php';
-require_once './User.php';
+require_once './../Model/UserProduct.php';
+require_once './../Model/User.php';
 
 class CartController
 {
-    private $userProductModel;
-    private $userModel;
+    private UserProduct $userProductModel;
+    private User $userModel;
 
     public function __construct()
     {
@@ -27,9 +27,9 @@ class CartController
             echo "<p>Ошибка при загрузке данных в корзину</p>";
         } elseif (empty($userData)) {
             $errors = "Ошибка при отображении имени пользователя";
-            require_once './cart.php';
+            require_once './../View/cart.php';
         } else {
-            require_once './cart.php';
+            require_once './../View/cart.php';
         }
     }
 

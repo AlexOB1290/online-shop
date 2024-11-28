@@ -1,10 +1,10 @@
 <?php
-require_once './Product.php';
-require_once './UserProduct.php';
+require_once './../Model/Product.php';
+require_once './../Model/UserProduct.php';
 class UserProductController
 {
-    private $productModel;
-    private $userProductModel;
+    private Product $productModel;
+    private UserProduct $userProductModel;
 
     public function __construct()
     {
@@ -12,13 +12,13 @@ class UserProductController
         $this->userProductModel = new UserProduct();
     }
 
-    public function getAddProductForm()
+    public function getAddProductForm(): void
     {
         $this->checkSession();
-        require_once './get_add_product.php';
+        require_once './../View/get_add_product.php';
     }
 
-    public function addUserProduct()
+    public function handleAddUserProductForm(): void
     {
         $errors = $this->validateAddProductForm($_POST);
 
@@ -38,7 +38,7 @@ class UserProductController
             }
         }
 
-        require_once './get_add_product.php';
+        require_once './../View/get_add_product.php';
     }
 
     private function checkSession(): void

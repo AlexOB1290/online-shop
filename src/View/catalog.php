@@ -1,16 +1,16 @@
 <div id="main" class="main">
     <?php foreach ($productsData as $product) : ?>
-    <div class="main_item">
-        <div class="card" >
-            <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
-            <div class="container">
-                <h1><?php echo $product['name']?></h1>
-                <p class="price"><?php echo $product['price']?> руб.</p>
-                <p><?php echo $product['description']?></p>
-                <p><button>Добавить в корзину</button></p>
+        <div class="main_item">
+            <div class="card" >
+                <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
+                <div class="container">
+                    <h1><?php echo $product['name']?></h1>
+                    <p class="price"><?php echo $product['price']?> руб.</p>
+                    <p><?php echo $product['description']?></p>
+                    <p><button>Добавить в корзину</button></p>
+                </div>
             </div>
         </div>
-    </div>
     <?php endforeach; ?>
 </div>
 <div class="container add">
@@ -22,7 +22,16 @@
 
 
 
+
+
 <style>
+    .img{
+        background-image: url("https://wallpapers.99px.ru/cms/mhost.php?tid=53&act=getimage&id=362662");
+        background-size: auto;
+        background-position: center;
+        height: auto;
+        width: auto;
+    }
     .main
     {
         display: flex;

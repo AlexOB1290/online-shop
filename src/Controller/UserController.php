@@ -1,5 +1,5 @@
 <?php
-require_once './User.php';
+require_once './../Model/User.php';
 class UserController
 {
     private User $userModel;
@@ -10,7 +10,7 @@ class UserController
 
     public function getRegistrationForm(): void
     {
-        require_once './get_registration.php';
+        require_once './../View/get_registration.php';
     }
 
     public function handleRegistrationForm(): void
@@ -22,19 +22,21 @@ class UserController
             $email = $_POST["email"];
             $password = $_POST['psw'];
 
-            $newUser = $this->userModel->addNewUser($name, $email, $password);
+            $hashPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            if ($newUser === false) {
-                $errors['name'] = "Ошибка при передаче данных";
-            }
+            $newUser = $this->userModel->addNewUser($name, $email, $hashPassword);
         }
 
-        require_once './get_registration.php';
+        if ($newUser === false) {
+            $errors['name'] = "Ошибка при передаче данных";
+        }
+
+        require_once './../View/get_registration.php';
     }
 
     public function getLoginForm(): void
     {
-        require_once './get_login.php';
+        require_once './../View/get_login.php';
     }
 
     public function handleLoginForm(): void
@@ -56,7 +58,7 @@ class UserController
                 $errors['email'] = "Имя пользователя или пароль указаны неверно";
             }
         }
-        require_once './get_login.php';
+        require_once './../View/get_login.php';
     }
     private function validateRegistrationForm(array $arrPost): array
     {

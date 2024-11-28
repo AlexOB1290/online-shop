@@ -1,64 +1,72 @@
 <?php
-require_once './UserController.php';
-require_once './UserProductController.php';
-require_once './CatalogController.php';
-require_once './CartController.php';
+require_once './../Controller/UserController.php';
+require_once './../Controller/UserProductController.php';
+require_once './../Controller/CatalogController.php';
+require_once './../Controller/CartController.php';
 class App {
-    public function run()
+    public function run(): void
     {
         $uri = $_SERVER['REQUEST_URI'];
         $method = $_SERVER['REQUEST_METHOD'];
 
-        if ($uri === '/registrate') {
-            $registration = new UserController();
-            if ($method === 'GET') {
-                $registration->getRegistrationForm();
-            } elseif ($method === 'POST') {
-                $registration->handleRegistrationForm();
-            } else {
-                echo "$method не поддерживается адресом $uri";
-            }
-        } elseif ($uri === '/login') {
-            $login = new UserController();
-            if ($method === 'GET') {
-                $login->getLoginForm();
-            } elseif ($method === 'POST') {
-                $login->handleLoginForm();
-            } else {
-                echo "$method не поддерживается адресом $uri";
-            }
-        } elseif ($uri === '/catalog') {
-            $catalog = new CatalogController();
-            if ($method === 'GET') {
-                $catalog->getCatalogPage();
-            } else {
-                echo "$method не поддерживается адресом $uri";
-            }
-        } elseif ($uri === '/add-product') {
-            $userProduct = new UserProductController();
-            if ($method === 'GET') {
-                $userProduct->getAddProductForm();
-            } elseif ($method === 'POST') {
-                $userProduct->addUserProduct();
-            } else {
-                echo "$method не поддерживается адресом $uri";
-            }
-        } elseif ($uri === '/cart') {
-            $cart = new CartController();
-            if ($method === 'GET') {
-                $cart->getCartPage();
-            } else {
-                echo "$method не поддерживается адресом $uri";
-            }
-        } elseif ($uri === '/logout') {
-            $logout = new UserController();
-            if ($method === 'GET') {
-                $logout->logout();
-            } else {
-                echo "$method не поддерживается адресом $uri";
-            }
-        } else {
-            require_once './404.html';
+        switch ($uri) {
+            case '/registrate':
+                $registration = new UserController();
+                if ($method === 'GET') {
+                    $registration->getRegistrationForm();
+                } elseif ($method === 'POST') {
+                    $registration->handleRegistrationForm();
+                } else {
+                    echo "$method не поддерживается адресом $uri";
+                }
+                break;
+            case '/login':
+                $login = new UserController();
+                if ($method === 'GET') {
+                    $login->getLoginForm();
+                } elseif ($method === 'POST') {
+                    $login->handleLoginForm();
+                } else {
+                    echo "$method не поддерживается адресом $uri";
+                }
+                break;
+            case '/catalog':
+                $catalog = new CatalogController();
+                if ($method === 'GET') {
+                    $catalog->getCatalogPage();
+                } else {
+                    echo "$method не поддерживается адресом $uri";
+                }
+                break;
+            case '/add-product':
+                $userProduct = new UserProductController();
+                if ($method === 'GET') {
+                    $userProduct->getAddProductForm();
+                } elseif ($method === 'POST') {
+                    $userProduct->handleAddUserProductForm();
+                } else {
+                    echo "$method не поддерживается адресом $uri";
+                }
+                break;
+            case '/cart':
+                $cart = new CartController();
+                if ($method === 'GET') {
+                    $cart->getCartPage();
+                } else {
+                    echo "$method не поддерживается адресом $uri";
+                }
+                break;
+            case '/logout':
+                $logout = new UserController();
+                if ($method === 'GET') {
+                    $logout->logout();
+                } else {
+                    echo "$method не поддерживается адресом $uri";
+                }
+                break;
+            default:
+                require_once './../View/404.html';
+                break;
         }
     }
 }

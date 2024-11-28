@@ -1,5 +1,5 @@
 <?php
-require_once './Product.php';
+require_once './../Model/Product.php';
 
 class CatalogController
 {
@@ -10,7 +10,7 @@ class CatalogController
         $this->productModel = new Product();
     }
 
-    public function getCatalogPage()
+    public function getCatalogPage(): void
     {
         $this->checkSession();
 
@@ -19,7 +19,7 @@ class CatalogController
         if ($productsData === false){
             echo "<p>Ошибка при загрузке данных о товарах на сайт</p>";
         } else {
-            require './catalog.php';
+            require_once './../View/catalog.php';
         }
     }
 
