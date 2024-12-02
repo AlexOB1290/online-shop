@@ -24,7 +24,7 @@ class UserController
 
             $hashPassword = password_hash($password, PASSWORD_DEFAULT);
 
-            $newUser = $this->userModel->addNewUser($name, $email, $hashPassword);
+            $newUser = $this->userModel->create($name, $email, $hashPassword);
         }
 
         if ($newUser === false) {
@@ -46,7 +46,7 @@ class UserController
             $email = $_POST["email"];
             $password = $_POST["psw"];
 
-            $userData = $this->userModel->getUserByEmail($email);
+            $userData = $this->userModel->getOneByEmail($email);
 
             if($userData === false) {
                 $errors['email'] = "Имя пользователя или пароль указаны неверно";

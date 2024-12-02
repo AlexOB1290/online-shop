@@ -14,7 +14,7 @@ class CatalogController
     {
         $this->checkSession();
 
-        $productsData = $this->productModel->getAllProducts();
+        $productsData = $this->productModel->getAll();
 
         if ($productsData === false){
             echo "<p>Ошибка при загрузке данных о товарах на сайт</p>";

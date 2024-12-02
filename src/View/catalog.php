@@ -25,13 +25,6 @@
 
 
 <style>
-    .img{
-        background-image: url("https://wallpapers.99px.ru/cms/mhost.php?tid=53&act=getimage&id=362662");
-        background-size: auto;
-        background-position: center;
-        height: auto;
-        width: auto;
-    }
     .main
     {
         display: flex;

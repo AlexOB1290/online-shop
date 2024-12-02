@@ -1,6 +1,6 @@
 <h1>Корзина товаров пользователя <?php echo $userData['name'] ?? $errors?></h1>
 <div id="main" class="main">
-    <?php foreach ($userProducts as $product) : ?>
+    <?php foreach ($products as $product) : ?>
         <div class="main_item">
             <div class="card" >
                 <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
