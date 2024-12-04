@@ -31,37 +31,18 @@ class CartController
             $productIds[] = $userProduct['product_id'];
         }
 
-        $productsDB = $this->productModel->getAllByIds($productIds);
+        $products = $this->productModel->getAllByIds($productIds);
 
-        $products = [];
-        $i = 0;
         foreach ($userProducts as $userProduct) {
-            $products[$i] = $productsDB[$i];
-            $products[$i]['amount'] = $userProduct['amount'];
-            $i++;
+            foreach ($products as &$product) {
+                if ($product['id'] === $userProduct['product_id']) {
+                    $product['amount'] = $userProduct['amount'];
+                }
+            }
+            unset($product);
         }
 
-//        $products = [];
-//
-//        foreach ($userProducts as $userProduct) {
-//            $productId = $userProduct['product_id'];
-//            $product = $this->productModel->getOneById($productId);
-//            $product['amount'] = $userProduct['amount'];
-//            $products[] = $product;
-//        }
-
         require_once './../View/cart.php';
-
-//        $products = $this->productModel->getAllWithAmountInCart($userId);
-//
-//        if($products === false) {
-//            echo "<p>Ошибка при загрузке данных в корзину</p>";
-//        } elseif (empty($userData)) {
-//            $errors = "Ошибка при отображении имени пользователя";
-//            require_once './../View/cart.php';
-//        } else {
-//            require_once './../View/cart.php';
-//        }
     }
 
     private function checkSession(): void

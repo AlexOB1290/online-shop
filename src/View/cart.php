@@ -1,35 +1,52 @@
-<h1>Корзина товаров пользователя <?php echo $userData['name'] ?? $errors?></h1>
-<div id="main" class="main">
-    <?php foreach ($products as $product) : ?>
-        <div class="main_item">
-            <div class="card" >
-                <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
-                <div class="container">
-                    <h1><?php echo $product['name']?></h1>
-                    <p class="price"><?php echo $product['price']?> руб.</p>
-                    <p><?php echo $product['description']?></p>
-                    <p>Добавлено в корзину <?php echo $product['amount']?> ед. товара</p>
-                    <p>Общая сумма: <?php echo $product['amount']*$product['price']?> руб.</p>
 
-                    <p><button>Купить</button></p>
+    <div class="container">
+        <h1>Корзина товаров пользователя <?php echo $userData['name']; ?></h1>
+        <div id="main" class="main">
+            <?php foreach ($products as $product) : ?>
+                <div class="main_item">
+                    <div class="card" >
+                        <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
+                        <div class="container">
+                            <h1><?php echo $product['name']?></h1>
+                            <p class="price"><?php echo $product['price']?> руб.</p>
+                            <p><?php echo $product['description']?></p>
+                            <p>Добавлено в корзину <?php echo $product['amount']?> ед. товара</p>
+                            <p>Общая сумма: <?php echo $product['amount']*$product['price']?> руб.</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            <?php endforeach; ?>
         </div>
-    <?php endforeach; ?>
-</div>
-<div class="container catalog">
+        <div>
+            <button onclick="window.location='/order';" class="orderbtn">To order</button>
+        </div>
+        <div class="container catalog">
     <p>Do you want to <a href="/catalog">Catalog</a>?</p>
-</div>
-<div class="container add">
-    <p> Do you want to <a href="/add-product"> Add product</a>?</p>
-</div>
-<div class="container logout">
-    <p>Do you want to log out of your account? <a href="/logout">Exit</a>.</p>
-</div>
+        </div>
+        <div class="container add">
+            <p> Do you want to <a href="/add-product"> Add product</a>?</p>
+        </div>
+        <div class="container logout">
+            <p>Do you want to log out of your account? <a href="/logout">Exit</a>.</p>
+        </div>
+    </div>
 
 
 
 <style>
+
+    * {box-sizing: border-box}
+
+    /* Bordered form */
+    form {
+        border: 3px solid #f1f1f1;
+    }
+
+    /* Add padding to containers */
+    .container {
+        padding: 16px;
+    }
+
     .main
     {
         display: flex;
@@ -68,20 +85,20 @@
         font-size: 22px;
     }
 
-    .card button {
-        border: none;
-        outline: 0;
-        padding: 12px;
-        color: white;
+    /* Set a style for the submit/register button */
+    .orderbtn {
         background-color: #04AA6D;
-        text-align: center;
+        color: white;
+        padding: 16px 20px;
+        margin: 8px 0;
+        border: none;
         cursor: pointer;
         width: 100%;
-        font-size: 18px;
+        opacity: 0.9;
     }
 
-    .card button:hover {
-        opacity: 0.7;
+    .orderbtn:hover {
+        opacity:1;
     }
 
     /* Set a grey background color and center the text of the "sign in" section */

@@ -3,6 +3,7 @@ require_once './../Controller/UserController.php';
 require_once './../Controller/UserProductController.php';
 require_once './../Controller/CatalogController.php';
 require_once './../Controller/CartController.php';
+require_once './../Controller/OrderController.php';
 class App {
     public function run(): void
     {
@@ -60,6 +61,16 @@ class App {
                 $logout = new UserController();
                 if ($method === 'GET') {
                     $logout->logout();
+                } else {
+                    echo "$method не поддерживается адресом $uri";
+                }
+                break;
+            case '/order':
+                $order = new OrderController();
+                if ($method === 'GET') {
+                    $order->getOderForm();
+                } elseif ($method === 'POST') {
+                    $order->handleOrderForm();
                 } else {
                     echo "$method не поддерживается адресом $uri";
                 }

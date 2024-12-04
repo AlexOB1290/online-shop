@@ -27,7 +27,7 @@ class UserProduct{
 
     public function getAllByUserId(int $userId): array|false
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :user_id ORDER BY product_id");
+        $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :user_id");
         $stmt->execute(['user_id' => $userId]);
         return $stmt->fetchAll();
     }
