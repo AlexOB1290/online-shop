@@ -18,7 +18,7 @@ class UserProductController
         require_once './../View/get_add_product.php';
     }
 
-    public function handleAddUserProductForm(): void
+    public function handleAddProductForm(): void
     {
         $errors = $this->validateAddProductForm($_POST);
 

@@ -1,25 +1,37 @@
 
     <div class="container">
         <h1>Корзина товаров пользователя <?php echo $userData['name']; ?></h1>
-        <div id="main" class="main">
+
+            <?php if (empty($products)) : ?>
+
+            <p><?php echo "Ваша корзина пуста" ;?></p>
+
+            <div>
+                <button onclick="window.location='/catalog';" class="orderbtn">To catalog</button>
+            </div>
+
+            <?php else : ?>
+                <div id="main" class="main">
             <?php foreach ($products as $product) : ?>
-                <div class="main_item">
-                    <div class="card" >
-                        <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
-                        <div class="container">
-                            <h1><?php echo $product['name']?></h1>
-                            <p class="price"><?php echo $product['price']?> руб.</p>
-                            <p><?php echo $product['description']?></p>
-                            <p>Добавлено в корзину <?php echo $product['amount']?> ед. товара</p>
-                            <p>Общая сумма: <?php echo $product['amount']*$product['price']?> руб.</p>
+                        <div class="main_item">
+                            <div class="card" >
+                                <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
+                                <div class="container">
+                                    <h1><?php echo $product['name']?></h1>
+                                    <p class="price"><?php echo $product['price']?> руб.</p>
+                                    <p><?php echo $product['description']?></p>
+                                    <p>Добавлено в корзину <?php echo $product['amount']?> ед. товара</p>
+                                    <p>Общая сумма: <?php echo $product['amount']*$product['price']?> руб.</p>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+        <?php endforeach; ?>
                 </div>
-            <?php endforeach; ?>
-        </div>
         <div>
             <button onclick="window.location='/order';" class="orderbtn">To order</button>
         </div>
+        <?php endif; ?>
+
         <div class="container catalog">
     <p>Do you want to <a href="/catalog">Catalog</a>?</p>
         </div>

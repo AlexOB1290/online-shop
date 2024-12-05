@@ -104,7 +104,7 @@ class UserController
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = "Email указан неверно";
         } else {
-            $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
+            $pdo = new PdoConnection('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
             $stmt = $pdo->prepare("SELECT * FROM users WHERE email = :email");
             $stmt->execute(['email' => $email]);
             $userData = $stmt->fetch();

@@ -1,23 +1,32 @@
 <?php
 require_once './../Model/User.php';
 require_once './../Model/UserProduct.php';
+require_once './../Model/Order.php';
+require_once './../Model/Product.php';
+require_once './../Model/OrderProduct.php';
 
 class OrderController
 {
-    private User $user;
-    private UserProduct $userProduct;
+    private User $userModel;
+    private UserProduct $userProductModel;
+    private Order $orderModel;
+    private Product $productModel;
+    private OrderProduct $orderProductModel;
 
     public function __construct()
     {
-        $this->user = new User();
-        $this->userProduct = new UserProduct();
+        $this->userModel = new User();
+        $this->userProductModel = new UserProduct();
+        $this->orderModel = new Order();
+        $this->productModel = new Product();
+        $this->orderProductModel = new OrderProduct();
     }
     public function getOderForm(): void
     {
         $this->checkSession();
 
         $userId = $_SESSION['user_id'];
-        $userData = $this->user->getOneById($userId);
+        $userData = $this->userModel->getOneById($userId);
         require_once './../View/get_order.php';
     }
 
@@ -32,12 +41,62 @@ class OrderController
             $email = $_POST['email'];
             $address = $_POST['address'];
             $telephone = $_POST['telephone'];
+            date_default_timezone_set('Asia/Irkutsk');
+            $date = date('d-m-Y H:i:s');
 
-            $userProducts = $this->userProduct->getAllByUserId($userId);
-            print_r($userProducts);
+            $userProducts = $this->userProductModel->getAllByUserId($userId);
+
+            if ($userProducts === false)
+            $productIds = [];
+            foreach ($userProducts as $userProduct) {
+                $productIds[] = $userProduct['product_id'];
+            }
+
+            $products = $this->productModel->getAllByIds($productIds);
+
+            $total = 0;
+            foreach ($products as $product) {
+                foreach ($userProducts as &$userProduct) {
+                    if ($userProduct['product_id'] === $product['id']) {
+                        $userProduct['price'] = $product['price'];
+                        $total += $userProduct['price'] * $userProduct['amount'];
+                    }
+                }
+                unset($userProduct);
+            }
+            //print_r($total);
+            //print_r($userProducts);
+
+            $newOrder = $this->orderModel->create($userId, $name, $email, $address, $telephone, $total, $date);
+
+            $userOrder = $this->orderModel->getOneByUserIdAndDate($userId, $date);
+
+            foreach ($userProducts as $userProduct) {
+                $orderId = $userOrder['id'];
+                $productId = $userProduct['product_id'];
+                $amount = $userProduct['amount'];
+                $price = $userProduct['price'];
+                $this->orderProductModel->addUserProduct($orderId, $productId, $amount, $price);
+            }
+
+            //$userOrderProducts = $this->orderProductModel->getByOrderId($orderId);
+            //print_r($userOrderProduct);
+
+            $this->userProductModel->deleteByUserId($userId);
+
+            header('Location: /user-order');
+        } else {
+            require_once './../View/get_order.php';
         }
+    }
 
-        require_once './../View/get_order.php';
+    public function getUserOrderPage(): void
+    {
+        $this->checkSession();
+        $userId = $_SESSION['user_id'];
+        $userOrder = $this->orderModel->getOneByUserId($userId);
+
+        require_once './../View/post_order.php';
     }
 
     private function validateOrderForm(array $arrPost): array

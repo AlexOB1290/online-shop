@@ -26,21 +26,24 @@ class CartController
 
         $userProducts = $this->userProductModel->getAllByUserId($userId);
 
-        $productIds = [];
-        foreach ($userProducts as $userProduct) {
-            $productIds[] = $userProduct['product_id'];
-        }
-
-        $products = $this->productModel->getAllByIds($productIds);
-
-        foreach ($userProducts as $userProduct) {
-            foreach ($products as &$product) {
-                if ($product['id'] === $userProduct['product_id']) {
-                    $product['amount'] = $userProduct['amount'];
-                }
+        if (!empty($userProducts)) {
+            $productIds = [];
+            foreach ($userProducts as $userProduct) {
+                $productIds[] = $userProduct['product_id'];
             }
-            unset($product);
+
+            $products = $this->productModel->getAllByIds($productIds);
+
+            foreach ($userProducts as $userProduct) {
+                foreach ($products as &$product) {
+                    if ($product['id'] === $userProduct['product_id']) {
+                        $product['amount'] = $userProduct['amount'];
+                    }
+                }
+                unset($product);
+            }
         }
+
 
         require_once './../View/cart.php';
     }

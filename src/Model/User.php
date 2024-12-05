@@ -1,12 +1,7 @@
 <?php
-class User
+require_once './../Model/PdoConnection.php';
+class User extends PdoConnection
 {
-    private PDO $pdo;
-    public function __construct()
-    {
-        $this->pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
-    }
-
     public function create(string $name, string $email, string $hashPassword): bool
     {
         $stmt = $this->pdo->prepare("INSERT INTO users (name, email, password) VALUES (:name, :email, :password)");

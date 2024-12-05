@@ -1,11 +1,7 @@
 <?php
-class UserProduct{
-    private PDO $pdo;
-    public function __construct()
-    {
-        $this->pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
-    }
-
+require_once './../Model/PdoConnection.php';
+class UserProduct extends PdoConnection
+{
     public function getAllByIds(int $userId, int $productId): array|false
     {
         $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :product_id");
@@ -30,5 +26,11 @@ class UserProduct{
         $stmt = $this->pdo->prepare("SELECT * FROM user_products WHERE user_id = :user_id");
         $stmt->execute(['user_id' => $userId]);
         return $stmt->fetchAll();
+    }
+
+    public function deleteByUserId(int $userId): bool
+    {
+        $stmt = $this->pdo->prepare("DELETE FROM user_products WHERE user_id = :user_id");
+        return $stmt->execute(['user_id' => $userId]);
     }
 }

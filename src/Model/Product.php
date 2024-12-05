@@ -1,12 +1,7 @@
 <?php
-class Product
+require_once './../Model/PdoConnection.php';
+class Product extends PdoConnection
 {
-    private PDO $pdo;
-    public function __construct()
-    {
-        $this->pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
-    }
-
     public function getAll(): array|false
     {
         $stmt = $this->pdo->query("SELECT * FROM products ORDER BY id");
