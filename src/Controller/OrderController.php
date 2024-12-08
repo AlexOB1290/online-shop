@@ -1,10 +1,10 @@
 <?php
-require_once './../Model/User.php';
-require_once './../Model/UserProduct.php';
-require_once './../Model/Order.php';
-require_once './../Model/Product.php';
-require_once './../Model/OrderProduct.php';
-
+namespace Controller;
+use Model\UserProduct;
+use Model\User;
+use Model\Product;
+use Model\Order;
+use Model\OrderProduct;
 class OrderController
 {
     private User $userModel;
@@ -21,7 +21,7 @@ class OrderController
         $this->productModel = new Product();
         $this->orderProductModel = new OrderProduct();
     }
-    public function getOderForm(): void
+    public function getOrderForm(): void
     {
         $this->checkSession();
 
@@ -64,10 +64,8 @@ class OrderController
                 }
                 unset($userProduct);
             }
-            //print_r($total);
-            //print_r($userProducts);
 
-            $newOrder = $this->orderModel->create($userId, $name, $email, $address, $telephone, $total, $date);
+            $this->orderModel->create($userId, $name, $email, $address, $telephone, $total, $date);
 
             $userOrder = $this->orderModel->getOneByUserIdAndDate($userId, $date);
 
@@ -78,9 +76,6 @@ class OrderController
                 $price = $userProduct['price'];
                 $this->orderProductModel->addUserProduct($orderId, $productId, $amount, $price);
             }
-
-            //$userOrderProducts = $this->orderProductModel->getByOrderId($orderId);
-            //print_r($userOrderProduct);
 
             $this->userProductModel->deleteByUserId($userId);
 

@@ -1,6 +1,6 @@
 <?php
-require_once './../Model/PdoConnection.php';
-class Product extends PdoConnection
+namespace Model;
+class Product extends Model
 {
     public function getAll(): array|false
     {

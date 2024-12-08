@@ -6,10 +6,6 @@
 
             <p><?php echo "Ваша корзина пуста" ;?></p>
 
-            <div>
-                <button onclick="window.location='/catalog';" class="orderbtn">To catalog</button>
-            </div>
-
             <?php else : ?>
                 <div id="main" class="main">
             <?php foreach ($products as $product) : ?>

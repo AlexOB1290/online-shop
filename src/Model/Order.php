@@ -1,6 +1,6 @@
 <?php
-require_once './../Model/PdoConnection.php';
-class Order extends PdoConnection
+namespace Model;
+class Order extends Model
 {
     public function create(int $userId, string $name, string $email, string $address, string $telephone, string $total, string $date): bool
     {

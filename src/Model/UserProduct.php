@@ -1,6 +1,6 @@
 <?php
-require_once './../Model/PdoConnection.php';
-class UserProduct extends PdoConnection
+namespace Model;
+class UserProduct extends Model
 {
     public function getAllByIds(int $userId, int $productId): array|false
     {

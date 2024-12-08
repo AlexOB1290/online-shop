@@ -1,6 +1,6 @@
 <?php
-require_once './../Model/PdoConnection.php';
-class OrderProduct extends PdoConnection
+namespace Model;
+class OrderProduct extends Model
 {
     public function addUserProduct($orderId, $productId, $amount, $price): bool
     {

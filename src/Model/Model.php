@@ -1,5 +1,7 @@
 <?php
-class PdoConnection
+namespace Model;
+use PDO;
+class Model
 {
     protected PDO $pdo;
     public function __construct()

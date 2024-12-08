@@ -1,6 +1,6 @@
 <?php
-require_once './../Model/PdoConnection.php';
-class User extends PdoConnection
+namespace Model;
+class User extends Model
 {
     public function create(string $name, string $email, string $hashPassword): bool
     {
