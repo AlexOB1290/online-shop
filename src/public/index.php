@@ -1,50 +1,58 @@
 <?php
 
-$uri = $_SERVER['REQUEST_URI'];
-$method = $_SERVER['REQUEST_METHOD'];
+use Core\App;
 
-    if ($uri === '/registrate') {
-        if ($method === 'GET') {
-            require_once './get_registration.php';
-        } elseif ($method === 'POST') {
-            require_once './handle_registration.php';
-        } else {
-            echo "$method не поддерживается адресом $uri";
-        }
-    } elseif ($uri === '/login') {
-        if ($method === 'GET') {
-            require_once './get_login.php';
-        } elseif ($method === 'POST') {
-            require_once './handle_login.php';
-        } else {
-            echo "$method не поддерживается адресом $uri";
-        }
-    } elseif ($uri === '/catalog') {
-        if ($method === 'GET') {
-            require_once './catalog.php';
-        } else {
-            echo "$method не поддерживается адресом $uri";
-        }
-    } elseif ($uri === '/add-product') {
-        if ($method === 'GET') {
-            require_once './get_add_product.php';
-        } elseif ($method === 'POST') {
-            require_once './handle_add_product.php';
-        } else {
-            echo "$method не поддерживается адресом $uri";
-        }
-    } elseif ($uri === '/cart') {
-        if ($method === 'GET') {
-            require_once './cart.php';
-        } else {
-            echo "$method не поддерживается адресом $uri";
-        }
-    } elseif ($uri === '/logout') {
-        if ($method === 'GET') {
-            require_once './logout.php';
-        } else {
-            echo "$method не поддерживается адресом $uri";
-        }
-    } else {
-        require_once './404.html';
+//$autoloadCore = function (string $classname) {
+//    $path = "./../Core/$classname.php";
+//
+//    if (file_exists($path)) {
+//        require_once $path;
+//        return true;
+//    }
+//
+//    return false;
+//};
+//
+//$autoloadController = function (string $classname) {
+//    $path = "./../Controller/$classname.php";
+//
+//    if (file_exists($path)) {
+//        require_once $path;
+//        return true;
+//    }
+//
+//    return false;
+//};
+//
+//$autoloadModel = function (string $classname) {
+//    $path = "./../Model/$classname.php";
+//
+//    if (file_exists($path)) {
+//        require_once $path;
+//        return true;
+//    }
+//
+//    return false;
+//};
+//
+//spl_autoload_register($autoloadCore);
+//spl_autoload_register($autoloadController);
+//spl_autoload_register($autoloadModel);
+
+$autoload = function($classname) {
+    $handlerPath = str_replace('\\', '/', $classname);
+    $path = "./../$handlerPath.php";
+
+    if (file_exists($path)) {
+        require_once $path;
+        return true;
     }
+
+    return false;
+};
+
+spl_autoload_register($autoload);
+
+
+$app = new App();
+$app->run();

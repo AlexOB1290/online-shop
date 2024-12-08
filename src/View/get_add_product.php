@@ -1,18 +1,3 @@
-<?php
-if (session_status() == PHP_SESSION_ACTIVE) {
-    if (!isset($_SESSION['user_id'])) {
-        header('Location: /login');
-    }
-} else {
-    session_start();
-    if (!isset($_SESSION['user_id'])) {
-        header('Location: /login');
-    }
-}
-
-?>
-
-
 <form action="/add-product" method=POST>
     <div class="container">
         <h1>Add-product</h1>

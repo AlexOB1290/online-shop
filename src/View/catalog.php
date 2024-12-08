@@ -1,30 +1,16 @@
-<?php
-
-session_start();
-if (!isset($_SESSION['user_id'])) {
-    header('Location: /login');
-} else {
-    $pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
-    $stmt = $pdo->query("SELECT * FROM products ORDER BY id");
-
-    $productsData = $stmt->fetchAll();
-}
-?>
-
-
 <div id="main" class="main">
     <?php foreach ($productsData as $product) : ?>
-    <div class="main_item">
-        <div class="card" >
-            <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
-            <div class="container">
-                <h1><?php echo $product['name']?></h1>
-                <p class="price"><?php echo $product['price']?> руб.</p>
-                <p><?php echo $product['description']?></p>
-                <p><button>Добавить в корзину</button></p>
+        <div class="main_item">
+            <div class="card" >
+                <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
+                <div class="container">
+                    <h1><?php echo $product['name']?></h1>
+                    <p class="price"><?php echo $product['price']?> руб.</p>
+                    <p><?php echo $product['description']?></p>
+                    <p><button>Добавить в корзину</button></p>
+                </div>
             </div>
         </div>
-    </div>
     <?php endforeach; ?>
 </div>
 <div class="container add">
@@ -33,6 +19,8 @@ if (!isset($_SESSION['user_id'])) {
 <div class="container logout">
     <p>Do you want to log out of your account? <a href="/logout">Exit</a>.</p>
 </div>
+
+
 
 
 
