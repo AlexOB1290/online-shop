@@ -1,7 +1,9 @@
 <?php
 namespace Controller;
+
 use Model\Product;
 use Model\UserProduct;
+
 class UserProductController
 {
     private Product $productModel;
@@ -39,7 +41,9 @@ class UserProductController
             }
         }
 
-        require_once './../View/get_add_product.php';
+        $productsData = $this->productModel->getAll();
+
+        require_once './../View/catalog.php';
     }
 
     private function checkSession(): void

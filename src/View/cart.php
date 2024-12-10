@@ -35,6 +35,9 @@
             <p> Do you want to <a href="/add-product"> Add product</a>?</p>
         </div>
         <div class="container logout">
+            <p>Do you want to <a href="/user-order">Last Order</a>?</p>
+        </div>
+        <div class="container logout">
             <p>Do you want to log out of your account? <a href="/logout">Exit</a>.</p>
         </div>
     </div>
