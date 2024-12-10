@@ -1,8 +1,10 @@
 <?php
 namespace Controller;
+
 use Model\UserProduct;
 use Model\User;
 use Model\Product;
+
 class CartController
 {
     private UserProduct $userProductModel;

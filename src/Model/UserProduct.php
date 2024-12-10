@@ -1,5 +1,6 @@
 <?php
 namespace Model;
+
 class UserProduct extends Model
 {
     public function getAllByIds(int $userId, int $productId): array|false

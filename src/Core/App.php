@@ -1,7 +1,8 @@
 <?php
 namespace Core;
 
-class App {
+class App
+{
     private array $routes = [
         '/registrate' => [
             'GET' => [
@@ -54,17 +55,17 @@ class App {
         '/order' => [
             'GET' => [
                 'class' => 'Controller\OrderController',
-                'method' => 'getOrderForm',
+                'method' => 'getOrderPage',
             ],
             'POST' => [
                 'class' => 'Controller\OrderController',
                 'method' => 'handleOrderForm',
             ]
         ],
-        '/user-order' => [
+        '/orders' => [
             'GET' => [
                 'class' => 'Controller\OrderController',
-                'method' => 'getUserOrderPage',
+                'method' => 'getOrders',
             ],
         ],
     ];

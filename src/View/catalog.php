@@ -7,14 +7,29 @@
                     <h1><?php echo $product['name']?></h1>
                     <p class="price"><?php echo $product['price']?> руб.</p>
                     <p><?php echo $product['description']?></p>
-                    <p><button>Добавить в корзину</button></p>
+                    <form action="/add-product" method=POST>
+                        <div class="container">
+                            <label style="color: red;">
+                                <?php echo $errors['product-id']??"";?></label>
+                            <input type="hidden" name="product-id" id="product-id" value="<?php echo $product['id']; ?>" required>
+
+                            <label for="amount"><b>Количество:</b></label>
+                            <label style="color: red;">
+                                <?php echo $errors['amount']??"";?></label>
+                            <input type="text" placeholder="Введите количество" name="amount" id="amount" required>
+                            <button type="submit" class="cartbtn">Добавить в корзину</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
     <?php endforeach; ?>
 </div>
-<div class="container add">
-    <p> Do you want to <a href="/add-product"> Add product</a>?</p>
+<div class="container logout">
+    <p>Do you want to move <a href="/cart">Cart</a>?</p>
+</div>
+<div class="container logout">
+    <p>Do you want to move <a href="/orders">Orders</a>?</p>
 </div>
 <div class="container logout">
     <p>Do you want to log out of your account? <a href="/logout">Exit</a>.</p>
@@ -89,4 +104,55 @@
         background-color: #04AA6D;
         text-align: center;
     }
+</style>
+
+<style>
+    * {box-sizing: border-box}
+
+    /* Bordered form */
+    form {
+        border: none;
+    }
+
+    /* Add padding to containers */
+    .container {
+        padding: 16px;
+    }
+
+    /* Full-width input fields */
+    input[type=text], input[type=password] {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+    }
+
+    input[type=text]:focus, input[type=password]:focus {
+        background-color: #ddd;
+        outline: none;
+    }
+
+    /* Set a style for the submit/register button */
+    .cartbtn {
+        background-color: #04AA6D;
+        color: white;
+        padding: 16px 20px;
+        margin: 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+    .registerbtn:hover {
+        opacity:1;
+    }
+
+    /* Add a blue text color to links */
+    a {
+        color: dodgerblue;
+    }
+
 </style>
