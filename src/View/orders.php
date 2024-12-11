@@ -12,7 +12,7 @@
                         <div class="list">
                             <?php foreach ($order['products'] as $product) : ?>
                                 <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:20%; height:auto">
-                                <p><?php echo "{$product['name']} - {$product['price']}"?> руб. за ед.</p>
+                                <p><?php echo "{$product['name']} - {$product['order_amount']} шт. - цена: {$product['price']}"?> руб. за ед.</p>
                             <?php endforeach; ?>
                         </div>
 

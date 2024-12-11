@@ -31,11 +31,8 @@
         <div class="container catalog">
     <p>Do you want to <a href="/catalog">Catalog</a>?</p>
         </div>
-        <div class="container add">
-            <p> Do you want to <a href="/add-product"> Add product</a>?</p>
-        </div>
         <div class="container logout">
-            <p>Do you want to <a href="/user-order">Last Order</a>?</p>
+            <p>Do you want to move <a href="/orders"> Orders</a>?</p>
         </div>
         <div class="container logout">
             <p>Do you want to log out of your account? <a href="/logout">Exit</a>.</p>

@@ -3,11 +3,11 @@ namespace Core;
 
 class Autoloader
 {
-    public function autoload(): void
+    public static function registrate(string $rootPath): void
     {
-        $autoload = function($classname) {
-            $handlerPath = str_replace('\\', '/', $classname);
-            $path = "./../$handlerPath.php";
+        $autoload = function($classname) use ($rootPath) {
+            $handlePath = str_replace('\\', '/', $classname);
+            $path = "{$rootPath}{$handlePath}.php";
 
             if (file_exists($path)) {
                 require_once $path;
