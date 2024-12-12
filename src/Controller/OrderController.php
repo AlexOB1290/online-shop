@@ -23,7 +23,7 @@ class OrderController
         $this->productModel = new Product();
         $this->orderProductModel = new OrderProduct();
     }
-    public function getOrderPage(): void
+    public function getOrderForm(): void
     {
         $this->checkSession();
 
@@ -176,10 +176,10 @@ class OrderController
 
         if (empty($telephone)) {
             $errors['telephone'] = "Номер телефона не должен быть пустым";
-        } elseif (strlen($telephone) < 11) {
-            $errors['telephone'] = "Номер телефона дожен содержать не менее 11 цифр";
         } elseif (!is_numeric($telephone)) {
             $errors['telephone'] = "Номер телефона должен содержать только цифры";
+        } elseif (strlen($telephone) < 11 || strlen($telephone) > 11) {
+            $errors['telephone'] = "Номер телефона должен содержать 11 цифр";
         }
 
         return $errors;

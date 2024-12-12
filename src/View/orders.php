@@ -5,6 +5,7 @@
                 <div class="container">
                     <h1>Заказ № <?php echo $order['order_number']?></h1>
                     <p>Имя заказчика: <?php echo $order['name']?></p>
+                    <p>Адрес доставки: <?php echo $order['address']?></p>
                     <p class="price">Общая сумма <?php echo $order['total']?> руб.</p>
                     <p>Дата заказа: <?php echo $order['date']?></p>
                     <details class="details">
@@ -12,7 +13,7 @@
                         <div class="list">
                             <?php foreach ($order['products'] as $product) : ?>
                                 <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:20%; height:auto">
-                                <p><?php echo "{$product['name']} - {$product['order_amount']} шт. - цена: {$product['price']}"?> руб. за ед.</p>
+                                <p><?php echo "{$product['name']} - {$product['order_amount']} шт. Цена: {$product['price']}"?> руб. за ед.</p>
                             <?php endforeach; ?>
                         </div>
 

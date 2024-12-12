@@ -25,12 +25,11 @@
         <input type="tel" placeholder="Enter Telephone number" name="telephone" id="telephone" required>
         <hr>
 
-        <p>By creating an account you agree to our <a href="#">Terms & Privacy</a>.</p>
         <button type="submit" class="orderbtn">Place an order</button>
     </div>
 
-    <div class="container signin">
-        <p>Already have an account? <a href="/login">Sign in</a>.</p>
+    <div class="container cart">
+        <p>Do you want to move <a href="/cart">Cart</a>?</p>
     </div>
 </form>
 
@@ -91,7 +90,7 @@
     }
 
     /* Set a grey background color and center the text of the "sign in" section */
-    .signin {
+    .cart {
         background-color: #f1f1f1;
         text-align: center;
     }
