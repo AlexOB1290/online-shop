@@ -1,41 +1,84 @@
-<div id="main" class="main">
-    <?php foreach ($orders as $order) : ?>
-        <div class="main_item">
-            <div class="card" >
-                <div class="container">
-                    <h1>Заказ № <?php echo $order['order_number']?></h1>
-                    <p>Имя заказчика: <?php echo $order['name']?></p>
-                    <p>Адрес доставки: <?php echo $order['address']?></p>
-                    <p class="price">Общая сумма <?php echo $order['total']?> руб.</p>
-                    <p>Дата заказа: <?php echo $order['date']?></p>
-                    <details class="details">
-                        <summary>Список товаров</summary>
-                        <div class="list">
-                            <?php foreach ($order['products'] as $product) : ?>
-                                <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:20%; height:auto">
-                                <p><?php echo "{$product['name']} - {$product['order_amount']} шт. Цена: {$product['price']}"?> руб. за ед.</p>
-                            <?php endforeach; ?>
-                        </div>
+<body>
+    <button class="tablink" onclick="window.location='/catalog';">Каталог</button>
+    <button class="tablink" onclick="window.location='/cart';" id="defaultOpen">Корзина<span class="badge"><?php echo $count ?></span></button>
+    <button class="tablink" onclick="window.location='/orders';">Заказы</button>
+    <button class="tablink" onclick="window.location='/logout';">Выйти из аккаунта</button>
 
-                    </details>
+    <div id="main" class="main">
+        <?php if (empty($orders)) : ?>
+
+            <h1><?php echo "Вы еще ничего не заказали" ;?></h1>
+
+        <?php else : ?>
+        <?php foreach ($orders as $order) : ?>
+            <div class="main_item">
+                <div class="card" >
+                    <div class="container">
+                        <h1>Заказ № <?php echo $order->getOrderNumber()?></h1>
+                        <p>Имя заказчика: <?php echo $order->getName()?></p>
+                        <p>Адрес доставки: <?php echo $order->getAddress()?></p>
+                        <p class="price">Общая сумма: <?php echo $order->getTotal()?> руб.</p>
+                        <p>Дата заказа: <?php echo $order->getDate()?></p>
+                        <details class="details">
+                            <summary>Список товаров</summary>
+                            <div class="list">
+                                <?php foreach ($order->getProducts() as $product) : ?>
+                                    <img src="<?php echo $product->getImage()?>" alt="Carnaval Costumes" style="max-width:20%; height:auto">
+                                    <p><?php echo "{$product->getName()} - {$product->getAmount()} шт. Цена: {$product->getPrice()}"?> руб. за ед.</p>
+                                <?php endforeach; ?>
+                            </div>
+
+                        </details>
+                    </div>
                 </div>
             </div>
-        </div>
-    <?php endforeach; ?>
-</div>
-<div class="container catalog">
-    <p>Do you want to <a href="/catalog">Catalog</a>?</p>
-</div>
-<div class="container logout">
-    <p>Do you want to log out of your account? <a href="/logout">Exit</a>.</p>
-</div>
+        <?php endforeach; ?>
+        <?php endif; ?>
+    </div>
+</body>
+
+<style>
+    /* Set height of body and the document to 100% to enable "full page tabs" */
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial;
+    }
+
+    /* Style tab links */
+    .tablink {
+        background-color: #555;
+        color: white;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        font-size: 17px;
+        width: 25%;
+    }
+
+    .tablink:hover {
+        background-color: #04AA6D;
+    }
+
+    .tablink .badge {
+        position: absolute;
+        top: 1%;
+        right: 50.5%;
+        padding: 5px 10px;
+        border-radius: 50%;
+        background: red;
+        color: white;
+    }
+</style>
 
 <style>
     .main
     {
-        display: flex;
+        display: inline-flex;
         flex-direction: row;
-        flex-wrap: nowrap;
+        flex-wrap: wrap;
     }
 
     .main_item
@@ -84,16 +127,5 @@
 
     .details:hover {
         opacity: 0.7;
-    }
-
-    /* Set a grey background color and center the text of the "sign in" section */
-    .logout {
-        background-color: #f1f1f1;
-        text-align: center;
-    }
-
-    .catalog {
-        background-color: #04AA6D;
-        text-align: center;
     }
 </style>

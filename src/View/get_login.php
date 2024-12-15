@@ -1,29 +1,29 @@
 <form action="/login" method="post">
 
     <div class="container">
-        <h1>Login</h1>
-        <p>Please fill in this form.</p>
+        <h1>Авторизация</h1>
+        <p>Пожалуйста, заполните поля ниже для входа в аккаунт.</p>
         <hr>
 
         <label for="email"><b>Email</b></label>
         <label style="color: red;">
             <?php echo $errors['email']??"";?></label>
-        <input type="text" placeholder="Enter Email" name="email" required>
+        <input type="text" placeholder="Введите email" name="email" required>
 
-        <label for="psw"><b>Password</b></label>
+        <label for="psw"><b>Пароль</b></label>
         <label style="color: red;">
             <?php echo $errors['password']??"";?></label>
-        <input type="password" placeholder="Enter Password" name="psw" required>
+        <input type="password" placeholder="Введите пароль" name="psw" required>
 
-        <button type="submit">Login</button>
+        <button type="submit">Войти</button>
         <label>
-            <input type="checkbox" checked="checked" name="remember"> Remember me
+            <input type="checkbox" checked="checked" name="remember"> Запомнить меня (пока не работает)
         </label>
     </div>
 
     <div class="container" style="background-color:#f1f1f1">
-        <button type="button" class="cancelbtn">Cancel</button>
-        <span class="psw">Start <a href="/registrate">registration</a></span>
+        <button type="button" class="cancelbtn" onclick="window.location = '/registrate'">Отмена</button>
+        <span class="psw">Начать <a href="/registrate">регистрацию</a></span>
     </div>
 </form>
 

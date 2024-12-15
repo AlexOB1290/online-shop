@@ -45,13 +45,13 @@ class UserController
             $email = $_POST["email"];
             $password = $_POST["psw"];
 
-            $userData = $this->userModel->getOneByEmail($email);
+            $user = $this->userModel->getOneByEmail($email);
 
-            if($userData === false) {
+            if(!$user) {
                 $errors['email'] = "Имя пользователя или пароль указаны неверно";
-            } elseif (password_verify($password, $userData['password'])) {
+            } elseif (password_verify($password, $user->getPassword())) {
                 session_start();
-                $_SESSION['user_id'] = $userData['id'];
+                $_SESSION['user_id'] = $user->getId();
                 header('Location: /catalog');
             } else {
                 $errors['email'] = "Имя пользователя или пароль указаны неверно";
@@ -103,9 +103,9 @@ class UserController
         } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors['email'] = "Email указан неверно";
         } else {
-            $userData = $this->userModel->getOneByEmail($email);
+            $user = $this->userModel->getOneByEmail($email);
 
-            if ($userData !== false) {
+            if ($user) {
                 $errors['email'] = "Email уже зарегистрирован";
             }
         }

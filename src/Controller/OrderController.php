@@ -28,7 +28,8 @@ class OrderController
         $this->checkSession();
 
         $userId = $_SESSION['user_id'];
-        $userData = $this->userModel->getOneById($userId);
+        $user = $this->userModel->getOneById($userId);
+
         require_once './../View/get_order.php';
     }
 
@@ -53,7 +54,7 @@ class OrderController
             if ($userProducts === false)
             $productIds = [];
             foreach ($userProducts as $userProduct) {
-                $productIds[] = $userProduct['product_id'];
+                $productIds[] = $userProduct->getProductId();
             }
 
             $products = $this->productModel->getAllByIds($productIds);
@@ -61,9 +62,9 @@ class OrderController
             $total = 0;
             foreach ($products as $product) {
                 foreach ($userProducts as &$userProduct) {
-                    if ($userProduct['product_id'] === $product['id']) {
-                        $userProduct['price'] = $product['price'];
-                        $total += $userProduct['price'] * $userProduct['amount'];
+                    if ($userProduct->getProductId() === $product->getId()) {
+                        $userProduct->setPrice($product->getPrice());
+                        $total += $product->getPrice() * $userProduct->getAmount();
                     }
                 }
                 unset($userProduct);
@@ -71,9 +72,9 @@ class OrderController
 
             $this->orderModel->create($userId, $orderNumber, $name, $email, $address, $telephone, $total, $date);
 
-            $userOrder = $this->orderModel->getOneByUserId($userId);
+            $order = $this->orderModel->getOneByUserId($userId);
 
-            $this->orderProductModel->addUserProduct($userOrder['id'], $userProducts);
+            $this->orderProductModel->addUserProduct($order->getId(), $userProducts);
 
             $this->userProductModel->deleteByUserId($userId);
 
@@ -87,10 +88,25 @@ class OrderController
     {
         $this->checkSession();
         $userId = $_SESSION['user_id'];
+
+        $userProducts = $this->userProductModel->getAllByUserId($userId);
+
+        if ($userProducts) {
+            $amount = 0;
+
+            foreach ($userProducts as $userProduct) {
+                $amount += $userProduct->getAmount();
+            }
+
+            $count = "$amount";
+        } else {
+            $count = "";
+        }
+
         $orders = $this->orderModel->getAllByUserId($userId);
 
         foreach ($orders as &$order) {
-            $order['products'] = $this->getOrderProducts($order['id']);
+            $order->setProducts($this->getOrderProducts($order->getId()));
         }
         unset($order);
 
@@ -103,16 +119,16 @@ class OrderController
 
         $productIds = [];
         foreach ($orderProducts as $orderProduct) {
-            $productIds[] = $orderProduct['product_id'];
+            $productIds[] = $orderProduct->getProductId();
         }
 
         $products = $this->productModel->getAllByIds($productIds);
 
         foreach ($orderProducts as $orderProduct) {
             foreach ($products as &$product) {
-                if ($product['id'] === $orderProduct['product_id']) {
-                    $product['order_amount'] = $orderProduct['amount'];
-                    $product['order_price'] = $orderProduct['price'];
+                if ($product->getId() === $orderProduct->getProductId()) {
+                    $product->setAmount($orderProduct->getAmount());
+                    $product->setPrice($orderProduct->getPrice());
                 }
             }
             unset($product);

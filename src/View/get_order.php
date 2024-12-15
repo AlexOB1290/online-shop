@@ -1,4 +1,9 @@
 <form action="/order" method=POST>
+    <button class="tablink" onclick="window.location='/catalog';">Каталог</button>
+    <button class="tablink" onclick="window.location='/cart';" id="defaultOpen">Корзина</button>
+    <button class="tablink" onclick="window.location='/orders';">Заказы</button>
+    <button class="tablink" onclick="window.location='/logout';">Выйти из аккаунта</button>
+
     <div class="container">
         <h1>Order form</h1>
         <p>Please fill in this form to create an order.</p>
@@ -7,12 +12,12 @@
         <label for="name"><b>Name</b></label>
         <label style="color: red;">
             <?php echo $errors['name']??"";?></label>
-        <input type="text" placeholder="Enter Name" name="name" id="name" value="<?php echo $userData['name'] ?? ""; ?>" required>
+        <input type="text" placeholder="Enter Name" name="name" id="name" value="<?php echo $user->getName() ?? ""; ?>" required>
 
         <label for="email"><b>Email</b></label>
         <label style="color: red;">
             <?php echo $errors['email']??"";?></label>
-        <input type="email" placeholder="Enter Email" name="email" id="email" value="<?php echo $userData['email'] ?? ""; ?>" required>
+        <input type="email" placeholder="Enter Email" name="email" id="email" value="<?php echo $user->getEmail() ?? ""; ?>" required>
 
         <label for="psw"><b>Address</b></label>
         <label style="color: red;">
@@ -33,6 +38,31 @@
     </div>
 </form>
 
+<style>
+    /* Set height of body and the document to 100% to enable "full page tabs" */
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial;
+    }
+
+    /* Style tab links */
+    .tablink {
+        background-color: #555;
+        color: white;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        font-size: 17px;
+        width: 25%;
+    }
+
+    .tablink:hover {
+        background-color: #04AA6D;
+    }
+</style>
 
 <style>
     * {box-sizing: border-box}

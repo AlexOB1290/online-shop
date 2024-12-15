@@ -24,22 +24,24 @@ class CartController
 
         $userId = $_SESSION['user_id'];
 
-        $userData = $this->userModel->getOneById($userId);
+        $user = $this->userModel->getOneById($userId);
 
         $userProducts = $this->userProductModel->getAllByUserId($userId);
 
         if (!empty($userProducts)) {
             $productIds = [];
             foreach ($userProducts as $userProduct) {
-                $productIds[] = $userProduct['product_id'];
+                $productIds[] = $userProduct->getProductId();
             }
 
             $products = $this->productModel->getAllByIds($productIds);
 
             foreach ($userProducts as $userProduct) {
                 foreach ($products as &$product) {
-                    if ($product['id'] === $userProduct['product_id']) {
-                        $product['amount'] = $userProduct['amount'];
+                    if ($product->getId() === $userProduct->getProductId()) {
+                        $product->setAmount($userProduct->getAmount());
+                        $total = $product->getPrice() * $userProduct->getAmount();
+                        $product->setTotal($total);
                     }
                 }
                 unset($product);

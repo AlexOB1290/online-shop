@@ -32,16 +32,30 @@ class UserProductController
             $productId = $_POST['product-id'];
             $amount = $_POST['amount'];
 
-            $userProductsData = $this->userProductModel->getAllByIds($userId, $productId);
+            $userProduct = $this->userProductModel->getOneByIds($userId, $productId);
 
-            if ($userProductsData === false) {
+            if (!$userProduct) {
                 $this->userProductModel->addProduct($userId, $productId, $amount);
             } else {
                 $this->userProductModel->increaseAmount($amount, $userId, $productId);
             }
+
+            $userProducts = $this->userProductModel->getAllByUserId($userId);
+
+            if ($userProducts) {
+                $amount = 0;
+
+                foreach ($userProducts as $userProduct) {
+                    $amount += $userProduct->getAmount();
+                }
+
+                $count = "$amount";
+            } else {
+                $count = "";
+            }
         }
 
-        $productsData = $this->productModel->getAll();
+        $products = $this->productModel->getAll();
 
         require_once './../View/catalog.php';
     }
@@ -79,9 +93,9 @@ class UserProductController
         } elseif (str_contains($productId, ".")) {
             $errors['product-id'] = "Product-id должно быть натуральным числом";
         } else {
-            $productData = $this->productModel->getOneById($productId);
+            $product = $this->productModel->getOneById($productId);
 
-            if ($productData === false) {
+            if (!$product) {
                 $errors['product-id'] = "Данный товар отсутствует в магазине";
             }
         }

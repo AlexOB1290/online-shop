@@ -1,48 +1,67 @@
+<body>
+    <button class="tablink" onclick="window.location='/catalog';">Каталог</button>
+    <button class="tablink" onclick="window.location='/cart';" id="defaultOpen">Корзина</button>
+    <button class="tablink" onclick="window.location='/orders';">Заказы</button>
+    <button class="tablink" onclick="window.location='/logout';">Выйти из аккаунта</button>
 
     <div class="container">
-        <h1>Корзина товаров пользователя <?php echo $userData['name']; ?></h1>
+        <h1>Корзина товаров пользователя <?php echo $user->getName(); ?></h1>
 
-            <?php if (empty($products)) : ?>
+        <?php if (empty($products)) : ?>
 
             <p><?php echo "Ваша корзина пуста" ;?></p>
 
-            <?php else : ?>
-                <div id="main" class="main">
-            <?php foreach ($products as $product) : ?>
-                        <div class="main_item">
-                            <div class="card" >
-                                <img src="<?php echo $product['image']?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
-                                <div class="container">
-                                    <h1><?php echo $product['name']?></h1>
-                                    <p class="price"><?php echo $product['price']?> руб.</p>
-                                    <p><?php echo $product['description']?></p>
-                                    <p>Добавлено в корзину <?php echo $product['amount']?> ед. товара</p>
-                                    <p>Общая сумма: <?php echo $product['amount']*$product['price']?> руб.</p>
-                                </div>
+        <?php else : ?>
+            <div id="main" class="main">
+                <?php foreach ($products as $product) : ?>
+                    <div class="main_item">
+                        <div class="card" >
+                            <img src="<?php echo $product->getImage()?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
+                            <div class="container">
+                                <h1><?php echo $product->getName()?></h1>
+                                <p class="price"><?php echo $product->getPrice()?> руб.</p>
+                                <p><?php echo $product->getDescription()?></p>
+                                <p>Добавлено в корзину <?php echo $product->getAmount()?> ед. товара</p>
+                                <p>Общая сумма: <?php echo $product->getTotal()?> руб.</p>
                             </div>
                         </div>
-        <?php endforeach; ?>
-                </div>
-        <div>
-            <button onclick="window.location='/order';" class="orderbtn">To order</button>
-        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <div>
+                <button onclick="window.location='/order';" class="orderbtn">To order</button>
+            </div>
         <?php endif; ?>
-
-        <div class="container catalog">
-    <p>Do you want to <a href="/catalog">Catalog</a>?</p>
-        </div>
-        <div class="container logout">
-            <p>Do you want to move <a href="/orders"> Orders</a>?</p>
-        </div>
-        <div class="container logout">
-            <p>Do you want to log out of your account? <a href="/logout">Exit</a>.</p>
-        </div>
     </div>
-
-
+</body>
 
 <style>
+    /* Set height of body and the document to 100% to enable "full page tabs" */
+    body, html {
+        height: 100%;
+        margin: 0;
+        font-family: Arial;
+    }
 
+    /* Style tab links */
+    .tablink {
+        background-color: #555;
+        color: white;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        font-size: 17px;
+        width: 25%;
+    }
+
+    .tablink:hover {
+        background-color: #04AA6D;
+    }
+</style>
+
+<style>
     * {box-sizing: border-box}
 
     /* Bordered form */
