@@ -51,7 +51,7 @@ class UserProductController
 
                 $count = "$amount";
             } else {
-                $count = "";
+                $count = "0";
             }
         }
 

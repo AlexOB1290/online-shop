@@ -24,12 +24,7 @@ class User extends Model
             return null;
         }
 
-        $obj = new self();
-        $obj->id = $data['id'];
-        $obj->name = $data['name'];
-        $obj->email = $data['email'];
-        $obj->password = $data['password'];
-        return $obj;
+        return $this->createObject($data);
     }
 
     public function getOneById(int $userId): ?self
@@ -42,6 +37,11 @@ class User extends Model
             return null;
         }
 
+        return $this->createObject($data);
+    }
+
+    private function createObject (array $data): self
+    {
         $obj = new self();
         $obj->id = $data['id'];
         $obj->name = $data['name'];

@@ -32,18 +32,7 @@ class Order extends Model
 
         $orders = [];
         foreach($data as $order){
-            $obj = new self();
-            $obj->id = $order['id'];
-            $obj->userId = $order['user_id'];
-            $obj->orderNumber = $order['order_number'];
-            $obj->name = $order['name'];
-            $obj->email = $order['email'];
-            $obj->address = $order['address'];
-            $obj->telephone = $order['telephone'];
-            $obj->total = $order['total'];
-            $obj->date = $order['date'];
-
-            $orders[] = $obj;
+            $orders[] = $this->createObject($order);
         }
 
         return $orders;
@@ -59,6 +48,11 @@ class Order extends Model
             return null;
         }
 
+        return $this->createObject($data);
+    }
+
+    private function createObject ($data): self
+    {
         $obj = new self();
         $obj->id = $data['id'];
         $obj->userId = $data['user_id'];

@@ -28,7 +28,35 @@ class OrderController
         $this->checkSession();
 
         $userId = $_SESSION['user_id'];
+
         $user = $this->userModel->getOneById($userId);
+
+        $userProducts = $this->userProductModel->getAllByUserId($userId);
+
+        if (!empty($userProducts)) {
+            $productIds = [];
+            foreach ($userProducts as $userProduct) {
+                $productIds[] = $userProduct->getProductId();
+            }
+
+            $products = $this->productModel->getAllByIds($productIds);
+
+            $totalSum =0;
+            $totalAmount = 0;
+
+            foreach ($userProducts as $userProduct) {
+                foreach ($products as &$product) {
+                    if ($product->getId() === $userProduct->getProductId()) {
+                        $product->setAmount($userProduct->getAmount());
+                        $total = $product->getPrice() * $userProduct->getAmount();
+                        $product->setTotal($total);
+                        $totalSum += $total;
+                        $totalAmount += $userProduct->getAmount();
+                    }
+                }
+                unset($product);
+            }
+        }
 
         require_once './../View/get_order.php';
     }
@@ -100,7 +128,7 @@ class OrderController
 
             $count = "$amount";
         } else {
-            $count = "";
+            $count = "0";
         }
 
         $orders = $this->orderModel->getAllByUserId($userId);

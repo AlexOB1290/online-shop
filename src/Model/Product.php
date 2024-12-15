@@ -22,14 +22,7 @@ class Product extends Model
 
         $products = [];
         foreach ($data as $product) {
-            $obj = new self();
-            $obj->id = $product['id'];
-            $obj->name = $product['name'];
-            $obj->price = $product['price'];
-            $obj->description = $product['description'];
-            $obj->image = $product['image'];
-
-            $products[] = $obj;
+            $products[] = $this->createObject($product);
         }
 
         return $products;
@@ -45,14 +38,7 @@ class Product extends Model
             return null;
         }
 
-        $obj = new self();
-        $obj->id = $data['id'];
-        $obj->name = $data['name'];
-        $obj->price = $data['price'];
-        $obj->description = $data['description'];
-        $obj->image = $data['image'];
-
-        return $obj;
+        return $this->createObject($data);
     }
 
     public function getAllByIds(array $productIds): ?array
@@ -68,17 +54,22 @@ class Product extends Model
 
         $products = [];
         foreach ($data as $product) {
-            $obj = new self();
-            $obj->id = $product['id'];
-            $obj->name = $product['name'];
-            $obj->price = $product['price'];
-            $obj->description = $product['description'];
-            $obj->image = $product['image'];
-
-            $products[] = $obj;
+            $products[] = $this->createObject($product);
         }
 
         return $products;
+    }
+
+    private function createObject(array $data): self
+    {
+        $obj = new self();
+        $obj->id = $data['id'];
+        $obj->name = $data['name'];
+        $obj->price = $data['price'];
+        $obj->description = $data['description'];
+        $obj->image = $data['image'];
+
+        return $obj;
     }
 
     public function setAmount(int $amount): void

@@ -1,41 +1,64 @@
 <form action="/order" method=POST>
-    <button class="tablink" onclick="window.location='/catalog';">Каталог</button>
-    <button class="tablink" onclick="window.location='/cart';" id="defaultOpen">Корзина</button>
-    <button class="tablink" onclick="window.location='/orders';">Заказы</button>
-    <button class="tablink" onclick="window.location='/logout';">Выйти из аккаунта</button>
+    <div class="button">
+        <button class="tablink" onclick="window.location='/catalog';">Каталог</button>
+        <button class="tablink" onclick="window.location='/cart';">Корзина</button>
+        <button class="tablink" onclick="window.location='/orders';">Заказы</button>
+        <button class="tablink" onclick="window.location='/logout';">Выйти из аккаунта</button>
+    </div>
 
     <div class="container">
-        <h1>Order form</h1>
-        <p>Please fill in this form to create an order.</p>
+        <br><br>
+        <h1>Оформление заказа</h1>
+        <p>Пожалуйста, заполните поля ниже, чтобы оформить заказ.</p>
         <hr>
 
-        <label for="name"><b>Name</b></label>
+        <label for="name"><b>Имя</b></label>
         <label style="color: red;">
             <?php echo $errors['name']??"";?></label>
-        <input type="text" placeholder="Enter Name" name="name" id="name" value="<?php echo $user->getName() ?? ""; ?>" required>
+        <input type="text" placeholder="Введите имя" name="name" id="name" value="<?php echo $user->getName() ?? ""; ?>" required>
 
         <label for="email"><b>Email</b></label>
         <label style="color: red;">
             <?php echo $errors['email']??"";?></label>
-        <input type="email" placeholder="Enter Email" name="email" id="email" value="<?php echo $user->getEmail() ?? ""; ?>" required>
+        <input type="email" placeholder="Введите email" name="email" id="email" value="<?php echo $user->getEmail() ?? ""; ?>" required>
 
-        <label for="psw"><b>Address</b></label>
+        <label for="psw"><b>Адрес доставки</b></label>
         <label style="color: red;">
             <?php echo $errors['address']??"";?></label>
-        <input type="text" placeholder="Enter Address" name="address" id="address" required>
+        <input type="text" placeholder="Введите адрес" name="address" id="address" required>
 
-        <label for="telephone"><b>Telephone</b></label>
+        <label for="telephone"><b>Номер телефона</b></label>
         <label style="color: red;">
             <?php echo $errors['telephone']??"";?></label>
-        <input type="tel" placeholder="Enter Telephone number" name="telephone" id="telephone" required>
+        <input type="tel" placeholder="Введите номер телефона" name="telephone" id="telephone" required>
         <hr>
 
-        <button type="submit" class="orderbtn">Place an order</button>
+        <button type="submit" class="orderbtn">Оформить</button>
+
+    </div>
+    <div>
+        <h2 style="margin-left: 10px">Всего <?php echo $totalAmount ?> ед. товара на сумму <?php echo $totalSum ?> руб.</h2>
+    </div>
+    <div>
+        <h3 style="margin-left: 10px">Список товаров из корзины:</h3>
     </div>
 
-    <div class="container cart">
-        <p>Do you want to move <a href="/cart">Cart</a>?</p>
-    </div>
+        <div id="main" class="main">
+            <?php foreach ($products as $product) : ?>
+                <div class="main_item">
+                    <div class="card" >
+                        <img src="<?php echo $product->getImage()?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
+                        <div class="container">
+                            <h3><?php echo $product->getName()?></h3>
+                            <p><?php echo $product->getPrice()?> руб.</p>
+                            <p>Добавлено в корзину <?php echo $product->getAmount()?> ед. товара</p>
+                            <p>Общая сумма: <?php echo $product->getTotal()?> руб.</p>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+
 </form>
 
 <style>
@@ -44,6 +67,11 @@
         height: 100%;
         margin: 0;
         font-family: Arial;
+    }
+
+    .button {
+        position: fixed;
+        width: 100%;
     }
 
     /* Style tab links */
@@ -67,14 +95,10 @@
 <style>
     * {box-sizing: border-box}
 
-    /* Bordered form */
-    form {
-        border: 3px solid #f1f1f1;
-    }
-
     /* Add padding to containers */
     .container {
         padding: 16px;
+        font-size: 12px;
     }
 
     /* Full-width input fields */
@@ -108,6 +132,7 @@
         cursor: pointer;
         width: 100%;
         opacity: 0.9;
+        font-size: 22px;
     }
 
     .orderbtn:hover {
@@ -119,9 +144,25 @@
         color: dodgerblue;
     }
 
-    /* Set a grey background color and center the text of the "sign in" section */
-    .cart {
-        background-color: #f1f1f1;
-        text-align: center;
+    .main
+    {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        height: 10%;
+        width: 10%;
+    }
+
+    .main_item
+    {
+        background: none;
+        padding: 10px;
+        margin-right: 5px;
+    }
+
+    .card img
+    {
+        height: 100%;
+        width: 70%;
     }
 </style>

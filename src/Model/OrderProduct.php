@@ -18,10 +18,10 @@ class OrderProduct extends Model
             $amount = $userProduct->getAmount();
             $price = $userProduct->getPrice();
 
-            $res = $stmt->execute(['order_id' => $orderId, 'product_id' => $productId, 'amount' => $amount, 'price' => $price]);
+            $result = $stmt->execute(['order_id' => $orderId, 'product_id' => $productId, 'amount' => $amount, 'price' => $price]);
         }
 
-        return $res;
+        return $result;
     }
 
     public function getByOrderId($orderId): ?array
@@ -36,17 +36,22 @@ class OrderProduct extends Model
 
         $orderProducts = [];
         foreach ($data as $orderProduct){
-            $obj = new self();
-            $obj->id = $orderProduct['id'];
-            $obj->orderId = $orderProduct['order_id'];
-            $obj->productId = $orderProduct['product_id'];
-            $obj->amount = $orderProduct['amount'];
-            $obj->price = $orderProduct['price'];
-
-            $orderProducts[] = $obj;
+            $orderProducts[] = $this->createObject($orderProduct);
         }
 
         return $orderProducts;
+    }
+
+    private function createObject (array $data): self
+    {
+        $obj = new self();
+        $obj->id = $data['id'];
+        $obj->orderId = $data['order_id'];
+        $obj->productId = $data['product_id'];
+        $obj->amount = $data['amount'];
+        $obj->price = $data['price'];
+
+        return $obj;
     }
 
     public function getId(): int

@@ -1,8 +1,10 @@
 <body>
+<div class="button">
     <button class="tablink" onclick="window.location='/catalog';">Каталог</button>
-    <button class="tablink" onclick="window.location='/cart';" id="defaultOpen">Корзина<span class="badge"><?php echo $count ?></span></button>
+    <button class="tablink" onclick="window.location='/cart';">Корзина<span class="badge"><?php echo $count ?></span></button>
     <button class="tablink" onclick="window.location='/orders';">Заказы</button>
     <button class="tablink" onclick="window.location='/logout';">Выйти из аккаунта</button>
+</div>
 
     <div id="main" class="main">
         <?php if (empty($orders)) : ?>
@@ -45,6 +47,11 @@
         font-family: Arial;
     }
 
+    .button {
+        position: fixed;
+        width: 100%;
+    }
+
     /* Style tab links */
     .tablink {
         background-color: #555;
@@ -64,8 +71,8 @@
 
     .tablink .badge {
         position: absolute;
-        top: 1%;
-        right: 50.5%;
+        top: 17%;
+        right: 57%;
         padding: 5px 10px;
         border-radius: 50%;
         background: red;
@@ -79,6 +86,7 @@
         display: inline-flex;
         flex-direction: row;
         flex-wrap: wrap;
+        margin-top: 50px;
     }
 
     .main_item

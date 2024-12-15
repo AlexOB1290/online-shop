@@ -34,7 +34,7 @@ class CatalogController
 
             $count = "$amount";
         } else {
-            $count = "";
+            $count = "0";
         }
 
         if (!$products){

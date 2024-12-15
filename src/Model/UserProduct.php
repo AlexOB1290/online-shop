@@ -31,13 +31,7 @@ class UserProduct extends Model
             return null;
         }
 
-        $obj = new self();
-        $obj->id = $data['id'];
-        $obj->userId = $data['user_id'];
-        $obj->productId = $data['product_id'];
-        $obj->amount = $data['amount'];
-
-        return $obj;
+        return $this->createObject($data);
     }
 
     public function getAllByUserId(int $userId): ?array
@@ -52,16 +46,21 @@ class UserProduct extends Model
 
         $userProducts = [];
         foreach ($data as $userProduct) {
-            $obj = new self();
-            $obj->id = $userProduct['id'];
-            $obj->userId = $userProduct['user_id'];
-            $obj->productId = $userProduct['product_id'];
-            $obj->amount = $userProduct['amount'];
-
-            $userProducts[] = $obj;
+            $userProducts[] = $this->createObject($userProduct);
         }
 
         return $userProducts;
+    }
+
+    private function createObject(array $data): self
+    {
+        $obj = new self();
+        $obj->id = $data['id'];
+        $obj->userId = $data['user_id'];
+        $obj->productId = $data['product_id'];
+        $obj->amount = $data['amount'];
+
+        return $obj;
     }
 
     public function deleteByUserId(int $userId): bool

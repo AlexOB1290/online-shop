@@ -1,11 +1,14 @@
 <body>
+<div class="button">
     <button class="tablink" onclick="window.location='/catalog';">Каталог</button>
     <button class="tablink" onclick="window.location='/cart';" id="defaultOpen">Корзина</button>
     <button class="tablink" onclick="window.location='/orders';">Заказы</button>
     <button class="tablink" onclick="window.location='/logout';">Выйти из аккаунта</button>
+</div>
 
     <div class="container">
-        <h1>Корзина товаров пользователя <?php echo $user->getName(); ?></h1>
+        <br><br>
+        <h1> Корзина товаров пользователя <?php echo $user->getName(); ?></h1>
 
         <?php if (empty($products)) : ?>
 
@@ -18,7 +21,7 @@
                         <div class="card" >
                             <img src="<?php echo $product->getImage()?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
                             <div class="container">
-                                <h1><?php echo $product->getName()?></h1>
+                                <h2><?php echo $product->getName()?></h2>
                                 <p class="price"><?php echo $product->getPrice()?> руб.</p>
                                 <p><?php echo $product->getDescription()?></p>
                                 <p>Добавлено в корзину <?php echo $product->getAmount()?> ед. товара</p>
@@ -29,7 +32,7 @@
                 <?php endforeach; ?>
             </div>
             <div>
-                <button onclick="window.location='/order';" class="orderbtn">To order</button>
+                <button onclick="window.location='/order';" class="orderbtn">Оформить заказ</button>
             </div>
         <?php endif; ?>
     </div>
@@ -41,6 +44,11 @@
         height: 100%;
         margin: 0;
         font-family: Arial;
+    }
+
+    .button {
+        position: fixed;
+        width: 100%;
     }
 
     /* Style tab links */
@@ -122,6 +130,7 @@
         cursor: pointer;
         width: 100%;
         opacity: 0.9;
+        font-size: 22px;
     }
 
     .orderbtn:hover {
