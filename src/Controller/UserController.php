@@ -2,6 +2,8 @@
 namespace Controller;
 
 use Model\User;
+use Request\LoginRequest;
+use Request\RegistrateRequest;
 
 class UserController
 {
@@ -16,14 +18,14 @@ class UserController
         require_once './../View/get_registration.php';
     }
 
-    public function handleRegistrationForm(): void
+    public function handleRegistrationForm(RegistrateRequest $request): void
     {
-        $errors = $this->validateRegistrationForm($_POST);
+        $errors = $request->validate();
 
         if (empty($errors)) {
-            $name = $_POST['name'];
-            $email = $_POST["email"];
-            $password = $_POST['psw'];
+            $name = $request->getName();
+            $email = $request->getEmail();
+            $password = $request->getPassword();
 
             $hashPassword = password_hash($password, PASSWORD_DEFAULT);
 
@@ -38,12 +40,12 @@ class UserController
         require_once './../View/get_login.php';
     }
 
-    public function handleLoginForm(): void
+    public function handleLoginForm(LoginRequest $request): void
     {
-        $errors = $this->validateLoginForm($_POST);
+        $errors = $request->validate();
         if (empty($errors)) {
-            $email = $_POST["email"];
-            $password = $_POST["psw"];
+            $email = $request->getEmail();
+            $password = $request->getPassword();
 
             $user = $this->userModel->getOneByEmail($email);
 
@@ -58,99 +60,6 @@ class UserController
             }
         }
         require_once './../View/get_login.php';
-    }
-    private function validateRegistrationForm(array $arrPost): array
-    {
-        $errors = [];
-
-        if (isset($arrPost['name'])) {
-            $name = $arrPost['name'];
-        } else {
-            $errors['name'] = "Требуется установить Имя";
-        }
-
-        if (isset($arrPost['email'])) {
-            $email = $arrPost['email'];
-        } else {
-            $errors['email'] = "Требуется установить Email";
-        }
-
-        if (isset($arrPost['psw'])) {
-            $password = $arrPost['psw'];
-        } else {
-            $errors['password'] = "Требуется установить Пароль";
-        }
-
-        if (isset($arrPost['psw-repeat'])) {
-            $passwordRepeat = $arrPost['psw-repeat'];
-        } else {
-            $errors['password-repeat'] = "Требуется установить повтор Пароля";
-        }
-
-        if (empty($name)) {
-            $errors['name'] = "Имя не должно быть пустым";
-        } elseif (is_numeric($name)) {
-            $errors['name'] = "Имя не должно быть числом";
-        } elseif (strlen($name) < 2) {
-            $errors['name'] = "Имя должно содержать не менее 2 букв";
-        }
-
-
-        if (empty($email)) {
-            $errors['email'] = "Email не должен быть пустым";
-        } elseif (strlen($email) < 6) {
-            $errors['email'] = "Email должен содержать не менее 6 символов";
-        } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = "Email указан неверно";
-        } else {
-            $user = $this->userModel->getOneByEmail($email);
-
-            if ($user) {
-                $errors['email'] = "Email уже зарегистрирован";
-            }
-        }
-
-        if (empty($password)) {
-            $errors['password'] = "Пароль не должен быть пустым";
-        } elseif (strlen($password) < 4) {
-            $errors['password'] = "Пароль должен содержать не менее 4 символов";
-        } elseif (is_numeric($password)) {
-            $errors['password'] = "Пароль не должен содержать только цифры";
-        } elseif ($password === strtolower($password) || $password === strtoupper($password)) {
-            $errors['password'] = "Пароль должен содержать заглавные и строчные буквы";
-        } elseif ($password !== $passwordRepeat) {
-            $errors['password'] = "Пароли не совпадают";
-        }
-
-        if (empty($passwordRepeat)) {
-            $errors['password'] = "Повтор пароля не должен быть пустым";
-        }
-        return $errors;
-    }
-
-    private function validateLoginForm(array $arrPost): array
-    {
-        $errors = [];
-
-        if(isset($arrPost['email'])){
-            $email = $arrPost['email'];
-            if (empty($email)) {
-                $errors['email'] = "Email не должен быть пустым";
-            }
-        } else {
-            $errors['email'] = "Требуется установить Email";
-        }
-
-        if(isset($arrPost['psw'])){
-            $password = $arrPost['psw'];
-            if (empty($password)) {
-                $errors['password'] = "Пароль не должен быть пустым";
-            }
-        } else {
-            $errors['password'] = "Требуется установить Пароль";
-        }
-
-        return $errors;
     }
 
     public function logout(): void

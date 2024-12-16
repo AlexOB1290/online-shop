@@ -1,7 +1,7 @@
 <body>
 <div class="button">
     <button class="tablink" onclick="window.location='/catalog';">Каталог</button>
-    <button class="tablink" onclick="window.location='/cart';">Корзина<span class="badge"><?php echo $count ?></span></button>
+    <button class="tablink" onclick="window.location='/cart';">Корзина<span class="badge"><?php echo $count ?? 0 ?></span></button>
     <button class="tablink" onclick="window.location='/orders';">Заказы</button>
     <button class="tablink" onclick="window.location='/logout';">Выйти из аккаунта</button>
 </div>

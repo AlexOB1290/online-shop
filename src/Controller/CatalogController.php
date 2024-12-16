@@ -32,10 +32,9 @@ class CatalogController
                 $amount += $userProduct->getAmount();
             }
 
-            $count = "$amount";
-        } else {
-            $count = "0";
+            $count = $amount;
         }
+
 
         if (!$products){
             echo "<p>Ошибка при загрузке данных о товарах на сайт</p>";

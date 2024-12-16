@@ -3,6 +3,7 @@ namespace Controller;
 
 use Model\Product;
 use Model\UserProduct;
+use Request\AddProductRequest;
 
 class UserProductController
 {
@@ -21,16 +22,16 @@ class UserProductController
         require_once './../View/get_add_product.php';
     }
 
-    public function handleAddProductForm(): void
+    public function handleAddProductForm(AddProductRequest $request): void
     {
-        $errors = $this->validateAddProductForm($_POST);
+        $errors = $request->validate();
 
         if (empty($errors)) {
             $this->checkSession();
 
             $userId = $_SESSION['user_id'];
-            $productId = $_POST['product-id'];
-            $amount = $_POST['amount'];
+            $productId = $request->getProductId();
+            $amount = $request->getAmount();
 
             $userProduct = $this->userProductModel->getOneByIds($userId, $productId);
 
@@ -49,9 +50,7 @@ class UserProductController
                     $amount += $userProduct->getAmount();
                 }
 
-                $count = "$amount";
-            } else {
-                $count = "0";
+                $count = $amount;
             }
         }
 
@@ -66,50 +65,5 @@ class UserProductController
         if(!isset($_SESSION['user_id'])){
             header('Location: /login');
         }
-    }
-
-    private function validateAddProductForm(array $arrPost): array
-    {
-        $errors = [];
-
-        if(isset($arrPost['product-id'])){
-            $productId = $arrPost['product-id'];
-        } else {
-            $errors['name'] = "Требуется установить Product-id";
-        }
-
-        if(isset($arrPost['amount'])){
-            $amount = $arrPost['amount'];
-        } else {
-            $errors['email'] = "Требуется установить Amount";
-        }
-
-        if (empty($productId)) {
-            $errors['product-id'] = "Product-id не должно быть пустым";
-        } elseif ($productId < 1) {
-            $errors['amount'] = "Product-id должно быть положительным числом";
-        } elseif (!is_numeric($productId)) {
-            $errors['product-id'] = "Product-id должно быть числом";
-        } elseif (str_contains($productId, ".")) {
-            $errors['product-id'] = "Product-id должно быть натуральным числом";
-        } else {
-            $product = $this->productModel->getOneById($productId);
-
-            if (!$product) {
-                $errors['product-id'] = "Данный товар отсутствует в магазине";
-            }
-        }
-
-        if (empty($amount)) {
-            $errors['amount'] = "Количество продуктов не должен быть пустым";
-        } elseif ($amount < 1) {
-            $errors['amount'] = "Количество продуктов должно быть положительным";
-        } elseif (!is_numeric($amount)) {
-            $errors['amount'] = "Количество продуктов должно быть числом";
-        } elseif (str_contains($amount, ".")) {
-            $errors['amount'] = "Количество должно быть натуральным числом";
-        }
-
-        return $errors;
     }
 }

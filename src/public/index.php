@@ -28,6 +28,4 @@ $app->addRoute('/order', 'GET', OrderController::class, 'getOrderForm');
 $app->addRoute('/order', 'POST', OrderController::class, 'handleOrderForm');
 $app->addRoute('/orders', 'GET', OrderController::class, 'getOrders');
 
-//print_r($app->getRoutes());
-
 $app->run();

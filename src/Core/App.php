@@ -1,6 +1,12 @@
 <?php
 namespace Core;
 
+use Request\AddProductRequest;
+use Request\OrderRequest;
+use Request\Request;
+use Request\RegistrateRequest;
+use Request\LoginRequest;
+
 class App
 {
     private array $routes = [];
@@ -13,12 +19,24 @@ class App
             $methods = $this->routes[$uri];
             if (array_key_exists($method, $methods)) {
                 $handler = $methods[$method];
-
                 $class  = $handler['class'];
-                $method = $handler['method'];
+                $classMethod = $handler['method'];
 
                 $obj = new $class();
-                $obj->$method();
+
+                if(str_contains($classMethod, 'handleRegistrat')) {
+                    $request = new RegistrateRequest($uri, $method, $_POST);
+                } elseif (str_contains($classMethod, 'handleLogin')) {
+                    $request = new LoginRequest($uri, $method, $_POST);
+                } elseif (str_contains($classMethod, 'handleAddProduct')) {
+                    $request = new AddProductRequest($uri, $method, $_POST);
+                } elseif (str_contains($classMethod, 'handleOrder')) {
+                    $request = new OrderRequest($uri, $method, $_POST);
+                } else {
+                    $request = null;
+                }
+
+                $obj->$classMethod($request);
             } else {
                 echo "$method не поддерживается адресом $uri";
             }
