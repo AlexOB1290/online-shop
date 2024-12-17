@@ -1,12 +1,14 @@
 <?php
 namespace Controller;
 
+use DTO\CreateOrderDTO;
 use Model\UserProduct;
 use Model\User;
 use Model\Product;
 use Model\Order;
 use Model\OrderProduct;
 use Request\OrderRequest;
+use Service\OrderService;
 
 class OrderController
 {
@@ -15,6 +17,7 @@ class OrderController
     private Order $orderModel;
     private Product $productModel;
     private OrderProduct $orderProductModel;
+    private OrderService $orderService;
 
     public function __construct()
     {
@@ -23,6 +26,7 @@ class OrderController
         $this->orderModel = new Order();
         $this->productModel = new Product();
         $this->orderProductModel = new OrderProduct();
+        $this->orderService = new OrderService();
     }
     public function getOrderForm(): void
     {
@@ -78,39 +82,16 @@ class OrderController
             $prefix = date("is");
             $orderNumber = uniqid("$prefix-");
 
-            $userProducts = $this->userProductModel->getAllByUserId($userId);
+            $dto = new CreateOrderDTO($userId, $orderNumber, $name, $email, $address, $telephone, $date);
 
-            if ($userProducts === false)
-            $productIds = [];
-            foreach ($userProducts as $userProduct) {
-                $productIds[] = $userProduct->getProductId();
-            }
-
-            $products = $this->productModel->getAllByIds($productIds);
-
-            $total = 0;
-            foreach ($products as $product) {
-                foreach ($userProducts as &$userProduct) {
-                    if ($userProduct->getProductId() === $product->getId()) {
-                        $userProduct->setPrice($product->getPrice());
-                        $total += $product->getPrice() * $userProduct->getAmount();
-                    }
-                }
-                unset($userProduct);
-            }
-
-            $this->orderModel->create($userId, $orderNumber, $name, $email, $address, $telephone, $total, $date);
-
-            $order = $this->orderModel->getOneByUserId($userId);
-
-            $this->orderProductModel->addUserProduct($order->getId(), $userProducts);
-
-            $this->userProductModel->deleteByUserId($userId);
+            $this->orderService->create($dto);
 
             header('Location: /orders');
         } else {
             $userId = $_SESSION['user_id'];
+
             $user = $this->userModel->getOneById($userId);
+
             $userProducts = $this->userProductModel->getAllByUserId($userId);
 
             if (!empty($userProducts)) {

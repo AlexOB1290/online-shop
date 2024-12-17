@@ -21,19 +21,14 @@ class App
                 $handler = $methods[$method];
                 $class  = $handler['class'];
                 $classMethod = $handler['method'];
+                $requestClass = $handler['requestClass'];
 
                 $obj = new $class();
 
-                if(str_contains($classMethod, 'handleRegistrat')) {
-                    $request = new RegistrateRequest($uri, $method, $_POST);
-                } elseif (str_contains($classMethod, 'handleLogin')) {
-                    $request = new LoginRequest($uri, $method, $_POST);
-                } elseif (str_contains($classMethod, 'handleAddProduct')) {
-                    $request = new AddProductRequest($uri, $method, $_POST);
-                } elseif (str_contains($classMethod, 'handleOrder')) {
-                    $request = new OrderRequest($uri, $method, $_POST);
+                if (!empty($requestClass)) {
+                    $request = new $requestClass($uri, $method, $_POST);
                 } else {
-                    $request = null;
+                    $request = new Request($uri, $method, $_POST);
                 }
 
                 $obj->$classMethod($request);
@@ -46,13 +41,14 @@ class App
         }
     }
 
-    public function addRoute(string $uriName, string $uriMethod, string $className, string $method): void
+    public function addRoute(string $requestUri, string $requestMethod, string $className, string $method, string $requestClass = null): void
     {
-        if(!isset($this->routes[$uriName][$uriMethod])) {
-            $this->routes[$uriName][$uriMethod]['class'] = $className;
-            $this->routes[$uriName][$uriMethod]['method'] = $method;
+        if(!isset($this->routes[$requestUri][$requestMethod])) {
+            $this->routes[$requestUri][$requestMethod]['class'] = $className;
+            $this->routes[$requestUri][$requestMethod]['method'] = $method;
+            $this->routes[$requestUri][$requestMethod]['requestClass'] = $requestClass;
         } else {
-            echo "$uriMethod уже зарегистрирован для $uriName" . "<br>";
+            echo "$requestMethod уже зарегистрирован для $requestUri" . "<br>";
         }
     }
 

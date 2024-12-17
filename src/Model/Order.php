@@ -51,7 +51,7 @@ class Order extends Model
         return $this->createObject($data);
     }
 
-    private function createObject ($data): self
+    private function createObject (array $data): self
     {
         $obj = new self();
         $obj->id = $data['id'];
