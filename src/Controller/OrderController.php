@@ -38,12 +38,7 @@ class OrderController
 
         $products = $this->cartService->getProducts($userId);
 
-        $totalAmount = 0;
-        $totalSum = 0;
-        foreach ($products as $product) {
-            $totalAmount += $product->getAmount();
-            $totalSum += $product->getPrice()*$product->getAmount();
-        }
+        $total = $this->cartService->getTotalAmountAndSum($userId);
 
         require_once './../View/get_order.php';
     }
@@ -76,12 +71,7 @@ class OrderController
 
             $products = $this->cartService->getProducts($userId);
 
-            $totalAmount = 0;
-            $totalSum = 0;
-            foreach ($products as $product) {
-                $totalAmount += $product->getAmount();
-                $totalSum += $product->getPrice()*$product->getAmount();
-            }
+            $total = $this->cartService->getTotalAmountAndSum($userId);
 
             require_once './../View/get_order.php';
         }

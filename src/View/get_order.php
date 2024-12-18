@@ -37,7 +37,7 @@
 
     </div>
     <div>
-        <h2 style="margin-left: 10px">Всего <?php echo $totalAmount ?> ед. товара на сумму <?php echo $totalSum ?> руб.</h2>
+        <h2 style="margin-left: 10px">Всего <?php echo $total['total_amount'] ?> ед. товара на сумму <?php echo $total['total_sum'] ?> руб.</h2>
     </div>
     <div>
         <h3 style="margin-left: 10px">Список товаров из корзины:</h3>

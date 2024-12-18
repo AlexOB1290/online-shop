@@ -8,7 +8,12 @@
 
     <div class="container">
         <br><br>
-        <h1> Корзина товаров пользователя <?php echo $user->getName(); ?></h1>
+        <h1 style="margin-left: 10px"> Корзина товаров пользователя <?php echo $user->getName(); ?></h1>
+        <?php if (!empty($products)) : ?>
+
+            <h2 style="margin-left: 10px">Всего <?php echo $total['total_amount'] ?> ед. товара на сумму <?php echo $total['total_sum'] ?> руб.</h2>
+
+        <?php endif; ?>
 
         <?php if (empty($products)) : ?>
 

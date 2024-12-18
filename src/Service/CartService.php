@@ -28,7 +28,7 @@ class CartService
         }
     }
 
-    public function getProducts(int $userId): array
+    public function getProducts(int $userId): ?array
     {
         $userProducts = $this->userProductModel->getAllByUserId($userId);
 
@@ -50,9 +50,32 @@ class CartService
                 }
                 unset($product);
             }
+        } else {
+            return null;
         }
 
         return $products;
+    }
+
+    public function getTotalAmountAndSum(int $userId): ?array
+    {
+        $products = $this->getProducts($userId);
+
+        if (!empty($products)) {
+            $totalAmount = 0;
+            $totalSum = 0;
+            foreach ($products as $product) {
+                $totalAmount += $product->getAmount();
+                $totalSum += $product->getTotal();
+            }
+
+            $total['total_amount'] = $totalAmount;
+            $total['total_sum'] = $totalSum;
+        } else {
+            return null;
+        }
+
+        return $total;
     }
 
     public function getCount(int $userId): ?int
