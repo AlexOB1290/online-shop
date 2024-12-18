@@ -2,17 +2,15 @@
 namespace Controller;
 
 use Model\Product;
-use Model\UserProduct;
+use Service\CartService;
 
 class CatalogController
 {
     private Product $productModel;
-    private UserProduct $userProductModel;
 
     public function __construct()
     {
         $this->productModel = new Product();
-        $this->userProductModel = new UserProduct();
     }
 
     public function getCatalogPage(): void
@@ -23,18 +21,8 @@ class CatalogController
 
         $products = $this->productModel->getAll();
 
-        $userProducts = $this->userProductModel->getAllByUserId($userId);
-
-        if ($userProducts) {
-            $amount = 0;
-
-            foreach ($userProducts as $userProduct) {
-                $amount += $userProduct->getAmount();
-            }
-
-            $count = $amount;
-        }
-
+        $obj = new CartService();
+        $count = $obj->getCount($userId);
 
         if (!$products){
             echo "<p>Ошибка при загрузке данных о товарах на сайт</p>";

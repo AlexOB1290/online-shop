@@ -2,7 +2,7 @@
 
 namespace DTO;
 
-class CreateUserProductDTO
+class CartDTO
 {
     public function __construct(
         private int $userId,

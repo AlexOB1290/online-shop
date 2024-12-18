@@ -56,4 +56,9 @@ class CreateOrderDTO
     {
         return $this->orderNumber;
     }
+
+    public function getTotal(): int
+    {
+        return $this->total;
+    }
 }

@@ -1,23 +1,23 @@
 <?php
 namespace Controller;
 
-use DTO\CreateUserProductDTO;
+use DTO\CartDTO;
 use Model\Product;
 use Model\UserProduct;
 use Request\AddProductRequest;
-use Service\UserProductService;
+use Service\CartService;
 
 class UserProductController
 {
     private Product $productModel;
     private UserProduct $userProductModel;
-    private UserProductService $userProductService;
+    private CartService $cartService;
 
     public function __construct()
     {
         $this->productModel = new Product();
         $this->userProductModel = new UserProduct();
-        $this->userProductService = new UserProductService();
+        $this->cartService = new CartService();
     }
 
     public function getAddProductForm(): void
@@ -37,9 +37,9 @@ class UserProductController
             $productId = $request->getProductId();
             $amount = $request->getAmount();
 
-            $dto = new CreateUserProductDTO($userId, $productId, $amount);
+            $dto = new CartDTO($userId, $productId, $amount);
 
-            $this->userProductService->create($dto);
+            $this->cartService->create($dto);
 
             $userProducts = $this->userProductModel->getAllByUserId($userId);
 

@@ -24,7 +24,20 @@ class OrderService
 
     public function create(CreateOrderDTO $orderDTO): void
     {
-        $userProducts = $this->userProductModel->getAllByUserId($orderDTO->getUserId());
+            $userProducts = $this->getUserProducts($orderDTO->getUserId());
+
+            $this->orderModel->create($orderDTO->getUserId(), $orderDTO->getOrderNumber(), $orderDTO->getName(), $orderDTO->getEmail(), $orderDTO->getAddress(), $orderDTO->getTelephone(), $this->userProductModel->getTotal(), $orderDTO->getDate());
+
+            $order = $this->orderModel->getOneByUserId($orderDTO->getUserId());
+
+            $this->orderProductModel->addUserProduct($order->getId(), $userProducts);
+
+            $this->userProductModel->deleteByUserId($orderDTO->getUserId());
+    }
+
+    private function getUserProducts(int $userId): array
+    {
+        $userProducts = $this->userProductModel->getAllByUserId($userId);
 
         if ($userProducts === false)
             $productIds = [];
@@ -45,12 +58,8 @@ class OrderService
             unset($userProduct);
         }
 
-            $this->orderModel->create($orderDTO->getUserId(), $orderDTO->getOrderNumber(), $orderDTO->getName(), $orderDTO->getEmail(), $orderDTO->getAddress(), $orderDTO->getTelephone(), $total, $orderDTO->getDate());
+        $this->userProductModel->setTotal($total);
 
-            $order = $this->orderModel->getOneByUserId($orderDTO->getUserId());
-
-            $this->orderProductModel->addUserProduct($order->getId(), $userProducts);
-
-            $this->userProductModel->deleteByUserId($orderDTO->getUserId());
+        return $userProducts;
     }
 }

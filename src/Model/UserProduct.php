@@ -8,6 +8,7 @@ class UserProduct extends Model
     private int $productId;
     private int $amount;
     private int $price = 0;
+    private int $total = 0;
 
     public function addProduct(int $userId, int $productId, int $amount): bool
     {
@@ -74,9 +75,19 @@ class UserProduct extends Model
         $this->price = $price;
     }
 
+    public function setTotal(int $total): void
+    {
+        $this->total = $total;
+    }
+
     public function getPrice(): int
     {
         return $this->price;
+    }
+
+    public function getTotal(): int
+    {
+        return $this->total;
     }
 
     public function getId(): int
