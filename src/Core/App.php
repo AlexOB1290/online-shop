@@ -31,12 +31,35 @@ class App
                     $request = new Request($uri, $method, $_POST);
                 }
 
-                $obj->$classMethod($request);
+                try {
+                    $obj->$classMethod($request);
+                } catch (\Throwable $exception) {
+                    date_default_timezone_set('Asia/Irkutsk');
+//                    $date = date('d-m-Y H:i:s');
+//                    $message = $exception->getMessage();
+//                    $file = $exception->getFile();
+//                    $line = $exception->getLine();
+
+                    $arr = [
+                        date('d-m-Y H:i:s') => [
+                            'message' => $exception->getMessage(),
+                            'file' => $exception->getFile(),
+                            'line' => $exception->getLine()
+                        ]
+                    ];
+
+                    file_put_contents('./../Storage/Log/error.txt', print_r($arr, true) . PHP_EOL, FILE_APPEND);
+
+                    http_response_code(500);
+                    require_once './../View/500.html';
+                }
+
+
             } else {
                 echo "$method не поддерживается адресом $uri";
             }
         } else {
-            //http_response_code(404);
+            http_response_code(404);
             require_once './../View/404.html';
         }
     }
@@ -50,10 +73,5 @@ class App
         } else {
             echo "$requestMethod уже зарегистрирован для $requestUri" . "<br>";
         }
-    }
-
-    public function getRoutes(): array
-    {
-        return $this->routes;
     }
 }

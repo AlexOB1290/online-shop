@@ -7,6 +7,7 @@ use Model\Order;
 use Model\OrderProduct;
 use Model\Product;
 use Model\UserProduct;
+use Model\Model;
 
 class OrderService
 {
@@ -14,18 +15,24 @@ class OrderService
     private UserProduct $userProductModel;
     private Product $productModel;
     private OrderProduct $orderProductModel;
+    private Model $model;
     public function __construct()
     {
         $this->orderModel = new Order();
         $this->userProductModel = new UserProduct();
         $this->productModel = new Product();
         $this->orderProductModel = new OrderProduct();
+        $this->model = new Model();
     }
 
     public function create(CreateOrderDTO $orderDTO): void
     {
-            $userProducts = $this->getUserProducts($orderDTO->getUserId());
+        $userProducts = $this->getUserProducts($orderDTO->getUserId());
 
+        $pdo = $this->model->getPdo();
+        $pdo->beginTransaction();
+
+        try {
             $this->orderModel->create($orderDTO->getUserId(), $orderDTO->getOrderNumber(), $orderDTO->getName(), $orderDTO->getEmail(), $orderDTO->getAddress(), $orderDTO->getTelephone(), $this->userProductModel->getTotal(), $orderDTO->getDate());
 
             $order = $this->orderModel->getOneByUserId($orderDTO->getUserId());
@@ -33,6 +40,13 @@ class OrderService
             $this->orderProductModel->addUserProduct($order->getId(), $userProducts);
 
             $this->userProductModel->deleteByUserId($orderDTO->getUserId());
+        } catch (\PDOException $exception){
+            $pdo->rollBack();
+
+            throw $exception;
+        }
+
+        $pdo->commit();
     }
 
     private function getUserProducts(int $userId): array

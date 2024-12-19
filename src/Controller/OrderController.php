@@ -38,7 +38,9 @@ class OrderController
 
         $products = $this->cartService->getProducts($userId);
 
-        $total = $this->cartService->getTotalAmountAndSum($userId);
+        if(isset($products)) {
+            $total = $this->cartService->getTotalAmountAndSum($products);
+        }
 
         require_once './../View/get_order.php';
     }
@@ -71,7 +73,9 @@ class OrderController
 
             $products = $this->cartService->getProducts($userId);
 
-            $total = $this->cartService->getTotalAmountAndSum($userId);
+            if(isset($products)) {
+                $total = $this->cartService->getTotalAmountAndSum($products);
+            }
 
             require_once './../View/get_order.php';
         }
@@ -82,8 +86,7 @@ class OrderController
         $this->checkSession();
         $userId = $_SESSION['user_id'];
 
-        $obj = new CartService();
-        $count = $obj->getCount($userId);
+        $count = $this->cartService->getCount($userId);
 
         $orders = $this->orderModel->getAllByUserId($userId);
 

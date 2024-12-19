@@ -11,12 +11,8 @@ class Model
         $this->pdo = new PDO('pgsql:host=postgres;port=5432;dbname=mydb', 'user', 'pass');
     }
 
-    public function hydrate(array $data): self
+    public function getPdo(): PDO
     {
-        foreach ($data as $key => $value) {
-            strpos($key, '_');
-        }
-
-        return $this;
+        return $this->pdo;
     }
 }

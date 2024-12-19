@@ -25,8 +25,9 @@ class CartController
 
         $products = $this->cartService->getProducts($userId);
 
-        $total = $this->cartService->getTotalAmountAndSum($userId);
-
+        if(isset($products)) {
+            $total = $this->cartService->getTotalAmountAndSum($products);
+        }
 
         require_once './../View/cart.php';
     }

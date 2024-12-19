@@ -57,23 +57,17 @@ class CartService
         return $products;
     }
 
-    public function getTotalAmountAndSum(int $userId): ?array
+    public function getTotalAmountAndSum(array $products): array
     {
-        $products = $this->getProducts($userId);
-
-        if (!empty($products)) {
-            $totalAmount = 0;
-            $totalSum = 0;
-            foreach ($products as $product) {
-                $totalAmount += $product->getAmount();
-                $totalSum += $product->getTotal();
-            }
-
-            $total['total_amount'] = $totalAmount;
-            $total['total_sum'] = $totalSum;
-        } else {
-            return null;
+        $totalAmount = 0;
+        $totalSum = 0;
+        foreach ($products as $product) {
+            $totalAmount += $product->getAmount();
+            $totalSum += $product->getTotal();
         }
+
+        $total['total_amount'] = $totalAmount;
+        $total['total_sum'] = $totalSum;
 
         return $total;
     }

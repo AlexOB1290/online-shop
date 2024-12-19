@@ -7,10 +7,12 @@ use Service\CartService;
 class CatalogController
 {
     private Product $productModel;
+    private CartService $cartService;
 
     public function __construct()
     {
         $this->productModel = new Product();
+        $this->cartService = new CartService();
     }
 
     public function getCatalogPage(): void
@@ -21,8 +23,7 @@ class CatalogController
 
         $products = $this->productModel->getAll();
 
-        $obj = new CartService();
-        $count = $obj->getCount($userId);
+        $count = $this->cartService->getCount($userId);
 
         if (!$products){
             echo "<p>Ошибка при загрузке данных о товарах на сайт</p>";

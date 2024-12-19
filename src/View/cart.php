@@ -9,7 +9,7 @@
     <div class="container">
         <br><br>
         <h1 style="margin-left: 10px"> Корзина товаров пользователя <?php echo $user->getName(); ?></h1>
-        <?php if (!empty($products)) : ?>
+        <?php if (isset($products)) : ?>
 
             <h2 style="margin-left: 10px">Всего <?php echo $total['total_amount'] ?> ед. товара на сумму <?php echo $total['total_sum'] ?> руб.</h2>
 
@@ -17,7 +17,7 @@
 
         <?php if (empty($products)) : ?>
 
-            <p><?php echo "Ваша корзина пуста" ;?></p>
+            <p style="margin-left: 10px"><?php echo "Ваша корзина пуста" ;?></p>
 
         <?php else : ?>
             <div id="main" class="main">
