@@ -4,15 +4,12 @@
         <h1>Авторизация</h1>
         <p>Пожалуйста, заполните поля ниже для входа в аккаунт.</p>
         <hr>
-
-        <label for="email"><b>Email</b></label>
-        <label style="color: red;">
-            <?php echo $errors['email']??"";?></label>
+        <p><label style="color: red;">
+                <?php echo $errors ?? "";?></label><p>
+        <label for="login"><b>Логин</b></label>
         <input type="text" placeholder="Введите email" name="email" required>
 
         <label for="psw"><b>Пароль</b></label>
-        <label style="color: red;">
-            <?php echo $errors['password']??"";?></label>
         <input type="password" placeholder="Введите пароль" name="psw" required>
 
         <button type="submit">Войти</button>

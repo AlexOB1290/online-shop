@@ -9,37 +9,37 @@ use Model\OrderProduct;
 use Request\OrderRequest;
 use Service\CartService;
 use Service\OrderService;
+use Service\AuthService;
 
 class OrderController
 {
-    private User $userModel;
-    private Order $orderModel;
-    private Product $productModel;
-    private OrderProduct $orderProductModel;
     private OrderService $orderService;
     private CartService $cartService;
+    private AuthService $authService;
 
     public function __construct()
     {
-        $this->userModel = new User();
-        $this->orderModel = new Order();
-        $this->productModel = new Product();
-        $this->orderProductModel = new OrderProduct();
         $this->orderService = new OrderService();
         $this->cartService = new CartService();
+        $this->authService = new AuthService();
     }
     public function getOrderForm(): void
     {
-        $this->checkSession();
+        if(!$this->authService->check()){
+            header('Location: /login');
+        }
 
-        $userId = $_SESSION['user_id'];
+        $userId = $this->authService->getCurrentUser()->getId();
 
-        $user = $this->userModel->getOneById($userId);
+        $userName = $this->authService->getCurrentUser()->getName();
+        $userEmail = $this->authService->getCurrentUser()->getEmail();
 
         $products = $this->cartService->getProducts($userId);
 
         if(isset($products)) {
-            $total = $this->cartService->getTotalAmountAndSum($products);
+            $totalAmount = $this->cartService->getTotalAmount($products);
+            $totalSum = $this->cartService->getTotalSum($products);
+            $str = "Всего $totalAmount ед. товара на сумму $totalSum руб.";
         }
 
         require_once './../View/get_order.php';
@@ -47,11 +47,12 @@ class OrderController
 
     public function handleOrderForm(OrderRequest $request): void
     {
-        $this->checkSession();
+        $userId = $this->authService->getCurrentUser()->getId();
+
         $errors = $request->validate();
 
         if (empty($errors)) {
-            $userId = $_SESSION['user_id'];
+
             $name = $request->getName();
             $email = $request->getEmail();
             $address = $request->getAddress();
@@ -67,14 +68,15 @@ class OrderController
 
             header('Location: /orders');
         } else {
-            $userId = $_SESSION['user_id'];
-
-            $user = $this->userModel->getOneById($userId);
+            $userName = $this->authService->getCurrentUser()->getName();
+            $userEmail = $this->authService->getCurrentUser()->getEmail();
 
             $products = $this->cartService->getProducts($userId);
 
             if(isset($products)) {
-                $total = $this->cartService->getTotalAmountAndSum($products);
+                $totalAmount = $this->cartService->getTotalAmount($products);
+                $totalSum = $this->cartService->getTotalSum($products);
+                $str = "Всего {$totalAmount} ед. товара на сумму echo {$totalSum} руб.";
             }
 
             require_once './../View/get_order.php';
@@ -83,12 +85,14 @@ class OrderController
 
     public function getOrders(): void
     {
-        $this->checkSession();
-        $userId = $_SESSION['user_id'];
+        if(!$this->authService->check()) {
+            header('Location: /login');
+        }
+        $userId = $this->authService->getCurrentUser()->getId();
 
         $count = $this->cartService->getCount($userId);
 
-        $orders = $this->orderModel->getAllByUserId($userId);
+        $orders = Order::getAllByUserId($userId);
 
         foreach ($orders as &$order) {
             $order->setProducts($this->getOrderProducts($order->getId()));
@@ -100,14 +104,14 @@ class OrderController
 
     private function getOrderProducts(int $orderId): array
     {
-        $orderProducts = $this->orderProductModel->getByOrderId($orderId);
+        $orderProducts = OrderProduct::getByOrderId($orderId);
 
         $productIds = [];
         foreach ($orderProducts as $orderProduct) {
             $productIds[] = $orderProduct->getProductId();
         }
 
-        $products = $this->productModel->getAllByIds($productIds);
+        $products = Product::getAllByIds($productIds);
 
         foreach ($orderProducts as $orderProduct) {
             foreach ($products as &$product) {
@@ -120,13 +124,5 @@ class OrderController
         }
 
         return $products;
-    }
-
-    private function checkSession(): void
-    {
-        session_start();
-        if(!isset($_SESSION['user_id'])){
-            header('Location: /login');
-        }
     }
 }

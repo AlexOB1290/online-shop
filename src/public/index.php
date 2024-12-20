@@ -12,6 +12,7 @@ use Request\RegistrateRequest;
 use Request\LoginRequest;
 use Request\OrderRequest;
 use Request\AddProductRequest;
+use Service\AuthService;
 
 $rootPath = str_replace('public', '', __DIR__);
 
@@ -23,9 +24,9 @@ $app->addRoute('/registrate', 'GET', UserController::class, 'getRegistrationForm
 $app->addRoute('/registrate', 'POST', UserController::class, 'handleRegistrationForm', RegistrateRequest::class);
 $app->addRoute('/login', 'GET', UserController::class, 'getLoginForm');
 $app->addRoute('/login', 'POST', UserController::class, 'handleLoginForm', LoginRequest::class);
-$app->addRoute('/logout', 'GET', UserController::class, 'logout');
+$app->addRoute('/logout', 'GET', AuthService::class, 'logout');
 $app->addRoute('/catalog', 'GET', CatalogController::class, 'getCatalogPage');
-$app->addRoute('/add-product', 'GET', UserProductController::class, 'getAddProductForm');
+//$app->addRoute('/add-product', 'GET', UserProductController::class, 'getAddProductForm');
 $app->addRoute('/add-product', 'POST', UserProductController::class, 'handleAddProductForm', AddProductRequest::class);
 $app->addRoute('/cart', 'GET', CartController::class, 'getCartPage');
 $app->addRoute('/order', 'GET', OrderController::class, 'getOrderForm');

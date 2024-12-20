@@ -3,40 +3,31 @@ namespace Controller;
 
 use Model\Product;
 use Service\CartService;
+use Service\AuthService;
 
 class CatalogController
 {
-    private Product $productModel;
     private CartService $cartService;
+    private AuthService $authService;
 
     public function __construct()
     {
-        $this->productModel = new Product();
         $this->cartService = new CartService();
+        $this->authService = new AuthService();
     }
 
     public function getCatalogPage(): void
     {
-        $this->checkSession();
+        if(!$this->authService->check()){
+            header('Location: /login');
+        }
 
-        $userId = $_SESSION['user_id'];
+        $userId = $this->authService->getCurrentUser()->getId();
 
-        $products = $this->productModel->getAll();
+        $products = Product::getAll();
 
         $count = $this->cartService->getCount($userId);
 
-        if (!$products){
-            echo "<p>Ошибка при загрузке данных о товарах на сайт</p>";
-        } else {
-            require_once './../View/catalog.php';
-        }
-    }
-
-    private function checkSession(): void
-    {
-        session_start();
-        if(!isset($_SESSION['user_id'])){
-            header('Location: /login');
-        }
+        require_once './../View/catalog.php';
     }
 }

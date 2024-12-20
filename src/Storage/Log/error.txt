@@ -1,57 +1,35 @@
-Array
-(
-    [19-12-2024 20:01:31] => Array
-        (
-            [message] => SQLSTATE[23503]: Foreign key violation: 7 ERROR:  insert or update on table "order_products" violates foreign key constraint "order_products_order_id_fkey"
-DETAIL:  Key (order_id)=(23) is not present in table "orders".
-            [file] => /var/www/html/src/Model/OrderProduct.php
-            [line] => 21
-        )
+Log information:
+Date: 20-12-2024 14:30:00 
+Message: Typed static property Model\Model::$pdo must not be accessed before initialization 
+File: /var/www/html/src/Model/User.php 
+Line: 19
 
-)
+Log information: 
+Date: 20-12-2024 14:32:09 
+Message: Typed static property Model\Model::$pdo must not be accessed before initialization 
+File: /var/www/html/src/Model/Product.php 
+Line: 16
 
-Array
-(
-    [19-12-2024 20:04:37] => Array
-        (
-            [message] => SQLSTATE[23503]: Foreign key violation: 7 ERROR:  insert or update on table "order_products" violates foreign key constraint "order_products_order_id_fkey"
-DETAIL:  Key (order_id)=(24) is not present in table "orders".
-            [file] => /var/www/html/src/Model/OrderProduct.php
-            [line] => 21
-        )
+Log information: 
+Date: 20-12-2024 14:37:32 
+Message: test exception 
+File: /var/www/html/src/Service/OrderService.php 
+Line: 37
 
-)
+Log information: 
+Date: 20-12-2024 14:38:32 
+Message: test exception 
+File: /var/www/html/src/Service/OrderService.php 
+Line: 37
 
-Array
-(
-    [19-12-2024 20:15:33] => Array
-        (
-            [message] => Call to undefined method DTO\CreateOrderDTO::getUserIdQWER()
-            [file] => /var/www/html/src/Service/OrderService.php
-            [line] => 42
-        )
+Log information: 
+Date: 20-12-2024 14:46:49 
+Message: Call to undefined method Service\CartService::getTotalAmountAndSum() 
+File: /var/www/html/src/Controller/OrderController.php 
+Line: 42
 
-)
-
-Array
-(
-    [19-12-2024 20:27:10] => Array
-        (
-            [message] => Call to undefined method DTO\CreateOrderDTO::getUserIdQWER()
-            [file] => /var/www/html/src/Service/OrderService.php
-            [line] => 42
-        )
-
-)
-
-Array
-(
-    [19-12-2024 21:04:53] => Array
-        (
-            [message] => SQLSTATE[HY093]: Invalid parameter number: :emaiiiiil
-            [file] => /var/www/html/src/Model/User.php
-            [line] => 20
-        )
-
-)
-
+Log information: 
+Date: 20-12-2024 16:26:36 
+Message: SQLSTATE[HY093]: Invalid parameter number: :user_qqqqqid 
+File: /var/www/html/src/Model/UserProduct.php 
+Line: 70

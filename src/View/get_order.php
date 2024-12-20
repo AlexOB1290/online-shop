@@ -15,12 +15,12 @@
         <label for="name"><b>Имя</b></label>
         <label style="color: red;">
             <?php echo $errors['name']??"";?></label>
-        <input type="text" placeholder="Введите имя" name="name" id="name" value="<?php echo $user->getName() ?? ""; ?>" required>
+        <input type="text" placeholder="Введите имя" name="name" id="name" value="<?php echo $userName ?? ""; ?>" required>
 
         <label for="email"><b>Email</b></label>
         <label style="color: red;">
             <?php echo $errors['email']??"";?></label>
-        <input type="email" placeholder="Введите email" name="email" id="email" value="<?php echo $user->getEmail() ?? ""; ?>" required>
+        <input type="email" placeholder="Введите email" name="email" id="email" value="<?php echo $userEmail ?? ""; ?>" required>
 
         <label for="psw"><b>Адрес доставки</b></label>
         <label style="color: red;">
@@ -37,13 +37,16 @@
 
     </div>
     <div>
-        <h2 style="margin-left: 10px">Всего <?php echo $total['total_amount'] ?> ед. товара на сумму <?php echo $total['total_sum'] ?> руб.</h2>
+        <h2 style="margin-left: 10px"> <?php echo $str ?? ""?> </h2>
     </div>
     <div>
         <h3 style="margin-left: 10px">Список товаров из корзины:</h3>
     </div>
 
         <div id="main" class="main">
+            <?php if (empty($products)) : ?>
+            <?php echo "" ?>
+            <?php else : ?>
             <?php foreach ($products as $product) : ?>
                 <div class="main_item">
                     <div class="card" >
@@ -57,6 +60,7 @@
                     </div>
                 </div>
             <?php endforeach; ?>
+            <?php endif; ?>
         </div>
 
 </form>

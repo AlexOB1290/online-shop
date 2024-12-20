@@ -6,23 +6,24 @@ use Model\Product;
 use Model\UserProduct;
 use Request\AddProductRequest;
 use Service\CartService;
+use Service\AuthService;
 
 class UserProductController
 {
-    private Product $productModel;
-    private UserProduct $userProductModel;
     private CartService $cartService;
+    private AuthService $authService;
 
     public function __construct()
     {
-        $this->productModel = new Product();
-        $this->userProductModel = new UserProduct();
         $this->cartService = new CartService();
+        $this->authService = new AuthService();
     }
 
     public function getAddProductForm(): void
     {
-        $this->checkSession();
+        if(!$this->authService->check()){
+            header('Location: /login');
+        }
         require_once './../View/get_add_product.php';
     }
 
@@ -30,10 +31,9 @@ class UserProductController
     {
         $errors = $request->validate();
 
-        if (empty($errors)) {
-            $this->checkSession();
+        $userId = $this->authService->getCurrentUser()->getId();
 
-            $userId = $_SESSION['user_id'];
+        if (empty($errors)) {
             $productId = $request->getProductId();
             $amount = $request->getAmount();
 
@@ -41,29 +41,12 @@ class UserProductController
 
             $this->cartService->create($dto);
 
-            $userProducts = $this->userProductModel->getAllByUserId($userId);
-
-            if ($userProducts) {
-                $amount = 0;
-
-                foreach ($userProducts as $userProduct) {
-                    $amount += $userProduct->getAmount();
-                }
-
-                $count = $amount;
-            }
+            $count = $this->cartService->getCount($userId);
         }
 
-        $products = $this->productModel->getAll();
+        $products = Product::getAll();
+        $count = $this->cartService->getCount($userId);
 
         require_once './../View/catalog.php';
-    }
-
-    private function checkSession(): void
-    {
-        session_start();
-        if(!isset($_SESSION['user_id'])){
-            header('Location: /login');
-        }
     }
 }

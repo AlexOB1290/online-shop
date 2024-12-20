@@ -32,10 +32,7 @@ class AddProductRequest extends Request
             } elseif (str_contains($productId, ".")) {
                 $errors['product-id'] = "Product-id должно быть натуральным числом";
             } else {
-                $product = new Product($productId);
-                $product->getOneById($productId);
-
-                if (!$product->getOneById($productId)) {
+                if (!Product::getOneById($productId)) {
                     $errors['product-id'] = "Данный товар отсутствует в магазине";
                 }
             }

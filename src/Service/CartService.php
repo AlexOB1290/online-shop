@@ -8,29 +8,20 @@ use Model\Product;
 
 class CartService
 {
-    private UserProduct $userProductModel;
-    private Product $productModel;
-
-    public function __construct()
-    {
-        $this->userProductModel = new UserProduct();
-        $this->productModel = new Product();
-    }
-
     public function create(CartDTO $userProductDTO): void
     {
-        $userProduct = $this->userProductModel->getOneByIds($userProductDTO->getUserId(), $userProductDTO->getProductId());
+        $userProduct = UserProduct::getOneByIds($userProductDTO->getUserId(), $userProductDTO->getProductId());
 
         if (!$userProduct) {
-            $this->userProductModel->addProduct($userProductDTO->getUserId(), $userProductDTO->getProductId(), $userProductDTO->getAmount());
+            UserProduct::addProduct($userProductDTO->getUserId(), $userProductDTO->getProductId(), $userProductDTO->getAmount());
         } else {
-            $this->userProductModel->increaseAmount($userProductDTO->getAmount(), $userProductDTO->getUserId(), $userProductDTO->getProductId());
+            UserProduct::increaseAmount($userProductDTO->getAmount(), $userProductDTO->getUserId(), $userProductDTO->getProductId());
         }
     }
 
     public function getProducts(int $userId): ?array
     {
-        $userProducts = $this->userProductModel->getAllByUserId($userId);
+        $userProducts = UserProduct::getAllByUserId($userId);
 
         if (!empty($userProducts)) {
             $productIds = [];
@@ -38,7 +29,7 @@ class CartService
                 $productIds[] = $userProduct->getProductId();
             }
 
-            $products = $this->productModel->getAllByIds($productIds);
+            $products = Product::getAllByIds($productIds);
 
             foreach ($userProducts as $userProduct) {
                 foreach ($products as &$product) {
@@ -57,24 +48,29 @@ class CartService
         return $products;
     }
 
-    public function getTotalAmountAndSum(array $products): array
+    public function getTotalAmount(array $products): int
     {
         $totalAmount = 0;
-        $totalSum = 0;
         foreach ($products as $product) {
             $totalAmount += $product->getAmount();
+        }
+
+        return $totalAmount;
+    }
+
+    public function getTotalSum(array $products): int
+    {
+        $totalSum = 0;
+        foreach ($products as $product) {
             $totalSum += $product->getTotal();
         }
 
-        $total['total_amount'] = $totalAmount;
-        $total['total_sum'] = $totalSum;
-
-        return $total;
+        return $totalSum;
     }
 
     public function getCount(int $userId): ?int
     {
-        $userProducts = $this->userProductModel->getAllByUserId($userId);
+        $userProducts = UserProduct::getAllByUserId($userId);
 
         if ($userProducts) {
             $amount = 0;

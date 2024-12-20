@@ -3,40 +3,34 @@ namespace Controller;
 
 use Model\User;
 use Service\CartService;
+use Service\AuthService;
 
 class CartController
 {
-    private User $userModel;
     private CartService $cartService;
+    private AuthService $authService;
 
     public function __construct()
     {
-        $this->userModel = new User();
         $this->cartService = new CartService();
+        $this->authService = new AuthService();
     }
 
     public function getCartPage(): void
     {
-        $this->checkSession();
+        if(!$this->authService->check()){
+            header('Location: /login');
+        }
 
-        $userId = $_SESSION['user_id'];
-
-        $user = $this->userModel->getOneById($userId);
+        $userId = $this->authService->getCurrentUser()->getId();
 
         $products = $this->cartService->getProducts($userId);
 
         if(isset($products)) {
-            $total = $this->cartService->getTotalAmountAndSum($products);
+            $totalAmount = $this->cartService->getTotalAmount($products);
+            $totalSum = $this->cartService->getTotalSum($products);
         }
 
         require_once './../View/cart.php';
-    }
-
-    private function checkSession(): void
-    {
-        session_start();
-        if(!isset($_SESSION['user_id'])){
-            header('Location: /login');
-        }
     }
 }

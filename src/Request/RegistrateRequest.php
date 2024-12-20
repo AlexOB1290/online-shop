@@ -49,9 +49,7 @@ class RegistrateRequest extends Request
             } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors['email'] = "указан неверно";
             } else {
-                $user = new User();
-
-                if ($user->getOneByEmail($email)) {
+                if (User::getOneByEmail($email)) {
                     $errors['email'] = "уже зарегистрирован";
                 }
             }

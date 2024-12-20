@@ -14,15 +14,15 @@ class Order extends Model
     private string $date;
 
     private array $products = [];
-    public function create(int $userId, string $orderNumber, string $name, string $email, string $address, string $telephone, string $total, string $date): bool
+    public static function create(int $userId, string $orderNumber, string $name, string $email, string $address, string $telephone, string $total, string $date): bool
     {
-        $stmt = $this->pdo->prepare("INSERT INTO orders (user_id, order_number, name, email, address, telephone, total, date) VALUES (:user_id, :order_number, :name, :email, :address, :telephone, :total, :date)");
+        $stmt = self::getPdo()->prepare("INSERT INTO orders (user_id, order_number, name, email, address, telephone, total, date) VALUES (:user_id, :order_number, :name, :email, :address, :telephone, :total, :date)");
         return $stmt->execute(['user_id' => $userId, 'name' => $name, 'order_number'=>$orderNumber, 'email' => $email, 'address' => $address, 'telephone' => $telephone, 'total' => $total, 'date' => $date]);
     }
 
-    public function getAllByUserId(int $userId): ?array
+    public static function getAllByUserId(int $userId): ?array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM orders WHERE user_id = :user_id");
+        $stmt = self::getPdo()->prepare("SELECT * FROM orders WHERE user_id = :user_id");
         $stmt->execute(['user_id' => $userId]);
         $data = $stmt->fetchAll();
 
@@ -32,15 +32,15 @@ class Order extends Model
 
         $orders = [];
         foreach($data as $order){
-            $orders[] = $this->createObject($order);
+            $orders[] = self::createObject($order);
         }
 
         return $orders;
     }
 
-    public function getOneByUserId(int $userId): ?self
+    public static function getOneByUserId(int $userId): ?self
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM orders WHERE user_id = :user_id ORDER BY id DESC LIMIT 1");
+        $stmt = self::getPdo()->prepare("SELECT * FROM orders WHERE user_id = :user_id ORDER BY id DESC LIMIT 1");
         $stmt->execute(['user_id' => $userId]);
         $data = $stmt->fetch();
 
@@ -48,10 +48,10 @@ class Order extends Model
             return null;
         }
 
-        return $this->createObject($data);
+        return self::createObject($data);
     }
 
-    private function createObject (array $data): self
+    private static function createObject (array $data): self
     {
         $obj = new self();
         $obj->id = $data['id'];

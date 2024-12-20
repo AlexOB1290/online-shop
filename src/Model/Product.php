@@ -11,9 +11,9 @@ class Product extends Model
     private int $amount = 0;
     private int $total = 0;
 
-    public function getAll(): ?array
+    public static function getAll(): ?array
     {
-        $stmt = $this->pdo->query("SELECT * FROM products ORDER BY id");
+        $stmt = self::getPdo()->query("SELECT * FROM products ORDER BY id");
         $data = $stmt->fetchAll();
 
         if($data === false) {
@@ -22,15 +22,15 @@ class Product extends Model
 
         $products = [];
         foreach ($data as $product) {
-            $products[] = $this->createObject($product);
+            $products[] = self::createObject($product);
         }
 
         return $products;
     }
 
-    public function getOneById(int $productId): ?self
+    public static function getOneById(int $productId): ?self
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM products WHERE id = :id");
+        $stmt = self::getPdo()->prepare("SELECT * FROM products WHERE id = :id");
         $stmt->execute(['id' => $productId]);
         $data = $stmt->fetch();
 
@@ -38,13 +38,13 @@ class Product extends Model
             return null;
         }
 
-        return $this->createObject($data);
+        return self::createObject($data);
     }
 
-    public function getAllByIds(array $productIds): ?array
+    public static function getAllByIds(array $productIds): ?array
     {
         $placeHolders = '?' . str_repeat(', ?', count($productIds) - 1);
-        $stmt = $this->pdo->prepare("SELECT * FROM products WHERE id IN ($placeHolders)");
+        $stmt = self::getPdo()->prepare("SELECT * FROM products WHERE id IN ($placeHolders)");
         $stmt->execute($productIds);
         $data = $stmt->fetchAll();
 
@@ -54,13 +54,13 @@ class Product extends Model
 
         $products = [];
         foreach ($data as $product) {
-            $products[] = $this->createObject($product);
+            $products[] = self::createObject($product);
         }
 
         return $products;
     }
 
-    private function createObject(array $data): self
+    private static function createObject(array $data): self
     {
         $obj = new self();
         $obj->id = $data['id'];

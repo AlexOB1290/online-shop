@@ -9,9 +9,9 @@ class OrderProduct extends Model
     private int $amount;
     private int $price;
 
-    public function addUserProduct(string $orderId, array $userProducts): bool
+    public static function addUserProduct(string $orderId, array $userProducts): bool
     {
-        $stmt = $this->pdo->prepare("INSERT INTO order_products (order_id, product_id, amount, price) VALUES (:order_id, :product_id, :amount, :price)");
+        $stmt = self::getPdo()->prepare("INSERT INTO order_products (order_id, product_id, amount, price) VALUES (:order_id, :product_id, :amount, :price)");
 
         foreach ($userProducts as $userProduct) {
             $productId = $userProduct->getProductId();
@@ -24,9 +24,9 @@ class OrderProduct extends Model
         return $result;
     }
 
-    public function getByOrderId($orderId): ?array
+    public static function getByOrderId($orderId): ?array
     {
-        $stmt = $this->pdo->prepare("SELECT * FROM order_products WHERE order_id = :order_id");
+        $stmt = self::getPdo()->prepare("SELECT * FROM order_products WHERE order_id = :order_id");
         $stmt->execute(['order_id' => $orderId]);
         $data = $stmt->fetchAll();
 
@@ -36,13 +36,13 @@ class OrderProduct extends Model
 
         $orderProducts = [];
         foreach ($data as $orderProduct){
-            $orderProducts[] = $this->createObject($orderProduct);
+            $orderProducts[] = self::createObject($orderProduct);
         }
 
         return $orderProducts;
     }
 
-    private function createObject (array $data): self
+    private static function createObject (array $data): self
     {
         $obj = new self();
         $obj->id = $data['id'];
