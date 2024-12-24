@@ -33,3 +33,45 @@ Date: 20-12-2024 16:26:36
 Message: SQLSTATE[HY093]: Invalid parameter number: :user_qqqqqid 
 File: /var/www/html/src/Model/UserProduct.php 
 Line: 70
+
+Log information: 
+Date: 22-12-2024 20:29:01 
+Message: Call to undefined method Model\Product::getProductId() 
+File: /var/www/html/src/Model/OrderProduct.php 
+Line: 17
+
+Log information: 
+Date: 23-12-2024 21:31:10 
+Message: Non-static method Service\CartService::getTotalSum() cannot be called statically 
+File: /var/www/html/src/Service/OrderService.php 
+Line: 31
+
+Произошла ошибка при обработке:
+ message: Call to undefined method DTO\CreateOrderDTO::getUserIdq()
+line: 37
+file: /var/www/html/src/Service/OrderService.php
+message: Call to undefined method DTO\CreateOrderDTO::getUserIdq()
+line: 37
+file: /var/www/html/src/Service/OrderService.php
+
+
+Произошла ошибка при обработке:
+message: Call to undefined method DTO\CreateOrderDTO::getUserIdq()
+line: 37
+file: /var/www/html/src/Service/OrderService.php
+
+
+Произошла ошибка при обработке:
+message: Call to undefined method DTO\CreateOrderDTO::getUserIdq()
+line: 37
+file: /var/www/html/src/Service/OrderService.php
+
+Произошла ошибка при обработке:
+message: Call to undefined method DTO\CreateOrderDTO::getUserIdq()
+line: 37
+file: /var/www/html/src/Service/OrderService.php
+
+Произошла ошибка при обработке:
+message: Call to undefined method DTO\CreateOrderDTO::getUserIdq()
+line: 37
+file: /var/www/html/src/Service/OrderService.php

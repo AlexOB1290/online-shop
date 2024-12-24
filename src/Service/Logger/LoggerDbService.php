@@ -2,7 +2,7 @@
 
 namespace Service\Logger;
 
-class LoggerDbService
+class LoggerDbService implements LoggerServiceInterface
 {
 
 }

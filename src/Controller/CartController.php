@@ -1,7 +1,6 @@
 <?php
 namespace Controller;
 
-use Model\User;
 use Service\CartService;
 use Service\AuthService;
 
@@ -24,7 +23,7 @@ class CartController
 
         $userId = $this->authService->getCurrentUser()->getId();
 
-        $products = $this->cartService->getProducts($userId);
+        $products = $this->cartService->getUserProducts($userId);
 
         if(isset($products)) {
             $totalAmount = $this->cartService->getTotalAmount($products);

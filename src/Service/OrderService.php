@@ -8,64 +8,40 @@ use Model\Order;
 use Model\OrderProduct;
 use Model\Product;
 use Model\UserProduct;
+use Service\CartService;
 
 class OrderService
 {
-    private UserProduct $userProductModel;
+    private CartService $cartService;
+
     public function __construct()
     {
-        $this->userProductModel = new UserProduct();
+        $this->cartService = new CartService();
     }
-
     public function create(CreateOrderDTO $orderDTO): void
     {
-        $userProducts = $this->getUserProducts($orderDTO->getUserId());
+        $userProducts = $this->cartService->getUserProducts($orderDTO->getUserId());
 
-        $pdo = Model::getPdo();
+        if ($userProducts) {
+            $pdo = Model::getPdo();
 
-        $pdo->beginTransaction();
+            $pdo->beginTransaction();
 
-        try {
-            Order::create($orderDTO->getUserId(), $orderDTO->getOrderNumber(), $orderDTO->getName(), $orderDTO->getEmail(), $orderDTO->getAddress(), $orderDTO->getTelephone(), $this->userProductModel->getTotal(), $orderDTO->getDate());
+            try {
+                Order::create($orderDTO->getUserId(), $orderDTO->getOrderNumber(), $orderDTO->getName(), $orderDTO->getEmail(), $orderDTO->getAddress(), $orderDTO->getTelephone(), $this->cartService->getTotalSum($userProducts), $orderDTO->getDate());
 
-            $order = Order::getOneByUserId($orderDTO->getUserId());
+                $order = Order::getOneByUserId($orderDTO->getUserId());
 
-            OrderProduct::addUserProduct($order->getId(), $userProducts);
+                OrderProduct::addUserProduct($order->getId(), $userProducts);
 
-            UserProduct::deleteByUserId($orderDTO->getUserId());
-        } catch (\PDOException $exception){
-            $pdo->rollBack();
+                UserProduct::deleteByUserId($orderDTO->getUserId());
+            } catch (\PDOException $exception){
+                $pdo->rollBack();
 
-            throw $exception;
-        }
-
-        $pdo->commit();
-    }
-
-    private function getUserProducts(int $userId): array
-    {
-        $userProducts = UserProduct::getAllByUserId($userId);
-
-        $productIds = [];
-        foreach ($userProducts as $userProduct) {
-            $productIds[] = $userProduct->getProductId();
-        }
-
-        $products = Product::getAllByIds($productIds);
-
-        $total = 0;
-        foreach ($products as $product) {
-            foreach ($userProducts as &$userProduct) {
-                if ($userProduct->getProductId() === $product->getId()) {
-                    $userProduct->setPrice($product->getPrice());
-                    $total += $product->getPrice() * $userProduct->getAmount();
-                }
+                throw $exception;
             }
-            unset($userProduct);
+
+            $pdo->commit();
         }
-
-        $this->userProductModel->setTotal($total);
-
-        return $userProducts;
     }
 }

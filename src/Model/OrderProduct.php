@@ -14,7 +14,7 @@ class OrderProduct extends Model
         $stmt = self::getPdo()->prepare("INSERT INTO order_products (order_id, product_id, amount, price) VALUES (:order_id, :product_id, :amount, :price)");
 
         foreach ($userProducts as $userProduct) {
-            $productId = $userProduct->getProductId();
+            $productId = $userProduct->getId();
             $amount = $userProduct->getAmount();
             $price = $userProduct->getPrice();
 

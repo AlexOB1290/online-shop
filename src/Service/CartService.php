@@ -19,7 +19,7 @@ class CartService
         }
     }
 
-    public function getProducts(int $userId): ?array
+    public function getUserProducts(int $userId): ?array
     {
         $userProducts = UserProduct::getAllByUserId($userId);
 

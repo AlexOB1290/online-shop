@@ -1,24 +1,27 @@
 <?php
 require_once './../Core/Autoloader.php';
 
-use Core\Autoloader;
-use Core\App;
-use Controller\UserController;
-use Controller\CatalogController;
-use Controller\UserProductController;
 use Controller\CartController;
+use Controller\CatalogController;
 use Controller\OrderController;
-use Request\RegistrateRequest;
+use Controller\UserController;
+use Controller\UserProductController;
+use Core\App;
+use Core\Autoloader;
+use Request\AddProductRequest;
 use Request\LoginRequest;
 use Request\OrderRequest;
-use Request\AddProductRequest;
+use Request\RegistrateRequest;
 use Service\AuthService;
+use Service\Logger\LoggerFileService;
 
 $rootPath = str_replace('public', '', __DIR__);
 
 Autoloader::registrate($rootPath);
 
-$app = new App();
+$loggerService = new LoggerFileService();
+
+$app = new App($loggerService);
 
 $app->addRoute('/registrate', 'GET', UserController::class, 'getRegistrationForm');
 $app->addRoute('/registrate', 'POST', UserController::class, 'handleRegistrationForm', RegistrateRequest::class);

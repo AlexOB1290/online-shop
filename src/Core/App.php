@@ -1,16 +1,18 @@
 <?php
 namespace Core;
 
-use Request\AddProductRequest;
-use Request\OrderRequest;
 use Request\Request;
-use Request\RegistrateRequest;
-use Request\LoginRequest;
-use Service\LoggerService;
+use Service\Logger\LoggerFileService;
 
 class App
 {
     private array $routes = [];
+    private LoggerFileService $loggerService;
+
+    public function __construct(LoggerFileService $loggerService)
+    {
+        $this->loggerService = $loggerService;
+    }
     public function run(): void
     {
         $uri = $_SERVER['REQUEST_URI'];
@@ -35,7 +37,11 @@ class App
                 try {
                     $obj->$classMethod($request);
                 } catch (\Throwable $exception) {
-                    LoggerService::writeLog($exception);
+                    $this->loggerService->error('Произошла ошибка при обработке', [
+                        'message' => $exception->getMessage(),
+                        'line' => $exception->getLine(),
+                        'file' => $exception->getFile(),
+                    ]);
 
                     http_response_code(500);
                     require_once './../View/500.html';

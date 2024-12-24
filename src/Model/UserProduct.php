@@ -7,8 +7,6 @@ class UserProduct extends Model
     private int $userId;
     private int $productId;
     private int $amount;
-    private int $price = 0;
-    private int $total = 0;
 
     public static function addProduct(int $userId, int $productId, int $amount): bool
     {
@@ -68,26 +66,6 @@ class UserProduct extends Model
     {
         $stmt = self::$pdo->prepare("DELETE FROM user_products WHERE user_id = :user_id");
         return $stmt->execute(['user_id' => $userId]);
-    }
-
-    public function setPrice(int $price): void
-    {
-        $this->price = $price;
-    }
-
-    public function setTotal(int $total): void
-    {
-        $this->total = $total;
-    }
-
-    public function getPrice(): int
-    {
-        return $this->price;
-    }
-
-    public function getTotal(): int
-    {
-        return $this->total;
     }
 
     public function getId(): int

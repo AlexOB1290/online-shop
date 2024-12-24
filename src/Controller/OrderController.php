@@ -34,7 +34,7 @@ class OrderController
         $userName = $this->authService->getCurrentUser()->getName();
         $userEmail = $this->authService->getCurrentUser()->getEmail();
 
-        $products = $this->cartService->getProducts($userId);
+        $products = $this->cartService->getUserProducts($userId);
 
         if(isset($products)) {
             $totalAmount = $this->cartService->getTotalAmount($products);
@@ -71,7 +71,7 @@ class OrderController
             $userName = $this->authService->getCurrentUser()->getName();
             $userEmail = $this->authService->getCurrentUser()->getEmail();
 
-            $products = $this->cartService->getProducts($userId);
+            $products = $this->cartService->getUserProducts($userId);
 
             if(isset($products)) {
                 $totalAmount = $this->cartService->getTotalAmount($products);

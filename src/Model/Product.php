@@ -8,8 +8,8 @@ class Product extends Model
     private int $price;
     private string $description;
     private string $image;
-    private int $amount = 0;
-    private int $total = 0;
+    private ?int $amount = null;
+    private ?int $total = null;
 
     public static function getAll(): ?array
     {
