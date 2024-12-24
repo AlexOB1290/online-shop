@@ -1,10 +1,10 @@
 <?php
 
-namespace Service;
+namespace Service\Logger;
 
 class LoggerService
 {
-    public static function writeLog(\Exception $exception): void
+    public function writeLog(\Throwable $exception): void
     {
         date_default_timezone_set('Asia/Irkutsk');
         $date = date('d-m-Y H:i:s');
