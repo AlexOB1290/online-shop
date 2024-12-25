@@ -2,31 +2,30 @@
 namespace Controller;
 
 use DTO\CreateOrderDTO;
-use Model\User;
-use Model\Product;
 use Model\Order;
 use Model\OrderProduct;
+use Model\Product;
 use Request\OrderRequest;
+use Service\Auth\AuthServiceInterface;
 use Service\CartService;
 use Service\OrderService;
-use Service\AuthService;
 
 class OrderController
 {
-    private OrderService $orderService;
+    private AuthServiceInterface $authService;
     private CartService $cartService;
-    private AuthService $authService;
-
-    public function __construct()
+    private OrderService $orderService;
+    public function __construct(AuthServiceInterface $authService, CartService $cartService, OrderService $orderService)
     {
-        $this->orderService = new OrderService();
-        $this->cartService = new CartService();
-        $this->authService = new AuthService();
+        $this->authService = $authService;
+        $this->cartService = $cartService;
+        $this->orderService = $orderService;
     }
     public function getOrderForm(): void
     {
         if(!$this->authService->check()){
             header('Location: /login');
+            return;
         }
 
         $userId = $this->authService->getCurrentUser()->getId();
@@ -87,6 +86,7 @@ class OrderController
     {
         if(!$this->authService->check()) {
             header('Location: /login');
+            return;
         }
         $userId = $this->authService->getCurrentUser()->getId();
 

@@ -1,17 +1,30 @@
 <?php
 namespace Core;
 
+use ReflectionMethod;
 use Request\Request;
+use Service\Auth\AuthServiceInterface;
+use Service\Auth\AuthSessionService;
+use Service\CartService;
 use Service\Logger\LoggerFileService;
+use Service\Logger\LoggerServiceInterface;
+use Service\OrderService;
+use ReflectionClass;
 
 class App
 {
     private array $routes = [];
-    private LoggerFileService $loggerService;
+    private LoggerServiceInterface $loggerService;
+    private OrderService $orderService;
+    private CartService $cartService;
+    private AuthServiceInterface $authService;
 
-    public function __construct(LoggerFileService $loggerService)
+    public function __construct(LoggerServiceInterface $loggerService)
     {
         $this->loggerService = $loggerService;
+        $this->orderService = new OrderService();
+        $this->cartService = new CartService();
+        $this->authService = new AuthSessionService();
     }
     public function run(): void
     {
@@ -26,7 +39,18 @@ class App
                 $classMethod = $handler['method'];
                 $requestClass = $handler['requestClass'];
 
-                $obj = new $class();
+                if(str_contains($class, 'UserController')) {
+                    $arrayObject = ['authService'=>$this->authService];
+                    $obj = new $class(...$arrayObject);
+                } elseif (str_contains($class, 'UserProductController') || str_contains($class, 'CartController') || str_contains($class, 'CatalogController')) {
+                    $arrayObject = ['authService'=>$this->authService, 'cartService'=>$this->cartService];
+                    $obj = new $class(...$arrayObject);
+                } elseif (str_contains($class, 'OrderController')) {
+                    $arrayObject = ['authService'=>$this->authService, 'cartService'=>$this->cartService, 'orderService'=>$this->orderService];
+                    $obj = new $class(...$arrayObject);
+                } else{
+                    $obj = new $class();
+                }
 
                 if (!empty($requestClass)) {
                     $request = new $requestClass($uri, $method, $_POST);
@@ -65,4 +89,5 @@ class App
             echo "$requestMethod уже зарегистрирован для $requestUri" . "<br>";
         }
     }
+
 }

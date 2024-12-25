@@ -75,3 +75,8 @@ file: /var/www/html/src/Service/OrderService.php
 message: Call to undefined method DTO\CreateOrderDTO::getUserIdq()
 line: 37
 file: /var/www/html/src/Service/OrderService.php
+
+Произошла ошибка при обработке:
+message: SQLSTATE[HY093]: Invalid parameter number: :user_id222222222
+line: 68
+file: /var/www/html/src/Model/UserProduct.php

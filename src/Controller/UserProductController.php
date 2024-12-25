@@ -3,26 +3,26 @@ namespace Controller;
 
 use DTO\CartDTO;
 use Model\Product;
-use Model\UserProduct;
 use Request\AddProductRequest;
+use Service\Auth\AuthServiceInterface;
 use Service\CartService;
-use Service\AuthService;
 
 class UserProductController
 {
+    private AuthServiceInterface $authService;
     private CartService $cartService;
-    private AuthService $authService;
 
-    public function __construct()
+    public function __construct(AuthServiceInterface $authService, CartService $cartService)
     {
-        $this->cartService = new CartService();
-        $this->authService = new AuthService();
+        $this->authService = $authService;
+        $this->cartService = $cartService;
     }
 
     public function getAddProductForm(): void
     {
         if(!$this->authService->check()){
             header('Location: /login');
+            return;
         }
         require_once './../View/get_add_product.php';
     }

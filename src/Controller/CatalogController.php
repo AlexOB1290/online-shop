@@ -2,24 +2,25 @@
 namespace Controller;
 
 use Model\Product;
+use Service\Auth\AuthServiceInterface;
 use Service\CartService;
-use Service\AuthService;
 
 class CatalogController
 {
+    private AuthServiceInterface $authService;
     private CartService $cartService;
-    private AuthService $authService;
 
-    public function __construct()
+    public function __construct(AuthServiceInterface $authService, CartService $cartService)
     {
-        $this->cartService = new CartService();
-        $this->authService = new AuthService();
+        $this->authService = $authService;
+        $this->cartService = $cartService;
     }
 
     public function getCatalogPage(): void
     {
         if(!$this->authService->check()){
             header('Location: /login');
+            return;
         }
 
         $userId = $this->authService->getCurrentUser()->getId();

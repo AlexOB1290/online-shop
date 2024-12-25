@@ -12,14 +12,14 @@ use Request\AddProductRequest;
 use Request\LoginRequest;
 use Request\OrderRequest;
 use Request\RegistrateRequest;
-use Service\AuthService;
-use Service\Logger\LoggerFileService;
+use Service\Auth\AuthSessionService;
+use Service\Logger\LoggerDbService;
 
 $rootPath = str_replace('public', '', __DIR__);
 
 Autoloader::registrate($rootPath);
 
-$loggerService = new LoggerFileService();
+$loggerService = new LoggerDbService();
 
 $app = new App($loggerService);
 
@@ -27,7 +27,7 @@ $app->addRoute('/registrate', 'GET', UserController::class, 'getRegistrationForm
 $app->addRoute('/registrate', 'POST', UserController::class, 'handleRegistrationForm', RegistrateRequest::class);
 $app->addRoute('/login', 'GET', UserController::class, 'getLoginForm');
 $app->addRoute('/login', 'POST', UserController::class, 'handleLoginForm', LoginRequest::class);
-$app->addRoute('/logout', 'GET', AuthService::class, 'logout');
+$app->addRoute('/logout', 'GET', AuthSessionService::class, 'logout');
 $app->addRoute('/catalog', 'GET', CatalogController::class, 'getCatalogPage');
 //$app->addRoute('/add-product', 'GET', UserProductController::class, 'getAddProductForm');
 $app->addRoute('/add-product', 'POST', UserProductController::class, 'handleAddProductForm', AddProductRequest::class);
