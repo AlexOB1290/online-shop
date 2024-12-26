@@ -1,36 +1,19 @@
 <?php
 namespace Core;
 
-use ReflectionException;
-use ReflectionMethod;
 use Request\Request;
-use Service\Auth\AuthServiceInterface;
-use Service\Auth\AuthSessionService;
-use Service\CartService;
-use Service\Logger\LoggerFileService;
 use Service\Logger\LoggerServiceInterface;
-use Service\OrderService;
-use ReflectionClass;
 
 class App
 {
     private array $routes = [];
-    private LoggerServiceInterface $loggerService;
-    private array $objects;
+    private Container $container;
 
-    public function __construct(LoggerServiceInterface $loggerService)
+    public function __construct(Container $container)
     {
-        $this->loggerService = $loggerService;
-        $this->objects = [
-            OrderService::class => new OrderService(),
-            CartService::class =>new CartService(),
-            AuthServiceInterface::class => new AuthSessionService(),
-        ];
+        $this->container = $container;
     }
 
-    /**
-     * @throws ReflectionException
-     */
     public function run(): void
     {
         $uri = $_SERVER['REQUEST_URI'];
@@ -44,11 +27,7 @@ class App
                 $classMethod = $handler['method'];
                 $requestClass = $handler['requestClass'];
 
-                if ($this->prepareObj($class)){
-                    $obj = new $class(...$this->prepareObj($class));
-                } else {
-                    $obj = new $class();
-                }
+                $obj = $this->container->get($class);
 
                 if (!empty($requestClass)) {
                     $request = new $requestClass($uri, $method, $_POST);
@@ -59,7 +38,7 @@ class App
                 try {
                     $obj->$classMethod($request);
                 } catch (\Throwable $exception) {
-                    $this->loggerService->error('Произошла ошибка при обработке', [
+                    $this->container->get(LoggerServiceInterface::class)->error('Произошла ошибка при обработке', [
                         'message' => $exception->getMessage(),
                         'line' => $exception->getLine(),
                         'file' => $exception->getFile(),
@@ -87,31 +66,4 @@ class App
             echo "$requestMethod уже зарегистрирован для $requestUri" . "<br>";
         }
     }
-
-    /**
-     * @throws ReflectionException
-     */
-    private function prepareObj(string $className): ?array
-    {
-        $reflector = new \ReflectionClass($className);
-        $constructReflector = $reflector->getConstructor();
-        if(!$constructReflector) {
-            return null;
-        }
-        $constructArguments = $constructReflector->getParameters();
-        $args = [];
-        foreach ($constructArguments as $argument) {
-            $argumentType = $argument->getType()->getName();
-            $args[$argument->getName()] = $this->getObj($argumentType);
-        }
-
-        return $args;
-    }
-
-    private function getObj(string $className): mixed
-    {
-        return $this->objects[$className];
-    }
-
-
 }
