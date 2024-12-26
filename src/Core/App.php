@@ -1,6 +1,7 @@
 <?php
 namespace Core;
 
+use ReflectionException;
 use ReflectionMethod;
 use Request\Request;
 use Service\Auth\AuthServiceInterface;
@@ -15,17 +16,21 @@ class App
 {
     private array $routes = [];
     private LoggerServiceInterface $loggerService;
-    private OrderService $orderService;
-    private CartService $cartService;
-    private AuthServiceInterface $authService;
+    private array $objects;
 
     public function __construct(LoggerServiceInterface $loggerService)
     {
         $this->loggerService = $loggerService;
-        $this->orderService = new OrderService();
-        $this->cartService = new CartService();
-        $this->authService = new AuthSessionService();
+        $this->objects = [
+            OrderService::class => new OrderService(),
+            CartService::class =>new CartService(),
+            AuthServiceInterface::class => new AuthSessionService(),
+        ];
     }
+
+    /**
+     * @throws ReflectionException
+     */
     public function run(): void
     {
         $uri = $_SERVER['REQUEST_URI'];
@@ -39,16 +44,9 @@ class App
                 $classMethod = $handler['method'];
                 $requestClass = $handler['requestClass'];
 
-                if(str_contains($class, 'UserController')) {
-                    $arrayObject = ['authService'=>$this->authService];
-                    $obj = new $class(...$arrayObject);
-                } elseif (str_contains($class, 'UserProductController') || str_contains($class, 'CartController') || str_contains($class, 'CatalogController')) {
-                    $arrayObject = ['authService'=>$this->authService, 'cartService'=>$this->cartService];
-                    $obj = new $class(...$arrayObject);
-                } elseif (str_contains($class, 'OrderController')) {
-                    $arrayObject = ['authService'=>$this->authService, 'cartService'=>$this->cartService, 'orderService'=>$this->orderService];
-                    $obj = new $class(...$arrayObject);
-                } else{
+                if ($this->prepareObj($class)){
+                    $obj = new $class(...$this->prepareObj($class));
+                } else {
                     $obj = new $class();
                 }
 
@@ -89,5 +87,31 @@ class App
             echo "$requestMethod уже зарегистрирован для $requestUri" . "<br>";
         }
     }
+
+    /**
+     * @throws ReflectionException
+     */
+    private function prepareObj(string $className): ?array
+    {
+        $reflector = new \ReflectionClass($className);
+        $constructReflector = $reflector->getConstructor();
+        if(!$constructReflector) {
+            return null;
+        }
+        $constructArguments = $constructReflector->getParameters();
+        $args = [];
+        foreach ($constructArguments as $argument) {
+            $argumentType = $argument->getType()->getName();
+            $args[$argument->getName()] = $this->getObj($argumentType);
+        }
+
+        return $args;
+    }
+
+    private function getObj(string $className): mixed
+    {
+        return $this->objects[$className];
+    }
+
 
 }
