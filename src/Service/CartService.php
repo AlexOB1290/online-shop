@@ -8,14 +8,14 @@ use Model\Product;
 
 class CartService
 {
-    public function create(CartDTO $userProductDTO): void
+    public function create(CartDTO $cartDTO): void
     {
-        $userProduct = UserProduct::getOneByIds($userProductDTO->getUserId(), $userProductDTO->getProductId());
+        $userProduct = UserProduct::getOneByIds($cartDTO->getUserId(), $cartDTO->getProductId());
 
         if (!$userProduct) {
-            UserProduct::addProduct($userProductDTO->getUserId(), $userProductDTO->getProductId(), $userProductDTO->getAmount());
+            UserProduct::addProduct($cartDTO->getUserId(), $cartDTO->getProductId(), $cartDTO->getAmount());
         } else {
-            UserProduct::increaseAmount($userProductDTO->getAmount(), $userProductDTO->getUserId(), $userProductDTO->getProductId());
+            UserProduct::increaseAmount($cartDTO->getAmount(), $cartDTO->getUserId(), $cartDTO->getProductId());
         }
     }
 
@@ -73,13 +73,11 @@ class CartService
         $userProducts = UserProduct::getAllByUserId($userId);
 
         if ($userProducts) {
-            $amount = 0;
+            $count = 0;
 
             foreach ($userProducts as $userProduct) {
-                $amount += $userProduct->getAmount();
+                $count += $userProduct->getAmount();
             }
-
-            $count = $amount;
         } else {
             return null;
         }

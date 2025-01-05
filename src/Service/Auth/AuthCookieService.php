@@ -38,7 +38,7 @@ class AuthCookieService implements AuthServiceInterface
 
     public function logout(): void
     {
-        setcookie('user_id', null);
+        setcookie('user_id', "", -1);
 
         header('Location: /login');
     }

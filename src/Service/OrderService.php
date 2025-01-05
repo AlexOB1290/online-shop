@@ -6,9 +6,7 @@ use DTO\CreateOrderDTO;
 use Model\Model;
 use Model\Order;
 use Model\OrderProduct;
-use Model\Product;
 use Model\UserProduct;
-use Service\CartService;
 
 class OrderService
 {

@@ -9,14 +9,14 @@
     <div id="main" class="main">
         <?php foreach ($products as $product) : ?>
             <div class="main_item">
-                <div class="card" >
-                    <img src="<?php echo $product->getImage()?>" alt="Carnaval Costumes" style="max-width:100%; height:auto">
+                <div class="card">
+                    <img src="<?php echo $product->getImage()?>" alt="Carnaval Costumes" style="max-width:100%; height:auto;">
                     <div class="container">
                         <h1><?php echo $product->getName()?></h1>
                         <p class="price"><?php echo $product->getPrice()?> руб.</p>
                         <p><?php echo $product->getDescription()?></p>
                         <form action="/add-product" method=POST>
-                            <div class="container">
+                            <div class="container" >
                                 <label style="color: red;">
                                     <?php echo $errors['product-id']??"";?></label>
                                 <input type="hidden" name="product-id" id="product-id" value="<?php echo $product->getId(); ?>" required>
@@ -26,6 +26,12 @@
                                     <?php echo $errors['amount']??"";?></label>
                                 <input type="text" placeholder="Введите количество" name="amount" id="amount" required>
                                 <button type="submit" class="cartbtn">Добавить в корзину</button>
+                            </div>
+                        </form>
+                        <form action="/product-card" method=POST>
+                            <div class="container" >
+                                <input type="hidden" name="product-id" id="product-id" value="<?php echo $product->getId(); ?>" required>
+                                <button type="submit" class="descbtn">Описание товара</button>
                             </div>
                         </form>
                     </div>
@@ -168,6 +174,17 @@
         color: white;
         padding: 16px 20px;
         margin: 0;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+        opacity: 0.9;
+    }
+
+    .container .descbtn {
+        background-color: grey;
+        color: white;
+        padding: 16px 20px;
+        margin-top: 0;
         border: none;
         cursor: pointer;
         width: 100%;

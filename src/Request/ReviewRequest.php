@@ -2,7 +2,7 @@
 
 namespace Request;
 
-class CatalogRequest extends Request
+class ReviewRequest extends Request
 {
     public function getProductId(): ?int
     {
@@ -50,10 +50,12 @@ class CatalogRequest extends Request
         if (isset($this->data['positive'])) {
             $positive = $this->data['positive'];
 
-            if(is_numeric($positive)) {
-                $errors['positive'] = "Поле должно быть текстовым";
-            } elseif (strlen($positive) < 4) {
-                $errors['positive'] = "Текст должен содержать не менее 4 символов";
+            if (!empty($positive)) {
+                if(is_numeric($positive)) {
+                    $errors['positive'] = "Поле должно быть текстовым";
+                } elseif (strlen($positive) < 4) {
+                    $errors['positive'] = "Текст должен содержать не менее 4 символов";
+                }
             }
         } else {
             $errors['positive'] = "Требуется установить значение";
@@ -62,10 +64,12 @@ class CatalogRequest extends Request
         if (isset($this->data['negative'])) {
             $negative = $this->data['negative'];
 
-            if(is_numeric($negative)) {
-                $errors['negative'] = "Поле должно быть текстовым";
-            } elseif (strlen($negative) < 4) {
-                $errors['negative'] = "Текст должен содержать не менее 4 символов";
+            if (!empty($negative)) {
+                if(is_numeric($negative)) {
+                    $errors['negative'] = "Поле должно быть текстовым";
+                } elseif (strlen($negative) < 4) {
+                    $errors['negative'] = "Текст должен содержать не менее 4 символов";
+                }
             }
         } else {
             $errors['negative'] = "Требуется установить значение";
@@ -74,10 +78,12 @@ class CatalogRequest extends Request
         if (isset($this->data['comment'])) {
             $comment = $this->data['comment'];
 
-            if(is_numeric($comment)) {
-                $errors['comment'] = "Поле должно быть текстовым";
-            } elseif (strlen($comment) < 4) {
-                $errors['comment'] = "Текст должен содержать не менее 4 символов";
+            if (!empty($comment)) {
+                if(is_numeric($comment)) {
+                    $errors['comment'] = "Поле должно быть текстовым";
+                } elseif (strlen($comment) < 4) {
+                    $errors['comment'] = "Текст должен содержать не менее 4 символов";
+                }
             }
         } else {
             $errors['comment'] = "Требуется установить значение";

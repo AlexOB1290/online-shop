@@ -42,6 +42,25 @@ class OrderProduct extends Model
         return $orderProducts;
     }
 
+    public static function getAllByIds(array $orderIds): ?array
+    {
+        $placeHolders = '?' . str_repeat(', ?', count($orderIds) - 1);
+        $stmt = self::getPdo()->prepare("SELECT * FROM order_products WHERE id IN ($placeHolders)");
+        $stmt->execute($orderIds);
+        $data = $stmt->fetchAll();
+
+        if($data === false) {
+            return null;
+        }
+
+        $orderProducts = [];
+        foreach ($data as $orderProduct) {
+            $orderProducts[] = self::createObject($orderProduct);
+        }
+
+        return $orderProducts;
+    }
+
     private static function createObject (array $data): self
     {
         $obj = new self();
