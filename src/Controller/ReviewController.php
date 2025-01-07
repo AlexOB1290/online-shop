@@ -54,23 +54,25 @@ class ReviewController
             date_default_timezone_set('Asia/Irkutsk');
             $createdAt = date('d-m-Y H:i:s');
 
-            print_r($orders = Order::getAllByUserId($userId));
+            $orders = Order::getAllByUserId($userId);
 
             if ($orders) {
                 $orderIds = [];
                 foreach ($orders as $order) {
                     $orderIds[] = $order->getId();
                 }
-                print_r($orderIds);
 
-                print_r($orderProducts = OrderProduct::getAllByIds($orderIds));
+                $orderProducts = OrderProduct::getAllByIds($orderIds);
 
                 foreach ($orderProducts as $orderProduct) {
                     if ($orderProduct->getProductId() === $productId) {
-                        $dto = new ReviewDTO($userId, $orderProduct->getId(), $rating, $positive, $negative, $comment, $createdAt);
+                        $dto = new ReviewDTO($userId, $productId, $orderProduct->getId(), $rating, $positive, $negative, $comment, $createdAt);
                         $this->reviewService->create($dto);
+                        break;
                     }
                 }
+            } else {
+                $message = "Чтобы оставить отзыв закажите товар";
             }
         } else {
             $productId = $request->getProductId();

@@ -2,7 +2,7 @@
 
 namespace Request;
 
-class CatalogRequest
+class CatalogRequest extends Request
 {
     public function getProductId(): ?int
     {

@@ -1,10 +1,8 @@
 <?php
 namespace Controller;
 
-use Model\Order;
 use Model\Product;
 use Request\CatalogRequest;
-use Request\ReviewRequest;
 use Service\Auth\AuthServiceInterface;
 use Service\CartService;
 
