@@ -45,7 +45,7 @@ class OrderProduct extends Model
     public static function getAllByIds(array $orderIds): ?array
     {
         $placeHolders = '?' . str_repeat(', ?', count($orderIds) - 1);
-        $stmt = self::getPdo()->prepare("SELECT * FROM order_products WHERE id IN ($placeHolders)");
+        $stmt = self::getPdo()->prepare("SELECT * FROM order_products WHERE order_id IN ($placeHolders)");
         $stmt->execute($orderIds);
         $data = $stmt->fetchAll();
 

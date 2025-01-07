@@ -3,8 +3,6 @@
 namespace Controller;
 
 use DTO\ReviewDTO;
-use Model\Order;
-use Model\OrderProduct;
 use Model\Product;
 use Request\ReviewRequest;
 use Service\Auth\AuthServiceInterface;
@@ -30,8 +28,8 @@ class ReviewController
             return;
         }
 
-        $productId = $request->getProductId();
         $userId = $this->authService->getCurrentUser()->getId();
+        $productId = $request->getProductId();
 
         $product = Product::getOneById($productId);
 
@@ -54,26 +52,10 @@ class ReviewController
             date_default_timezone_set('Asia/Irkutsk');
             $createdAt = date('d-m-Y H:i:s');
 
-            $orders = Order::getAllByUserId($userId);
+            $dto = new ReviewDTO($userId, $productId, $rating, $positive, $negative, $comment, $createdAt);
+            $this->reviewService->create($dto);
 
-            if ($orders) {
-                $orderIds = [];
-                foreach ($orders as $order) {
-                    $orderIds[] = $order->getId();
-                }
-
-                $orderProducts = OrderProduct::getAllByIds($orderIds);
-
-                foreach ($orderProducts as $orderProduct) {
-                    if ($orderProduct->getProductId() === $productId) {
-                        $dto = new ReviewDTO($userId, $productId, $orderProduct->getId(), $rating, $positive, $negative, $comment, $createdAt);
-                        $this->reviewService->create($dto);
-                        break;
-                    }
-                }
-            } else {
-                $message = "Чтобы оставить отзыв закажите товар";
-            }
+            header('Location: /catalog');
         } else {
             $productId = $request->getProductId();
             $userId = $this->authService->getCurrentUser()->getId();

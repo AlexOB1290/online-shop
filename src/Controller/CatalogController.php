@@ -2,19 +2,23 @@
 namespace Controller;
 
 use Model\Product;
+use Model\Review;
 use Request\CatalogRequest;
 use Service\Auth\AuthServiceInterface;
 use Service\CartService;
+use Service\ReviewService;
 
 class CatalogController
 {
     private AuthServiceInterface $authService;
     private CartService $cartService;
+    private ReviewService $reviewService;
 
-    public function __construct(AuthServiceInterface $authService, CartService $cartService)
+    public function __construct(AuthServiceInterface $authService, CartService $cartService, ReviewService $reviewService)
     {
         $this->authService = $authService;
         $this->cartService = $cartService;
+        $this->reviewService = $reviewService;
     }
 
     public function getCatalogPage(): void
@@ -47,6 +51,14 @@ class CatalogController
         $product = Product::getOneById($productId);
 
         $count = $this->cartService->getCount($userId);
+
+        $check = $this->reviewService->check($userId, $productId);
+
+        if($check){
+            $review = Review::getOneByUserIdAndProductId($userId, $productId);
+        }
+
+        $reviews = Review::getAllByProductId($productId);
 
         require_once './../View/product_card.php';
     }

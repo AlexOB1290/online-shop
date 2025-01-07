@@ -7,23 +7,22 @@ class Review extends Model
     private int $id;
     private int $userId;
     private int $productId;
-    private int $orderProductId;
     private int $rating;
     private string $positive;
     private string $negative;
     private string $comment;
     private string $createdAt;
 
-    public static function create(int $userId, int $productId, int $orderProductId, int $rating, string $positive, string $negative, string $comment, string $createdAt): bool
+    public static function create(int $userId, int $productId, int $rating, string $positive, string $negative, string $comment, string $createdAt): bool
     {
-        $stmt = self::getPdo()->prepare("INSERT INTO reviews (user_id, product_id, order_product_id, rating, positive, negative, comment, created_at) VALUES (:user_id, :product_id, :order_product_id, :rating, :positive, :negative, :comment, :created_at)");
-        return $stmt->execute(['user_id' => $userId, 'product_id' => $productId, 'order_product_id' => $orderProductId, 'rating' => $rating, 'positive' => $positive, 'negative' => $negative, 'comment' => $comment, 'created_at' => $createdAt]);
+        $stmt = self::getPdo()->prepare("INSERT INTO reviews (user_id, product_id, rating, positive, negative, comment, created_at) VALUES (:user_id, :product_id, :rating, :positive, :negative, :comment, :created_at)");
+        return $stmt->execute(['user_id' => $userId, 'product_id' => $productId, 'rating' => $rating, 'positive' => $positive, 'negative' => $negative, 'comment' => $comment, 'created_at' => $createdAt]);
     }
 
-    public static function getOneByOrderProductId(int $orderProductId): ?self
+    public static function getOneByUserIdAndProductId(int $userId, int $productId): ?self
     {
-        $stmt = self::getPdo()->prepare("SELECT * FROM reviews WHERE order_product_id = :order_product_id");
-        $stmt->execute(['order_product_id' => $orderProductId]);
+        $stmt = self::getPdo()->prepare("SELECT * FROM reviews WHERE user_id = :user_id AND product_id = :product_id");
+        $stmt->execute(['user_id' =>$userId, 'product_id' => $productId]);
         $data = $stmt->fetch();
 
         if($data === false){
@@ -33,13 +32,30 @@ class Review extends Model
         return self::createObject($data);
     }
 
+    public static function getAllByProductId(int $productId): ?array
+    {
+        $stmt = self::getPdo()->prepare("SELECT * FROM reviews WHERE product_id = :product_id");
+        $stmt->execute(['product_id' => $productId]);
+        $data = $stmt->fetchAll();
+
+        if($data === false){
+            return null;
+        }
+
+        $reviews = [];
+        foreach($data as $order){
+            $reviews[] = self::createObject($order);
+        }
+
+        return $reviews;
+    }
+
     private static function createObject(array $data): self
     {
         $obj = new self();
         $obj->id = $data['id'];
         $obj->userId = $data['user_id'];
         $obj->productId = $data['product_id'];
-        $obj->orderProductId = $data['order_product_id'];
         $obj->rating = $data['rating'];
         $obj->positive = $data['positive'];
         $obj->negative = $data['negative'];
@@ -62,11 +78,6 @@ class Review extends Model
     public function getProductId(): int
     {
         return $this->productId;
-    }
-
-    public function getOrderProductId(): int
-    {
-        return $this->orderProductId;
     }
 
     public function getRating(): int

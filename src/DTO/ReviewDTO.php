@@ -7,7 +7,6 @@ class ReviewDTO
     public function __construct(
         private int $userId,
         private int $productId,
-        private int $orderProductId,
         private int $rating,
         private string $positive,
         private string $negative,
@@ -16,7 +15,6 @@ class ReviewDTO
     ) {
         $this->userId = $userId;
         $this->productId = $productId;
-        $this->orderProductId = $orderProductId;
         $this->rating = $rating;
         $this->positive = $positive;
         $this->negative = $negative;
@@ -32,11 +30,6 @@ class ReviewDTO
     public function getProductId(): int
     {
         return $this->productId;
-    }
-
-    public function getOrderProductId(): int
-    {
-        return $this->orderProductId;
     }
 
     public function getRating(): int

@@ -11,10 +11,19 @@ class ReviewService
 {
     public function create(ReviewDTO $reviewDTO): void
     {
-        Review::create($reviewDTO->getUserId(), $reviewDTO->getProductId(), $reviewDTO->getOrderProductId(), $reviewDTO->getRating(), $reviewDTO->getPositive(), $reviewDTO->getNegative(), $reviewDTO->getComment(), $reviewDTO->getCreatedAt());
+        if ($this->check($reviewDTO->getUserId(), $reviewDTO->getProductId()))
+        {
+            $obj = Review::getOneByUserIdAndProductId($reviewDTO->getUserId(), $reviewDTO->getProductId());
+
+            if(!$obj) {
+                Review::create($reviewDTO->getUserId(), $reviewDTO->getProductId(), $reviewDTO->getRating(), $reviewDTO->getPositive(), $reviewDTO->getNegative(), $reviewDTO->getComment(), $reviewDTO->getCreatedAt());
+            } else {
+                header('Location: /catalog');
+            }
+        }
     }
 
-    public function getReview(int $userId, int $productId): Review
+    public function check(int $userId, int $productId): bool
     {
         $orders = Order::getAllByUserId($userId);
 
@@ -28,12 +37,11 @@ class ReviewService
 
             foreach ($orderProducts as $orderProduct) {
                 if ($orderProduct->getProductId() === $productId) {
-                    $obj = Review::getOneByOrderProductId($orderProduct->getId());
-                    break;
+                    return true;
                 }
             }
         }
 
-        return $obj;
+        return false;
     }
 }

@@ -69,8 +69,9 @@ $container->set(UserProductController::class, function (Container $container) {
 $container->set(CatalogController::class, function (Container $container) {
     $authService = $container->get(AuthServiceInterface::class);
     $cartService = new CartService();
+    $reviewService = new ReviewService();
 
-    return new CatalogController($authService, $cartService);
+    return new CatalogController($authService, $cartService, $reviewService);
 });
 
 $container->set(ReviewController::class, function (Container $container) {

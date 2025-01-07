@@ -19,10 +19,24 @@
             <h3><?php echo $product->getName()?></h3>
             <p class="price">Стоимость <?php echo $product->getPrice()?> руб.</p>
             <p><?php echo $product->getDescription()?></p>
+            <?php if (!$check) : ?>
+            <p style="color: #39ac31"> Оформите заказ, чтобы оставить отзыв </p>
+            <?php elseif (!isset($review)) : ?>
             <form action="/review" method=POST>
                     <input type="hidden" name="product-id" id="product-id" value="<?php echo $product->getId(); ?>" required>
                     <button type="submit" class="descbtn">Оставить отзыв</button>
             </form>
+            <?php else : ?>
+            <p style="color: #39ac31"> Вы уже оценивали товар </p>
+            <?php endif; ?>
+
+            <?php foreach ($reviews as $review) : ?>
+                <?php echo $review->getCreatedAt() ?>
+                <?php echo $review->getRating() ?>
+                <?php echo $review->getPositive() ?>
+                <?php echo $review->getNegative() ?>
+                <?php echo $review->getComment() ?>
+            <?php endforeach; ?>
         </div>
     </div>
 </div>
