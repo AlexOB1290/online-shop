@@ -8,9 +8,7 @@
 
     <div id="main" class="main">
         <?php if (empty($orders)) : ?>
-
-            <h1><?php echo "Вы еще ничего не заказали" ;?></h1>
-
+            <p style="margin-left: 10px"><?php echo "Вы еще ничего не заказали" ;?></p>
         <?php else : ?>
         <?php foreach ($orders as $order) : ?>
             <div class="main_item">

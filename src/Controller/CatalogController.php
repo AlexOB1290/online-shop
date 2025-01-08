@@ -58,7 +58,10 @@ class CatalogController
             $review = Review::getOneByUserIdAndProductId($userId, $productId);
         }
 
-        $reviews = Review::getAllByProductId($productId);
+        $reviews = $this->reviewService->getReviews($productId);
+        if ($reviews) {
+            $avgRating = $this->reviewService->getAverageRating($reviews);
+        }
 
         require_once './../View/product_card.php';
     }

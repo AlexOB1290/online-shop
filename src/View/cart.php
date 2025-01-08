@@ -10,9 +10,7 @@
         <br><br>
 
         <?php if (empty($products)) : ?>
-
             <p style="margin-left: 10px"><?php echo "Ваша корзина пуста" ;?></p>
-
         <?php else : ?>
             <h2 style="margin-left: 10px">Всего <?php echo $totalAmount ?> ед. товара на сумму <?php echo $totalSum ?> руб.</h2>
             <div id="main" class="main">

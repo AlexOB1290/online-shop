@@ -40,6 +40,25 @@ class User extends Model
         return self::createObject($data);
     }
 
+    public static function getAllByIds(array $userIds): ?array
+    {
+        $placeHolders = '?' . str_repeat(', ?', count($userIds) - 1);
+        $stmt = self::getPdo()->prepare("SELECT * FROM users WHERE id IN ($placeHolders)");
+        $stmt->execute($userIds);
+        $data = $stmt->fetchAll();
+
+        if($data === false) {
+            return null;
+        }
+
+        $users = [];
+        foreach ($data as $user) {
+            $users[] = self::createObject($user);
+        }
+
+        return $users;
+    }
+
     private static function createObject (array $data): self
     {
         $obj = new self();

@@ -37,7 +37,7 @@
                     <label for="star-1" title="Оценка «1»"></label>
                 </div>
 
-                <label for="positive">Преимущества</label>
+                <label for="positive">Достоинства</label>
                 <label style="color: red;">
                     <?php echo $errors['positive']??"";?></label>
                 <input type="text" id="positive" name="positive" placeholder="Напишите основные преимущества">

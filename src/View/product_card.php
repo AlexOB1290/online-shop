@@ -16,7 +16,7 @@
             <img src="<?php echo $product->getImage()?>" style="width:30%">
         </div>
         <div class="column">
-            <h3><?php echo $product->getName()?></h3>
+            <h3><?php echo $product->getName()?></h3> <label style="color: #cc6600">Средняя оценка: <?php echo $avgRating ?? "нет оценок"?></label>
             <p class="price">Стоимость <?php echo $product->getPrice()?> руб.</p>
             <p><?php echo $product->getDescription()?></p>
             <?php if (!$check) : ?>
@@ -30,13 +30,21 @@
             <p style="color: #39ac31"> Вы уже оценивали товар </p>
             <?php endif; ?>
 
-            <?php foreach ($reviews as $review) : ?>
-                <?php echo $review->getCreatedAt() ?>
-                <?php echo $review->getRating() ?>
-                <?php echo $review->getPositive() ?>
-                <?php echo $review->getNegative() ?>
-                <?php echo $review->getComment() ?>
-            <?php endforeach; ?>
+            <?php if (!empty($reviews)) : ?>
+            <div class="reviews">
+                <p style="font-weight: bold">Отзывы:</p>
+                <?php foreach ($reviews as $review) : ?>
+                    Заказчик: <label style="color: #555; font-weight: bold"><?php echo $review->getUsername() ?></label> <br>
+                    Дата заказа: <label style="color: #555"><?php echo $review->getCreatedAt() ?></label> <br>
+                    Оценка: <label style="color: #555"><?php echo $review->getRating() ?></label> <br>
+                    Достоинства: <label style="color: #555"><?php echo $review->getPositive() ?></label> <br>
+                    Недостатки: <label style="color: #555"><?php echo $review->getNegative() ?></label> <br>
+                    Комментарий: <label style="color: #555"><?php echo $review->getComment() ?></label> <br><br>
+                <?php endforeach; ?>
+            </div>
+            <?php else : ?>
+                <p style="color: darkblue">Пока никто не написал отзывы</p>
+            <?php endif; ?>
         </div>
     </div>
 </div>

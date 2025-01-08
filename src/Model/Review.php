@@ -12,6 +12,7 @@ class Review extends Model
     private string $negative;
     private string $comment;
     private string $createdAt;
+    private ?string $username = null;
 
     public static function create(int $userId, int $productId, int $rating, string $positive, string $negative, string $comment, string $createdAt): bool
     {
@@ -63,6 +64,16 @@ class Review extends Model
         $obj->createdAt = $data['created_at'];
 
         return $obj;
+    }
+
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
     }
 
     public function getId(): int
