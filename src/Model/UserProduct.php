@@ -20,6 +20,12 @@ class UserProduct extends Model
         return $stmt->execute(['amount' => $amount, 'user_id' => $userId, 'product_id' => $productId]);
     }
 
+    public static function decreaseAmount(int $amount, int $userId, int $productId): bool
+    {
+        $stmt = self::getPdo()->prepare("UPDATE user_products SET amount =amount - :amount WHERE user_id = :user_id AND product_id = :product_id");
+        return $stmt->execute(['amount' => $amount, 'user_id' => $userId, 'product_id' => $productId]);
+    }
+
     public static function getOneByIds(int $userId, int $productId): ?self
     {
         $stmt = self::getPdo()->prepare("SELECT * FROM user_products WHERE user_id = :user_id AND product_id = :product_id");

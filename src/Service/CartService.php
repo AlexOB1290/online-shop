@@ -19,6 +19,16 @@ class CartService
         }
     }
 
+    public function addOne(CartDTO $cartDTO): void
+    {
+        UserProduct::increaseAmount($cartDTO->getAmount(), $cartDTO->getUserId(), $cartDTO->getProductId());
+    }
+
+    public function deleteOne(CartDTO $cartDTO): void
+    {
+        UserProduct::decreaseAmount($cartDTO->getAmount(), $cartDTO->getUserId(), $cartDTO->getProductId());
+    }
+
     public function getUserProducts(int $userId): ?array
     {
         $userProducts = UserProduct::getAllByUserId($userId);

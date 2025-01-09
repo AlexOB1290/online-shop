@@ -92,11 +92,14 @@ $app->addRoute('/logout', 'GET', AuthServiceInterface::class, 'logout');
 $app->addRoute('/catalog', 'GET', CatalogController::class, 'getCatalogPage');
 $app->addRoute('/add-product', 'POST', UserProductController::class, 'handleAddProductForm', AddProductRequest::class);
 $app->addRoute('/cart', 'GET', CartController::class, 'getCartPage');
+$app->addRoute('/clear-cart', 'GET', CartController::class, 'clearCart');
 $app->addRoute('/order', 'GET', OrderController::class, 'getOrderForm');
 $app->addRoute('/order', 'POST', OrderController::class, 'handleOrderForm', OrderRequest::class);
 $app->addRoute('/orders', 'GET', OrderController::class, 'getOrders');
 $app->addRoute('/product-card', 'POST', CatalogController::class, 'getProductCard', CatalogRequest::class);
 $app->addRoute('/review', 'POST', ReviewController::class, 'getReviewForm', ReviewRequest::class);
 $app->addRoute('/add-review', 'POST', ReviewController::class, 'handleReviewForm', ReviewRequest::class);
+$app->addRoute('/add', 'POST', UserProductController::class, 'addOne', AddProductRequest::class);
+$app->addRoute('/delete', 'POST', UserProductController::class, 'deleteOne', AddProductRequest::class);
 
 $app->run();

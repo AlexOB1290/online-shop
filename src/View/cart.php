@@ -10,7 +10,9 @@
         <br><br>
 
         <?php if (empty($products)) : ?>
+
             <p style="margin-left: 10px"><?php echo "Ваша корзина пуста" ;?></p>
+
         <?php else : ?>
             <h2 style="margin-left: 10px">Всего <?php echo $totalAmount ?> ед. товара на сумму <?php echo $totalSum ?> руб.</h2>
             <div id="main" class="main">
@@ -24,6 +26,23 @@
                                 <p><?php echo $product->getDescription()?></p>
                                 <p>Добавлено в корзину <?php echo $product->getAmount()?> ед. товара</p>
                                 <p>Общая сумма: <?php echo $product->getTotal()?> руб.</p>
+                                <div class="deladd">
+                                    <form action="/delete" method="POST">
+                                        <button type="submit" class="cartbtn">-</button>
+                                        <input type="hidden" name="product-id" id="product-id" value="<?php echo $product->getId(); ?>" required>
+                                        <input type="hidden" name="amount" id="amount" value="1" required>
+                                    </form>
+                                        <label for="amount"></label>
+                                        <label style="color: red;">
+                                            <?php echo $errors['amount']??"";?></label>
+                                        <input type="text" placeholder="Введите количество" name="amount" id="amount" value="<?php echo $product->getAmount()?>" required>
+                                    <form action="/add" method="POST">
+                                        <button type="submit" class="cartbtn">+</button>
+                                        <input type="hidden" name="product-id" id="product-id" value="<?php echo $product->getId(); ?>" required>
+                                        <input type="hidden" name="amount" id="amount" value="1" required>
+                                    </form>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -31,6 +50,7 @@
             </div>
             <div>
                 <button onclick="window.location='/order';" class="orderbtn">Оформить заказ</button>
+                <button onclick="window.location='/clear-cart';" class="clearbtn">Очистить корзину</button>
             </div>
         <?php endif; ?>
     </div>
@@ -72,7 +92,8 @@
 
     /* Bordered form */
     form {
-        border: 3px solid #f1f1f1;
+        border: none;
+        float: left;
     }
 
     /* Add padding to containers */
@@ -122,11 +143,12 @@
     .orderbtn {
         background-color: #04AA6D;
         color: white;
+        float: left;
         padding: 16px 20px;
         margin: 8px 0;
         border: none;
         cursor: pointer;
-        width: 100%;
+        width: 50%;
         opacity: 0.9;
         font-size: 22px;
     }
@@ -135,19 +157,40 @@
         opacity:1;
     }
 
-    /* Set a grey background color and center the text of the "sign in" section */
-    .logout {
-        background-color: #f1f1f1;
+    .clearbtn {
+        background-color: dodgerblue;
+        color: white;
+        float: left;
+        padding: 16px 20px;
+        margin: 8px 0;
+        border: none;
+        cursor: pointer;
+        width: 50%;
+        opacity: 0.9;
+        font-size: 22px;
+    }
+
+    .clearbtn:hover {
+        opacity:1;
+    }
+
+    .deladd {
+        float: none;
+        width: 100%;
+        display: flex;
         text-align: center;
     }
 
-    .catalog {
-        background-color: #04AA6D;
-        text-align: center;
+    .cartbtn {
+        font-size: 17px;
+        padding: 5px 6px;
+        cursor: pointer;
     }
 
-    .add {
-        background-color: #f1f1f1;
+    input[type=text] {
+        width: 100%;
+        flex-grow: 1;
+        border: none;
         text-align: center;
     }
 </style>
