@@ -4,6 +4,7 @@ namespace Controller;
 
 use DTO\ReviewDTO;
 use Model\Product;
+use Model\Review;
 use Request\ReviewRequest;
 use Service\Auth\AuthServiceInterface;
 use Service\CartService;
@@ -52,10 +53,20 @@ class ReviewController
             date_default_timezone_set('Asia/Irkutsk');
             $createdAt = date('d-m-Y H:i:s');
 
+            $count = $this->cartService->getCount($userId);
+
             $dto = new ReviewDTO($userId, $productId, $rating, $positive, $negative, $comment, $createdAt);
             $this->reviewService->create($dto);
 
-            header('Location: /catalog');
+            $review = Review::getOneByUserIdAndProductId($userId, $productId);
+
+            if ($review) {
+                $result = "<p> Ваш заказ успешно добавлен! </p>";
+            } else {
+                $result = "<p> Произошла ошибка при добавлении отзыва! Попробуйте еще раз. </p>";
+            }
+
+            require_once './../View/review-result.php';
         } else {
             $productId = $request->getProductId();
             $userId = $this->authService->getCurrentUser()->getId();

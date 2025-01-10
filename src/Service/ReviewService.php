@@ -18,8 +18,6 @@ class ReviewService
 
             if(!$obj) {
                 Review::create($reviewDTO->getUserId(), $reviewDTO->getProductId(), $reviewDTO->getRating(), $reviewDTO->getPositive(), $reviewDTO->getNegative(), $reviewDTO->getComment(), $reviewDTO->getCreatedAt());
-            } else {
-                header('Location: /catalog');
             }
         }
     }
