@@ -3,20 +3,24 @@ namespace Controller;
 
 use DTO\CartDTO;
 use Model\Product;
+use Model\Review;
 use Model\UserProduct;
 use Request\AddProductRequest;
 use Service\Auth\AuthServiceInterface;
 use Service\CartService;
+use Service\ReviewService;
 
 class UserProductController
 {
     private AuthServiceInterface $authService;
     private CartService $cartService;
+    private ReviewService $reviewService;
 
-    public function __construct(AuthServiceInterface $authService, CartService $cartService)
+    public function __construct(AuthServiceInterface $authService, CartService $cartService, ReviewService $reviewService)
     {
         $this->authService = $authService;
         $this->cartService = $cartService;
+        $this->reviewService = $reviewService;
     }
 
     public function getAddProductForm(): void
@@ -44,6 +48,9 @@ class UserProductController
         }
 
         $products = Product::getAll();
+        $reviews = Review::getAll();
+
+        $this->reviewService->setAverageRating($products, $reviews);
         $count = $this->cartService->getCount($userId);
 
         require_once './../View/catalog.php';

@@ -12,8 +12,8 @@ class Order extends Model
     private string $telephone;
     private string $total;
     private string $date;
-
     private array $products = [];
+
     public static function create(int $userId, string $orderNumber, string $name, string $email, string $address, string $telephone, string $total, string $date): bool
     {
         $stmt = self::getPdo()->prepare("INSERT INTO orders (user_id, order_number, name, email, address, telephone, total, date) VALUES (:user_id, :order_number, :name, :email, :address, :telephone, :total, :date)");

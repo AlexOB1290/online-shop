@@ -31,26 +31,14 @@ class CartService
 
     public function getUserProducts(int $userId): ?array
     {
-        $userProducts = UserProduct::getAllByUserId($userId);
+        $products = Product::getAllWithJoinByUserId($userId);
 
-        if (!empty($userProducts)) {
-            $productIds = [];
-            foreach ($userProducts as $userProduct) {
-                $productIds[] = $userProduct->getProductId();
+        if ($products) {
+            foreach ($products as &$product) {
+                $total = $product->getPrice() * $product->getAmount();
+                $product->setTotal($total);
             }
-
-            $products = Product::getAllByIds($productIds);
-
-            foreach ($userProducts as $userProduct) {
-                foreach ($products as &$product) {
-                    if ($product->getId() === $userProduct->getProductId()) {
-                        $product->setAmount($userProduct->getAmount());
-                        $total = $product->getPrice() * $userProduct->getAmount();
-                        $product->setTotal($total);
-                    }
-                }
-                unset($product);
-            }
+            unset($product);
         } else {
             return null;
         }

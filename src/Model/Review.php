@@ -12,12 +12,64 @@ class Review extends Model
     private string $negative;
     private string $comment;
     private string $createdAt;
-    private ?string $username = null;
+    private ?string $name = null;
+
+    public static function getAllWithJoinByProductId(int $productId): ?array
+    {
+        $stmt = self::getPdo()->prepare("SELECT r.*, u.name FROM reviews r JOIN users u ON r.user_id = u.id WHERE product_id = :product_id");
+        $stmt->execute(['product_id' => $productId]);
+        $data = $stmt->fetchAll();
+
+        if($data === false){
+            return null;
+        }
+
+        $reviews = [];
+        foreach($data as $order){
+            $reviews[] = self::createObjectAut($order);
+        }
+
+        return $reviews;
+    }
+
+    public static function createObjectAut(array $data): self
+    {
+        $obj = new self();
+        $arrayProp = get_class_vars(self::class);
+        foreach ($arrayProp as $property => $value) {
+            $propertyLower = strtolower($property);
+            foreach ($data as $dataKey => $dataValue) {
+                $key = strtolower(str_replace("_", "", $dataKey));
+                if ($key === $propertyLower) {
+                    $obj->$property = $dataValue;
+                    break;
+                }
+            }
+        }
+        return $obj;
+    }
 
     public static function create(int $userId, int $productId, int $rating, string $positive, string $negative, string $comment, string $createdAt): bool
     {
         $stmt = self::getPdo()->prepare("INSERT INTO reviews (user_id, product_id, rating, positive, negative, comment, created_at) VALUES (:user_id, :product_id, :rating, :positive, :negative, :comment, :created_at)");
         return $stmt->execute(['user_id' => $userId, 'product_id' => $productId, 'rating' => $rating, 'positive' => $positive, 'negative' => $negative, 'comment' => $comment, 'created_at' => $createdAt]);
+    }
+
+    public static function getAll(): ?array
+    {
+        $stmt = self::getPdo()->query("SELECT * FROM reviews");
+        $data = $stmt->fetchAll();
+
+        if($data === false) {
+            return null;
+        }
+
+        $reviews = [];
+        foreach ($data as $product) {
+            $reviews[] = self::createObject($product);
+        }
+
+        return $reviews;
     }
 
     public static function getOneByUserIdAndProductId(int $userId, int $productId): ?self
@@ -66,14 +118,14 @@ class Review extends Model
         return $obj;
     }
 
-    public function setUsername(string $username): void
+    public function setName(string $name): void
     {
-        $this->username = $username;
+        $this->name = $name;
     }
 
-    public function getUsername(): string
+    public function getName(): string
     {
-        return $this->username;
+        return $this->name;
     }
 
     public function getId(): int

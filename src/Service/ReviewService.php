@@ -6,7 +6,6 @@ use DTO\ReviewDTO;
 use Model\Order;
 use Model\OrderProduct;
 use Model\Review;
-use Model\User;
 
 class ReviewService
 {
@@ -44,37 +43,31 @@ class ReviewService
         return false;
     }
 
-    public function getReviews(int $productId): ?array
-    {
-        $reviews = Review::getAllByProductId($productId);
-
-        if ($reviews) {
-            $userIds = [];
-            foreach ($reviews as $review) {
-                $userIds[] = $review->getUserId();
-            }
-
-            $users = User::getAllByIds($userIds);
-
-            foreach ($users as $user) {
-                foreach ($reviews as &$review) {
-                    if ($review->getUserId() === $user->getId()) {
-                        $review->setUsername($user->getName());
-                    }
-                }
-                unset($review);
-            }
-        }
-
-        return $reviews;
-    }
-
     public function getAverageRating(array $reviews): float
     {
         $average = 0;
         foreach ($reviews as $review) {
             $average += $review->getRating();
         }
-        return round($average/count($reviews), 2);
+        return round($average/count($reviews), 1);
+    }
+
+    public function setAverageRating(array $products, array $reviews): void
+    {
+        foreach ($products as &$product) {
+            $ratingSum = 0;
+            $i = 0;
+            foreach ($reviews as $review) {
+                if ($product->getId() === $review->getProductId()) {
+                    $ratingSum += $review->getRating();
+                } else {
+                    continue;
+                }
+                $i++;
+            }
+            $avgRating = $ratingSum / $i;
+            $product->setAvgRating(round($avgRating, 1));
+        }
+        unset($product);
     }
 }

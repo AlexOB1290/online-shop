@@ -3,7 +3,6 @@ namespace Controller;
 
 use DTO\CreateOrderDTO;
 use Model\Order;
-use Model\OrderProduct;
 use Model\Product;
 use Request\OrderRequest;
 use Service\Auth\AuthServiceInterface;
@@ -95,34 +94,10 @@ class OrderController
         $orders = Order::getAllByUserId($userId);
 
         foreach ($orders as &$order) {
-            $order->setProducts($this->getOrderProducts($order->getId()));
+            $order->setProducts(Product::getAllWithJoinByOrderId($order->getId()));
         }
         unset($order);
 
         require_once './../View/orders.php';
-    }
-
-    private function getOrderProducts(int $orderId): array
-    {
-        $orderProducts = OrderProduct::getByOrderId($orderId);
-
-        $productIds = [];
-        foreach ($orderProducts as $orderProduct) {
-            $productIds[] = $orderProduct->getProductId();
-        }
-
-        $products = Product::getAllByIds($productIds);
-
-        foreach ($orderProducts as $orderProduct) {
-            foreach ($products as &$product) {
-                if ($product->getId() === $orderProduct->getProductId()) {
-                    $product->setAmount($orderProduct->getAmount());
-                    $product->setPrice($orderProduct->getPrice());
-                }
-            }
-            unset($product);
-        }
-
-        return $products;
     }
 }

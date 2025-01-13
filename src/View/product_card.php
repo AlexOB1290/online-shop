@@ -34,7 +34,7 @@
             <div class="reviews">
                 <p style="font-weight: bold">Отзывы:</p>
                 <?php foreach ($reviews as $review) : ?>
-                    Заказчик: <label style="color: #555; font-weight: bold"><?php echo $review->getUsername() ?></label> <br>
+                    Заказчик: <label style="color: #555; font-weight: bold"><?php echo $review->getName() ?></label> <br>
                     Дата заказа: <label style="color: #555"><?php echo $review->getCreatedAt() ?></label> <br>
                     Оценка: <label style="color: #555"><?php echo $review->getRating() ?></label> <br>
                     Достоинства: <label style="color: #555"><?php echo $review->getPositive() ?></label> <br>

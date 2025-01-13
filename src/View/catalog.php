@@ -13,6 +13,7 @@
                     <img src="<?php echo $product->getImage()?>" alt="Carnaval Costumes" style="max-width:100%; height:auto;">
                     <div class="container">
                         <h1><?php echo $product->getName()?></h1>
+                        <p>Средняя оценка: <?php echo $product->getAvgRating() ?? "нет оценки" ?></p>
                         <p class="price"><?php echo $product->getPrice()?> руб.</p>
                         <p><?php echo $product->getDescription()?></p>
                         <form action="/add-product" method=POST>

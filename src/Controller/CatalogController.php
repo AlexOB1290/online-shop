@@ -31,6 +31,9 @@ class CatalogController
         $userId = $this->authService->getCurrentUser()->getId();
 
         $products = Product::getAll();
+        $reviews = Review::getAll();
+
+        $this->reviewService->setAverageRating($products, $reviews);
 
         $count = $this->cartService->getCount($userId);
 
@@ -58,7 +61,8 @@ class CatalogController
             $review = Review::getOneByUserIdAndProductId($userId, $productId);
         }
 
-        $reviews = $this->reviewService->getReviews($productId);
+        $reviews = Review::getAllWithJoinByProductId($productId);
+
         if ($reviews) {
             $avgRating = $this->reviewService->getAverageRating($reviews);
         }
