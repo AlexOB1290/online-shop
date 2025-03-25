@@ -1,6 +1,6 @@
 <?php
 
-namespace Core;
+namespace Alexob1290\Core;
 
 class Container
 {

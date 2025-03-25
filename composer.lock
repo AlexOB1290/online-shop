@@ -1,0 +1,56 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "2e97d423e4513beb9967aa457cc904c2",
+    "packages": [
+        {
+            "name": "alexob1290/core",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/AlexOB1290/alexob1290-core.git",
+                "reference": "ad2eb396264adddd0f65665d1c5171e179ed9d2e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/AlexOB1290/alexob1290-core/zipball/ad2eb396264adddd0f65665d1c5171e179ed9d2e",
+                "reference": "ad2eb396264adddd0f65665d1c5171e179ed9d2e",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Alexob1290\\Core\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "AlexOB1290",
+                    "email": "rougetrooper2016@gmail.com"
+                }
+            ],
+            "description": "my project Core directiry",
+            "support": {
+                "issues": "https://github.com/AlexOB1290/alexob1290-core/issues",
+                "source": "https://github.com/AlexOB1290/alexob1290-core/tree/v1.0.0"
+            },
+            "time": "2025-01-15T07:42:32+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.6.0"
+}

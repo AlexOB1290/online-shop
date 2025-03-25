@@ -3,11 +3,11 @@ namespace Model;
 
 class OrderProduct extends Model
 {
-    private int $id;
-    private int $orderId;
-    private int $productId;
-    private int $amount;
-    private int $price;
+    protected int $id;
+    protected int $orderId;
+    protected int $productId;
+    protected int $amount;
+    protected int $price;
 
     public static function addUserProduct(string $orderId, array $userProducts): bool
     {
@@ -36,7 +36,7 @@ class OrderProduct extends Model
 
         $orderProducts = [];
         foreach ($data as $orderProduct){
-            $orderProducts[] = self::createObject($orderProduct);
+            $orderProducts[] = self::createObjectAut($orderProduct);
         }
 
         return $orderProducts;
@@ -55,7 +55,7 @@ class OrderProduct extends Model
 
         $orderProducts = [];
         foreach ($data as $orderProduct) {
-            $orderProducts[] = self::createObject($orderProduct);
+            $orderProducts[] = self::createObjectAut($orderProduct);
         }
 
         return $orderProducts;

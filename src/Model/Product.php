@@ -3,18 +3,18 @@ namespace Model;
 
 class Product extends Model
 {
-    private int $id;
-    private string $name;
-    private int $price;
-    private string $description;
-    private string $image;
-    private ?int $amount = null;
-    private ?int $total = null;
-    private ?float $avgRating = null;
+    protected int $id;
+    protected string $name;
+    protected int $price;
+    protected string $description;
+    protected string $image;
+    protected ?int $amount = null;
+    protected ?int $total = null;
+    protected ?float $avgRating = null;
 
     public static function getAllWithJoinByUserId(int $userId): ?array
     {
-        $stmt = self::getPdo()->prepare("SELECT p.*, up.amount FROM products p JOIN user_products up ON p.id = up.product_id WHERE user_id = :user_id");
+        $stmt = self::getPdo()->prepare("SELECT p.*, up.amount FROM products p JOIN user_products up ON p.id = up.product_id WHERE user_id = :user_id ORDER BY p.id");
         $stmt->execute(["user_id" => $userId]);
         $data = $stmt->fetchAll();
 
@@ -48,23 +48,6 @@ class Product extends Model
         return $products;
     }
 
-    public static function createObjectAut(array $data): self
-    {
-        $obj = new self();
-        $arrayProp = get_class_vars(self::class);
-        foreach ($arrayProp as $property => $value) {
-            $propertyLower = strtolower($property);
-            foreach ($data as $dataKey => $dataValue) {
-                $key = strtolower(str_replace("_", "", $dataKey));
-                if ($key === $propertyLower) {
-                    $obj->$property = $dataValue;
-                    break;
-                }
-            }
-        }
-        return $obj;
-    }
-
     public static function getAll(): ?array
     {
         $stmt = self::getPdo()->query("SELECT * FROM products ORDER BY id");
@@ -76,7 +59,7 @@ class Product extends Model
 
         $products = [];
         foreach ($data as $product) {
-            $products[] = self::createObject($product);
+            $products[] = self::createObjectAut($product);
         }
 
         return $products;
@@ -92,7 +75,7 @@ class Product extends Model
             return null;
         }
 
-        return self::createObject($data);
+        return self::createObjectAut($data);
     }
 
     public static function getAllByIds(array $productIds): ?array
@@ -108,7 +91,7 @@ class Product extends Model
 
         $products = [];
         foreach ($data as $product) {
-            $products[] = self::createObject($product);
+            $products[] = self::createObjectAut($product);
         }
 
         return $products;

@@ -3,10 +3,10 @@ namespace Model;
 
 class User extends Model
 {
-    private int $id;
-    private string $name;
-    private string $email;
-    private string $password;
+    protected int $id;
+    protected string $name;
+    protected string $email;
+    protected string $password;
 
     public static function create(string $name, string $email, string $hashPassword): bool
     {
@@ -24,7 +24,7 @@ class User extends Model
             return null;
         }
 
-        return self::createObject($data);
+        return self::createObjectAut($data);
     }
 
     public static function getOneById(int $userId): ?self
@@ -37,7 +37,7 @@ class User extends Model
             return null;
         }
 
-        return self::createObject($data);
+        return self::createObjectAut($data);
     }
 
     public static function getAllByIds(array $userIds): ?array
@@ -53,7 +53,7 @@ class User extends Model
 
         $users = [];
         foreach ($data as $user) {
-            $users[] = self::createObject($user);
+            $users[] = self::createObjectAut($user);
         }
 
         return $users;

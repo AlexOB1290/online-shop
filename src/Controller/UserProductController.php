@@ -45,6 +45,8 @@ class UserProductController
             $dto = new CartDTO($userId, $productId, $amount);
 
             $this->cartService->create($dto);
+        } else {
+            $response = ['errorsmess' => $errors];
         }
 
         $products = Product::getAll();
@@ -53,7 +55,8 @@ class UserProductController
         $this->reviewService->setAverageRating($products, $reviews);
         $count = $this->cartService->getCount($userId);
 
-        require_once './../View/catalog.php';
+        $response = ['errorsmess' => $errors, 'count' => $count];
+        echo json_encode($response);
     }
 
     public function addOne(AddProductRequest $request): void
@@ -61,9 +64,9 @@ class UserProductController
         $errors = $request->validate();
 
         $userId = $this->authService->getCurrentUser()->getId();
+        $productId = $request->getProductId();
 
         if (empty($errors)) {
-            $productId = $request->getProductId();
             $amount = $request->getAmount();
 
             $dto = new CartDTO($userId, $productId, $amount);
@@ -78,7 +81,9 @@ class UserProductController
             $totalSum = $this->cartService->getTotalSum($products);
         }
 
-        require_once './../View/cart.php';
+        $userProducts = UserProduct::getOneByIds($userId, $productId);
+        $response = ['errorsmess' => $errors, 'totalAmount' => $totalAmount, 'totalSum' => $totalSum, 'amount' => $userProducts->getAmount()];
+        echo json_encode($response);
     }
 
     public function deleteOne(AddProductRequest $request): void
@@ -86,9 +91,9 @@ class UserProductController
         $errors = $request->validate();
 
         $userId = $this->authService->getCurrentUser()->getId();
+        $productId = $request->getProductId();
 
         if (empty($errors)) {
-            $productId = $request->getProductId();
             $amount = $request->getAmount();
 
             $userProducts = UserProduct::getOneByIds($userId, $productId);
@@ -106,7 +111,8 @@ class UserProductController
             $totalAmount = $this->cartService->getTotalAmount($products);
             $totalSum = $this->cartService->getTotalSum($products);
         }
-
-        require_once './../View/cart.php';
+        $userProducts = UserProduct::getOneByIds($userId, $productId);
+        $response = ['errorsmess' => $errors, 'totalAmount' => $totalAmount, 'totalSum' => $totalSum, 'amount' => $userProducts->getAmount()];
+        echo json_encode($response);
     }
 }

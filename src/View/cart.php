@@ -27,17 +27,17 @@
                                 <p>Добавлено в корзину <?php echo $product->getAmount()?> ед. товара</p>
                                 <p>Общая сумма: <?php echo $product->getTotal()?> руб.</p>
                                 <div class="deladd">
-                                    <form action="/delete" method="POST">
-                                        <button type="submit" class="cartbtn">-</button>
+                                    <form class="delete" onsubmit="return false" method="POST">
+                                        <button type="submit" class="deltbtn">-</button>
                                         <input type="hidden" name="product-id" id="product-id" value="<?php echo $product->getId(); ?>" required>
                                         <input type="hidden" name="amount" id="amount" value="1" required>
                                     </form>
                                         <label for="amount"></label>
                                         <label style="color: red;">
                                             <?php echo $errors['amount']??"";?></label>
-                                        <input type="text" placeholder="Введите количество" name="amount" id="amount" value="<?php echo $product->getAmount()?>" required>
-                                    <form action="/add" method="POST">
-                                        <button type="submit" class="cartbtn">+</button>
+                                        <input class="amount" type="text" placeholder="Введите количество" name="amount" id="amount" value="<?php echo $product->getAmount()?>" required>
+                                    <form class="add" onsubmit="return false" method="POST">
+                                        <button type="submit" class="addbtn">+</button>
                                         <input type="hidden" name="product-id" id="product-id" value="<?php echo $product->getId(); ?>" required>
                                         <input type="hidden" name="amount" id="amount" value="1" required>
                                     </form>
@@ -55,6 +55,55 @@
         <?php endif; ?>
     </div>
 </body>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    var form = $('.delete');
+    console.log(form);
+
+    $("document").ready(function () {
+        form.submit(function () {
+            $.ajax({
+                global: false,
+                type: "POST",
+                url: "/delete",
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    $('.amount').val(data.amount);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ошибка при добавлении товара:', error);
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    var form = $('.add');
+    console.log(form);
+
+    $("document").ready(function () {
+        form.submit(function () {
+            $.ajax({
+                global: false,
+                type: "POST",
+                url: "/add",
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function (data) {
+                    console.log(data);
+                    $('.amount').val(data.amount);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ошибка при добавлении товара:', error);
+                }
+            });
+        });
+    });
+</script>
 
 <style>
     /* Set height of body and the document to 100% to enable "full page tabs" */

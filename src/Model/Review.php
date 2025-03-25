@@ -4,15 +4,15 @@ namespace Model;
 
 class Review extends Model
 {
-    private int $id;
-    private int $userId;
-    private int $productId;
-    private int $rating;
-    private string $positive;
-    private string $negative;
-    private string $comment;
-    private string $createdAt;
-    private ?string $name = null;
+    protected int $id;
+    protected int $userId;
+    protected int $productId;
+    protected int $rating;
+    protected string $positive;
+    protected string $negative;
+    protected string $comment;
+    protected string $createdAt;
+    protected ?string $name = null;
 
     public static function getAllWithJoinByProductId(int $productId): ?array
     {
@@ -32,23 +32,6 @@ class Review extends Model
         return $reviews;
     }
 
-    public static function createObjectAut(array $data): self
-    {
-        $obj = new self();
-        $arrayProp = get_class_vars(self::class);
-        foreach ($arrayProp as $property => $value) {
-            $propertyLower = strtolower($property);
-            foreach ($data as $dataKey => $dataValue) {
-                $key = strtolower(str_replace("_", "", $dataKey));
-                if ($key === $propertyLower) {
-                    $obj->$property = $dataValue;
-                    break;
-                }
-            }
-        }
-        return $obj;
-    }
-
     public static function create(int $userId, int $productId, int $rating, string $positive, string $negative, string $comment, string $createdAt): bool
     {
         $stmt = self::getPdo()->prepare("INSERT INTO reviews (user_id, product_id, rating, positive, negative, comment, created_at) VALUES (:user_id, :product_id, :rating, :positive, :negative, :comment, :created_at)");
@@ -66,7 +49,7 @@ class Review extends Model
 
         $reviews = [];
         foreach ($data as $product) {
-            $reviews[] = self::createObject($product);
+            $reviews[] = self::createObjectAut($product);
         }
 
         return $reviews;
@@ -82,7 +65,7 @@ class Review extends Model
             return null;
         }
 
-        return self::createObject($data);
+        return self::createObjectAut($data);
     }
 
     public static function getAllByProductId(int $productId): ?array
@@ -97,7 +80,7 @@ class Review extends Model
 
         $reviews = [];
         foreach($data as $order){
-            $reviews[] = self::createObject($order);
+            $reviews[] = self::createObjectAut($order);
         }
 
         return $reviews;

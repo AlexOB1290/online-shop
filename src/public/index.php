@@ -1,15 +1,15 @@
 <?php
-require_once './../Core/Autoloader.php';
+require_once './../../vendor/autoload.php';
 
+use Alexob1290\Core\Autoloader;
+use Alexob1290\Core\Container;
+use Alexob1290\Core\App;
 use Controller\CartController;
 use Controller\CatalogController;
 use Controller\OrderController;
 use Controller\UserController;
 use Controller\UserProductController;
 use Controller\ReviewController;
-use Core\App;
-use Core\Autoloader;
-use Core\Container;
 use Request\AddProductRequest;
 use Request\LoginRequest;
 use Request\OrderRequest;

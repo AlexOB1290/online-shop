@@ -38,6 +38,8 @@ class OrderController
             $totalAmount = $this->cartService->getTotalAmount($products);
             $totalSum = $this->cartService->getTotalSum($products);
             $str = "Всего $totalAmount ед. товара на сумму $totalSum руб.";
+        } else {
+            header('Location: /orders');
         }
 
         require_once './../View/get_order.php';

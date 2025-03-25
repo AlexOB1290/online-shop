@@ -3,10 +3,10 @@ namespace Model;
 
 class UserProduct extends Model
 {
-    private int $id;
-    private int $userId;
-    private int $productId;
-    private int $amount;
+    protected int $id;
+    protected int $userId;
+    protected int $productId;
+    protected int $amount;
 
     public static function addProduct(int $userId, int $productId, int $amount): bool
     {
@@ -36,7 +36,7 @@ class UserProduct extends Model
             return null;
         }
 
-        return self::createObject($data);
+        return self::createObjectAut($data);
     }
 
     public static function getAllByUserId(int $userId): ?array
@@ -51,7 +51,7 @@ class UserProduct extends Model
 
         $userProducts = [];
         foreach ($data as $userProduct) {
-            $userProducts[] = self::createObject($userProduct);
+            $userProducts[] = self::createObjectAut($userProduct);
         }
 
         return $userProducts;

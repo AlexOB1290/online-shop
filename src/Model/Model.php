@@ -15,4 +15,21 @@ class Model
 
         return self::$pdo;
     }
+
+    public static function createObjectAut(array $data): static
+    {
+        $obj = new static();
+        $arrayProp = get_class_vars(static::class);
+        foreach ($arrayProp as $property => $value) {
+            $propertyLower = strtolower($property);
+            foreach ($data as $dataKey => $dataValue) {
+                $key = strtolower(str_replace("_", "", $dataKey));
+                if ($key === $propertyLower) {
+                    $obj->$property = $dataValue;
+                    break;
+                }
+            }
+        }
+        return $obj;
+    }
 }

@@ -3,16 +3,16 @@ namespace Model;
 
 class Order extends Model
 {
-    private int $id;
-    private int $userId;
-    private string $orderNumber;
-    private string $name;
-    private string $email;
-    private string $address;
-    private string $telephone;
-    private string $total;
-    private string $date;
-    private array $products = [];
+    protected int $id;
+    protected int $userId;
+    protected string $orderNumber;
+    protected string $name;
+    protected string $email;
+    protected string $address;
+    protected string $telephone;
+    protected string $total;
+    protected string $date;
+    protected array $products = [];
 
     public static function create(int $userId, string $orderNumber, string $name, string $email, string $address, string $telephone, string $total, string $date): bool
     {
@@ -32,7 +32,7 @@ class Order extends Model
 
         $orders = [];
         foreach($data as $order){
-            $orders[] = self::createObject($order);
+            $orders[] = self::createObjectAut($order);
         }
 
         return $orders;
@@ -48,7 +48,7 @@ class Order extends Model
             return null;
         }
 
-        return self::createObject($data);
+        return self::createObjectAut($data);
     }
 
     private static function createObject (array $data): self

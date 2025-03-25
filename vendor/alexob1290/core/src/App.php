@@ -1,5 +1,5 @@
 <?php
-namespace Core;
+namespace Alexob1290\Core;
 
 use Request\Request;
 use Service\Logger\LoggerServiceInterface;

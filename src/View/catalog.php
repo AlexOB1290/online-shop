@@ -16,14 +16,14 @@
                         <p>Средняя оценка: <?php echo $product->getAvgRating() ?? "нет оценки" ?></p>
                         <p class="price"><?php echo $product->getPrice()?> руб.</p>
                         <p><?php echo $product->getDescription()?></p>
-                        <form action="/add-product" method=POST>
+                        <form class="add-product" onsubmit="return false" method=POST>
                             <div class="container" >
                                 <label style="color: red;">
                                     <?php echo $errors['product-id']??"";?></label>
                                 <input type="hidden" name="product-id" id="product-id" value="<?php echo $product->getId(); ?>" required>
 
                                 <label for="amount"><b>Количество:</b></label>
-                                <label style="color: red;">
+                                <label class="error" style="color: red;">
                                     <?php echo $errors['amount']??"";?></label>
                                 <input type="text" placeholder="Введите количество" name="amount" id="amount" required>
                                 <button type="submit" class="cartbtn">Добавить в корзину</button>
@@ -41,6 +41,32 @@
         <?php endforeach; ?>
     </div>
 </body>
+
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+    var form = $('.add-product');
+    console.log(form);
+
+    $("document").ready(function () {
+        form.submit(function () {
+            $.ajax({
+                type: "POST",
+                url: "/add-product",
+                data: $(this).serialize(),
+                dataType: 'json',
+                success: function (data) {
+                    // Обновляем количество товаров в бейдже корзины
+                    console.log(data);
+                    $('.badge').text(data.count);
+                    $('.error').text(data.errorsmess.amount);
+                },
+                error: function(xhr, status, error) {
+                    console.error('Ошибка при добавлении товара:', error);
+                }
+            });
+        });
+    });
+</script>
 
 <style>
     /* Set height of body and the document to 100% to enable "full page tabs" */
